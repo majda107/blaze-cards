@@ -14,8 +14,6 @@ namespace BlazeCards.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddBaseAddressHttpClient();
-
             await builder.Build().RunAsync();
         }
     }

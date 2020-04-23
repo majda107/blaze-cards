@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazeCards.Server", "BlazeC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazeCards.Client", "BlazeCards\Client\BlazeCards.Client.csproj", "{A3D151C6-952F-41C6-9603-569E8B15B2E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazeCards.Shared", "BlazeCards\Shared\BlazeCards.Shared.csproj", "{CC42D4EA-49F5-45B8-A51B-7401D0C708D1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{A3D151C6-952F-41C6-9603-569E8B15B2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3D151C6-952F-41C6-9603-569E8B15B2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3D151C6-952F-41C6-9603-569E8B15B2E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC42D4EA-49F5-45B8-A51B-7401D0C708D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC42D4EA-49F5-45B8-A51B-7401D0C708D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC42D4EA-49F5-45B8-A51B-7401D0C708D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC42D4EA-49F5-45B8-A51B-7401D0C708D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

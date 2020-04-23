@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\BlazeCards.Client.csproj" />
-    <ProjectReference Include="..\Shared\BlazeCards.Shared.csproj" />
   </ItemGroup>
 
 
