@@ -28,9 +28,9 @@ namespace BlazeCards.Client.Cards.Components
             this.Sequence = 0;
 
             //this.Cards.Add(new RectComponent());
-            //this.Cards.Add(new TextComponent());
+            this.Cards.Add(new TextComponent());
 
-            this.Cards.Add(new CardComponent());
+            //this.Cards.Add(new CardComponent());
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)

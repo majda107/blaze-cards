@@ -51,29 +51,7 @@ namespace BlazeCards.Client.Cards.Components
 
             //this.RenderInner().Invoke(builder);
 
-            builder.OpenElement(seq++, "text");
-
-            builder.AddAttribute(seq++, "tabindex", "0");
-            builder.AddAttribute(seq++, "x", "0");
-            builder.AddAttribute(seq++, "y", "20");
-
-            builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            {
-                Console.WriteLine("CANVAS DOUBLE CLICCCCC...");
-            }));
-
-            builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            {
-                Console.WriteLine("CANVAS DOWNNNN");
-                if (this.Canvas.State.Selected == this) return;
-
-                this.Canvas.State.Selected = this;
-                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-
-            }));
-
-            builder.AddContent(seq++, "haha gay");
-            builder.CloseElement();
+            this.RenderInner(builder, ref seq);
 
 
 
@@ -117,24 +95,41 @@ namespace BlazeCards.Client.Cards.Components
             //});
         }
 
-        protected RenderFragment HookMouseDown()
-        {
-            //return new RenderFragment(builder =>
-            //{
-            //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            //    {
-            //        if (this.Canvas.State.Selected == this) return;
+        //protected RenderFragment HookMouseDown()
+        //{
+        //    //return new RenderFragment(builder =>
+        //    //{
+        //    //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+        //    //    {
+        //    //        if (this.Canvas.State.Selected == this) return;
 
-            //        this.Canvas.State.Selected = this;
-            //        this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-            //    }));
-            //});
-            return null;
+        //    //        this.Canvas.State.Selected = this;
+        //    //        this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+        //    //    }));
+        //    //});
+        //    return null;
+        //}
+
+        protected void HookMouseDown(RenderTreeBuilder builder, ref int seq)
+        {
+            builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            {
+                if (this.Canvas.State.Selected == this) return;
+
+                this.Canvas.State.Selected = this;
+                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+            }));
         }
 
-        protected virtual RenderFragment RenderInner()
+        //protected virtual RenderFragment RenderInner()
+        //{
+        //    return new RenderFragment(builder => { });
+        //}
+
+
+        protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
-            return new RenderFragment(builder => { });
+            
         }
 
         public void InvokeChange()

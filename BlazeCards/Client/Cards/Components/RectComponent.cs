@@ -17,25 +17,25 @@ namespace BlazeCards.Client.Cards.Components
             this.Size = new SizeBehavior(this, 30, 30);
         }
 
-        protected override RenderFragment RenderInner()
-        {
-            return new RenderFragment(builder =>
-            {
-                //builder.OpenElement(this.Canvas.Sequence++, "rect");
-                //builder.AddAttribute(this.Canvas.Sequence++, "width", $"{this.Size.Width}px");
-                //builder.AddAttribute(this.Canvas.Sequence++, "height", $"{this.Size.Height}px");
+        //protected override RenderFragment RenderInner()
+        //{
+        //    return new RenderFragment(builder =>
+        //    {
+        //        //builder.OpenElement(this.Canvas.Sequence++, "rect");
+        //        //builder.AddAttribute(this.Canvas.Sequence++, "width", $"{this.Size.Width}px");
+        //        //builder.AddAttribute(this.Canvas.Sequence++, "height", $"{this.Size.Height}px");
 
-                this.HookMouseDown().Invoke(builder);
+        //        //this.HookMouseDown().Invoke(builder);
 
-                //builder.AddAttribute(this.Canvas.Sequence++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-                //{
-                //    this.Canvas.State.Selected = this;
-                //    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                //}));
+        //        //builder.AddAttribute(this.Canvas.Sequence++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+        //        //{
+        //        //    this.Canvas.State.Selected = this;
+        //        //    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+        //        //}));
 
-                builder.CloseElement();
-            });
-        }
+        //        builder.CloseElement();
+        //    });
+        //}
     }
 
     
