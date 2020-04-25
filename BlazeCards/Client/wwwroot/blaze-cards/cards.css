@@ -1,0 +1,40 @@
+﻿.canvas {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+}
+
+.canvas-zoom {
+    transform-origin: 0;
+    -webkit-transform-origin: 0;
+}
+
+g {
+    transform: translate(0, 0);
+}
+
+.g-card {
+    background-color: red;
+    width: 20px;
+    height: 20px;
+}
+
+
+
+
+/* text SHIT */
+
+text {
+    user-select: none;
+    font-size: 20px;
+    fill: darkgray;
+}
+
+text:focus {
+    outline: none;
+}
+
+.card-caret {
+    opacity: 1;
+    transition-duration: 160ms;
+}
