@@ -28,7 +28,9 @@ namespace BlazeCards.Client.Cards.Components
             this.Sequence = 0;
 
             //this.Cards.Add(new RectComponent());
-            this.Cards.Add(new TextComponent());
+            //this.Cards.Add(new TextComponent());
+
+            this.Cards.Add(new CardComponent());
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -36,8 +38,6 @@ namespace BlazeCards.Client.Cards.Components
             this.Sequence = 0;
             builder.OpenElement(this.Sequence++, "svg");
             builder.AddAttribute(this.Sequence++, "class", "canvas");
-
-
 
 
 
@@ -54,12 +54,12 @@ namespace BlazeCards.Client.Cards.Components
 
 
 
-
             builder.OpenElement(this.Sequence++, "g");
             builder.AddAttribute(this.Sequence++, "class", "canvas-zoom");
 
             builder.OpenElement(this.Sequence++, "g");
             builder.AddAttribute(this.Sequence++, "class", "canvas-graphics");
+
 
             foreach (var card in this.Cards)
             {

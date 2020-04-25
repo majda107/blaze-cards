@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlazeCards.Client.Cards.Components
 {
-    public abstract class CardComponent: ComponentBase
+    public class CardComponent : ComponentBase
     {
         [Parameter]
         public CanvasComponent Canvas { get; set; }
@@ -25,8 +25,9 @@ namespace BlazeCards.Client.Cards.Components
         public PositionBehavior Position { get; private set; }
 
         public CardComponent()
+
         {
-            
+
         }
 
         private void Init()
@@ -37,39 +38,98 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            this.Render().Invoke(builder);
-            base.BuildRenderTree(builder);
+            //this.Render().Invoke(builder);
+
+            int seq = 0;
+
+
+            builder.OpenElement(seq++, "g");
+
+
+
+
+
+            //this.RenderInner().Invoke(builder);
+
+            builder.OpenElement(seq++, "text");
+
+            builder.AddAttribute(seq++, "tabindex", "0");
+            builder.AddAttribute(seq++, "x", "0");
+            builder.AddAttribute(seq++, "y", "20");
+
+            builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            {
+                Console.WriteLine("CANVAS DOUBLE CLICCCCC...");
+            }));
+
+            builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            {
+                Console.WriteLine("CANVAS DOWNNNN");
+                if (this.Canvas.State.Selected == this) return;
+
+                this.Canvas.State.Selected = this;
+                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
+            }));
+
+            builder.AddContent(seq++, "haha gay");
+            builder.CloseElement();
+
+
+
+            builder.AddElementReferenceCapture(seq++, (eref) =>
+            {
+                this.Graphics = eref;
+            });
+
+            builder.CloseElement();
+
+            //base.BuildRenderTree(builder);
         }
 
         public RenderFragment Render()
         {
-            return new RenderFragment(builder =>
-            {
-                builder.OpenElement(this.Canvas.Sequence++, "g");
+            return null;
+            //return new RenderFragment(builder =>
+            //{
+            //    builder.OpenElement(this.Canvas.Sequence++, "g");
 
-                this.RenderInner().Invoke(builder);
+            //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            //    {
+            //        Console.WriteLine("CANVAS DOWN");
+            //    }));
 
-                builder.AddElementReferenceCapture(this.Canvas.Sequence++, (eref) =>
-                {
-                    this.Graphics = eref;
-                });
+            //    builder.AddAttribute(this.Canvas.Sequence++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            //    {
+            //        Console.WriteLine("CANVAS DOUBLE CLICK...");
+            //    }));
 
-                builder.CloseElement();
-            });
+
+
+            //    this.RenderInner().Invoke(builder);
+
+            //    builder.AddElementReferenceCapture(this.Canvas.Sequence++, (eref) =>
+            //    {
+            //        this.Graphics = eref;
+            //    });
+
+            //    builder.CloseElement();
+            //});
         }
 
         protected RenderFragment HookMouseDown()
         {
-            return new RenderFragment(builder =>
-            {
-                builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-                {
-                    if (this.Canvas.State.Selected == this) return;
+            //return new RenderFragment(builder =>
+            //{
+            //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            //    {
+            //        if (this.Canvas.State.Selected == this) return;
 
-                    this.Canvas.State.Selected = this;
-                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                }));
-            });
+            //        this.Canvas.State.Selected = this;
+            //        this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+            //    }));
+            //});
+            return null;
         }
 
         protected virtual RenderFragment RenderInner()
@@ -88,6 +148,8 @@ namespace BlazeCards.Client.Cards.Components
                 this.Init();
 
             this.Position?.Update();
+
+            Console.WriteLine("Re-rendering component...");
             base.OnAfterRender(firstRender);
         }
     }

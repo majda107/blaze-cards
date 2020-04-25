@@ -21,9 +21,9 @@ namespace BlazeCards.Client.Cards.Components
         {
             return new RenderFragment(builder =>
             {
-                builder.OpenElement(this.Canvas.Sequence++, "rect");
-                builder.AddAttribute(this.Canvas.Sequence++, "width", $"{this.Size.Width}px");
-                builder.AddAttribute(this.Canvas.Sequence++, "height", $"{this.Size.Height}px");
+                //builder.OpenElement(this.Canvas.Sequence++, "rect");
+                //builder.AddAttribute(this.Canvas.Sequence++, "width", $"{this.Size.Width}px");
+                //builder.AddAttribute(this.Canvas.Sequence++, "height", $"{this.Size.Height}px");
 
                 this.HookMouseDown().Invoke(builder);
 

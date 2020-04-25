@@ -24,11 +24,12 @@ namespace BlazeCards.Client.Cards.Components
         {
             return new RenderFragment(builder =>
             {
-                builder.OpenElement(this.Canvas.Sequence++, "text");
+                //builder.OpenElement(this.Canvas.Sequence++, "text");
 
-                builder.AddAttribute(this.Canvas.Sequence++, "tabindex", "1");
-                builder.AddAttribute(this.Canvas.Sequence++, "x", "0");
-                builder.AddAttribute(this.Canvas.Sequence++, "y", "20");
+                //builder.AddAttribute(this.Canvas.Sequence++, "tabindex", "1");
+                //builder.AddAttribute(this.Canvas.Sequence++, "x", "0");
+                //builder.AddAttribute(this.Canvas.Sequence++, "y", "20");
+
 
 
                 //builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
@@ -36,13 +37,13 @@ namespace BlazeCards.Client.Cards.Components
                 //    Console.WriteLine("lel");
                 //}));
 
-                builder.AddAttribute(this.Canvas.Sequence++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-                {
-                    this.TextBehavior.Editing = true;
-                    this.Canvas.State.Selected = this;
+                //builder.AddAttribute(this.Canvas.Sequence++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+                //{
+                //    this.TextBehavior.Editing = true;
+                //    this.Canvas.State.Selected = this;
 
-                    Console.WriteLine("Editing...");
-                }));
+                //    Console.WriteLine("Editing...");
+                //}));
 
 
 
@@ -52,36 +53,36 @@ namespace BlazeCards.Client.Cards.Components
                 //    //this.Canvas.State.Selected = null;
                 //}));
 
-                builder.AddAttribute(this.Canvas.Sequence++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
-                {
-                    Console.WriteLine("key down...");
-                    this.TextBehavior.KeyDown(e);
-                }));
+                //builder.AddAttribute(this.Canvas.Sequence++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
+                //{
+                //    Console.WriteLine("key down...");
+                //    this.TextBehavior.KeyDown(e);
+                //}));
 
-                //this.HookMouseDown().Invoke(builder);
-
-
-                builder.AddContent(this.Canvas.Sequence++, this.TextBehavior.Value);
-
-                builder.AddElementReferenceCapture(this.Canvas.Sequence++, (eref) =>
-                {
-                    this.TextRef = eref;
-                });
-
-                builder.CloseElement();
+                ////this.HookMouseDown().Invoke(builder);
 
 
-                // add caret
-                if (this.TextBehavior.Editing)
-                {
-                    builder.OpenElement(this.Canvas.Sequence++, "rect");
-                    builder.AddAttribute(this.Canvas.Sequence++, "x", (this.TextBehavior.Caret + 4).ToString("0.0").Replace(',', '.'));
-                    builder.AddAttribute(this.Canvas.Sequence++, "y", "2");
-                    builder.AddAttribute(this.Canvas.Sequence++, "height", "20px");
-                    builder.AddAttribute(this.Canvas.Sequence++, "width", "2px");
-                    builder.AddAttribute(this.Canvas.Sequence++, "class", "card-caret");
-                    builder.CloseElement();
-                }
+                //builder.AddContent(this.Canvas.Sequence++, this.TextBehavior.Value);
+
+                //builder.AddElementReferenceCapture(this.Canvas.Sequence++, (eref) =>
+                //{
+                //    this.TextRef = eref;
+                //});
+
+                //builder.CloseElement();
+
+
+                //// add caret
+                //if (this.TextBehavior.Editing)
+                //{
+                //    builder.OpenElement(this.Canvas.Sequence++, "rect");
+                //    builder.AddAttribute(this.Canvas.Sequence++, "x", (this.TextBehavior.Caret + 4).ToString("0.0").Replace(',', '.'));
+                //    builder.AddAttribute(this.Canvas.Sequence++, "y", "2");
+                //    builder.AddAttribute(this.Canvas.Sequence++, "height", "20px");
+                //    builder.AddAttribute(this.Canvas.Sequence++, "width", "2px");
+                //    builder.AddAttribute(this.Canvas.Sequence++, "class", "card-caret");
+                //    builder.CloseElement();
+                //}
             });
         }
 

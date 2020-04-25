@@ -24,7 +24,7 @@ namespace BlazeCards.Client.Cards.Behaviors
 
         public void Focus()
         {
-            this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.TextRef);
+            //this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.TextRef);
         }
 
         public void KeyDown(KeyboardEventArgs e)
@@ -44,12 +44,12 @@ namespace BlazeCards.Client.Cards.Behaviors
 
         public async Task GetCaretAsync()
         {
-            float res = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
-            if (res != this.Caret)
-            {
-                this.Caret = res;
-                this.Card.InvokeChange();
-            }
+            //float res = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
+            //if (res != this.Caret)
+            //{
+            //    this.Caret = res;
+            //    this.Card.InvokeChange();
+            //}
         }
     }
 }
