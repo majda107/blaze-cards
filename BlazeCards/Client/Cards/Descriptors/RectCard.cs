@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace BlazeCards.Client.Cards.Descriptors
 {
-    public class TextCard : Card
+    public class RectCard : Card
     {
-        public TextBehavior TextBehavior { get; private set; }
-        public TextCard() : base()
+        public SizeBehavior SizeBehavior { get; private set; }
+        public RectCard() : base()
         {
-            this.TextBehavior = new TextBehavior();
+            this.SizeBehavior = new SizeBehavior(30, 30);
         }
-        public override Type GetComponentType() => typeof(TextComponent);
+
+        public override Type GetComponentType() => typeof(RectComponent);
 
         public override void AssignComponent(CardComponent component)
         {
             base.AssignComponent(component);
-            this.TextBehavior.AssignComponent(component as TextComponent);
+            this.SizeBehavior.AssignComponent(component);
         }
     }
 }

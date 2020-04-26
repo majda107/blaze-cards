@@ -11,24 +11,28 @@ namespace BlazeCards.Client.Cards.Behaviors
     {
         public CardComponent Card;
 
-        private Vector2f size;
+        private Vector2f _size;
         public Vector2f Size
         {
-            get => this.size;
+            get => this._size;
             set
             {
-                this.size = value;
+                this._size = value;
                 this.Card.InvokeChange();
             }
         }
 
-        public float Width { get => this.size.X; }
-        public float Height { get => this.size.Y; }
+        public float Width { get => this._size.X; }
+        public float Height { get => this._size.Y; }
 
-        public SizeBehavior(CardComponent card, float width = 0, float height = 0)
+        public SizeBehavior(float width = 0, float height = 0)
+        {
+            this._size = new Vector2f(width, height);
+        }
+
+        public void AssignComponent(CardComponent card)
         {
             this.Card = card;
-            this.size = new Vector2f(width, height);
         }
     }
 }

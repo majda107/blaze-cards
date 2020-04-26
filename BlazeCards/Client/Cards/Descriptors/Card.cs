@@ -18,19 +18,12 @@ namespace BlazeCards.Client.Cards.Descriptors
             this.PositionBehavior = new PositionBehavior();
         }
 
-        public void AssignComponent(CardComponent component)
+        public virtual void AssignComponent(CardComponent component)
         {
             Console.WriteLine("Assigning card component");
 
             this.Component = component;
             this.PositionBehavior.AssignComponent(component);
-
-            this.AssignComponentInner(component);
-        }
-
-        protected virtual void AssignComponentInner(CardComponent component)
-        {
-
         }
 
         public virtual Type GetComponentType() => typeof(CardComponent);
