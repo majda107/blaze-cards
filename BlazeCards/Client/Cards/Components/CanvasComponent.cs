@@ -22,6 +22,8 @@ namespace BlazeCards.Client.Cards.Components
 
         public int Sequence { get; set; }
 
+        public ElementReference CanvasReference { get; private set; }
+
         public CanvasComponent()
         {
             this.State = new CardState();
@@ -60,6 +62,15 @@ namespace BlazeCards.Client.Cards.Components
                 }
 
 
+                //this.State.Selector = new RectCard();
+                //var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
+                //pos.ToLocalFromClient(this.JSRuntime, this.CanvasReference).ContinueWith(t =>
+                //{
+                //    this.State.Selector.PositionBehavior.Position = pos;
+                //});
+
+                //this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
+
                 Console.WriteLine("canvas down...");
             }));
 
@@ -72,6 +83,7 @@ namespace BlazeCards.Client.Cards.Components
             {
                 this.State.Mouse.OnUp(new Vector2f((int)e.ClientX, (int)e.ClientY));
                 this.State.Selected = null;
+                this.State.Selector = null;
             }));
 
 
@@ -90,6 +102,23 @@ namespace BlazeCards.Client.Cards.Components
                 builder.AddAttribute(this.Sequence++, "Descriptor", card);
                 builder.CloseComponent();
             }
+
+
+
+            if (this.State.Selector != null)
+            {
+                builder.OpenComponent(this.Sequence++, this.State.Selector.GetComponentType());
+                builder.AddAttribute(this.Sequence++, "Canvas", this);
+                builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Selector);
+                builder.CloseComponent();
+            }
+            else this.Sequence += 3;
+
+
+            builder.AddElementReferenceCapture(this.Sequence++, (eref) =>
+            {
+                this.CanvasReference = eref;
+            });
 
             builder.CloseElement();
             builder.CloseElement();

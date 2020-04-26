@@ -1,4 +1,5 @@
 ﻿using BlazeCards.Client.Cards.Components;
+using BlazeCards.Client.Cards.Descriptors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,13 @@ namespace BlazeCards.Client.Cards.State
 
         public MouseState Mouse { get; private set; }
 
+
+        // EXCHANGE FOR CARD!
         public CardComponent Selected { get; set; }
+
+
+
+        public RectCard Selector { get; set; }
 
         public CardState()
         {

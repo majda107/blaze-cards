@@ -13,3 +13,7 @@ function getTextWidth(element) {
 function getTextHeight(element) {
     return element.getBoundingClientRect().height;
 }
+
+function getBoudingRect(element) {
+    return element.getBoundingClientRect();
+}

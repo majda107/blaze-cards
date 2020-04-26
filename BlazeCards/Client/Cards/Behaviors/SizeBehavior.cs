@@ -18,6 +18,8 @@ namespace BlazeCards.Client.Cards.Behaviors
             set
             {
                 this._size = value;
+
+                if (this.Card == null) return;
                 this.Card.InvokeChange();
             }
         }
