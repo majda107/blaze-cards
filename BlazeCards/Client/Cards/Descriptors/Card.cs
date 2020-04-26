@@ -1,5 +1,6 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
 using BlazeCards.Client.Cards.Components;
+using BlazeCards.Client.Cards.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,17 @@ namespace BlazeCards.Client.Cards.Descriptors
     {
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }
+
         public IList<Card> Children { get; private set; }
-        public Card()
+        public Card Parent { get; set; }
+
+        public Card(Card parent = null)
         {
             // move to asign component
             //this.PositionBehavior = new PositionBehavior(this.Component);
             this.PositionBehavior = new PositionBehavior();
             this.Children = new List<Card>();
+            this.Parent = parent;
         }
 
         public virtual void AssignComponent(CardComponent component)
@@ -29,5 +34,19 @@ namespace BlazeCards.Client.Cards.Descriptors
         }
 
         public virtual Type GetComponentType() => typeof(CardComponent);
+
+
+        public virtual Vector2f GetPosition() => this.PositionBehavior.Position;
+        public abstract Vector2f GetSize();
+
+
+
+        public virtual void Snap() { this.Parent?.Snap(); }
+        public void AddChild(Card child)
+        {
+            child.Parent = this;
+            this.Children.Add(child);
+            this.Snap();
+        }
     }
 }

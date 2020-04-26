@@ -43,6 +43,7 @@ namespace BlazeCards.Server
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
+            app.UseWebAssemblyDebugging();
             app.UseStaticFiles();
 
             app.UseRouting();

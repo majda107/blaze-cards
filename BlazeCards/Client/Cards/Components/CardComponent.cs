@@ -69,9 +69,12 @@ namespace BlazeCards.Client.Cards.Components
             {
                 if (this.Canvas.State.Selected == this) return;
 
+                this.Canvas.State.ComponentClicked = true; // broken event propag
                 this.Canvas.State.Selected = this;
                 this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
+
+            //builder.AddAttribute(seq++, "onmousedown:stopPropagation", true);
         }
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)

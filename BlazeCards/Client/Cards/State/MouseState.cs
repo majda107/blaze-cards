@@ -49,6 +49,8 @@ namespace BlazeCards.Client.Cards.State
 
         public void OnUp(Vector2f position)
         {
+            this.CardState.Selected?.Descriptor?.Snap();
+
             this.Down = false;
         }
     }

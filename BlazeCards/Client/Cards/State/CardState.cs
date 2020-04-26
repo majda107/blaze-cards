@@ -8,6 +8,10 @@ namespace BlazeCards.Client.Cards.State
 {
     public class CardState
     {
+        // because of broken event propagation
+        public bool ComponentClicked { get; set; }
+
+
         public MouseState Mouse { get; private set; }
 
         public CardComponent Selected { get; set; }

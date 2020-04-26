@@ -27,6 +27,7 @@ namespace BlazeCards.Client.Cards.Behaviors
 
         private void Move(Vector2f position)
         {
+            if (this.Card == null) return;
             //Console.WriteLine($"Translatin.. {position.X} | {position.Y}");
             this.Card.JSRuntime.InvokeVoidAsync("translateGraphics", this.Card.Graphics, position.X, position.Y);
         }

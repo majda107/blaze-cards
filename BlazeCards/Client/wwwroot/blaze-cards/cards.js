@@ -9,3 +9,7 @@ function setFocus(element) {
 function getTextWidth(element) {
     return element.getBoundingClientRect().width;
 }
+
+function getTextHeight(element) {
+    return element.getBoundingClientRect().height;
+}

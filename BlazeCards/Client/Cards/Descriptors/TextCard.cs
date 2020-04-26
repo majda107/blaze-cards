@@ -1,5 +1,6 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
 using BlazeCards.Client.Cards.Components;
+using BlazeCards.Client.Cards.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,11 @@ namespace BlazeCards.Client.Cards.Descriptors
         {
             base.AssignComponent(component);
             this.TextBehavior.AssignComponent(component as TextComponent);
+        }
+
+        public override Vector2f GetSize()
+        {
+            return this.TextBehavior.GetSize().Result;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace BlazeCards.Client.Cards.Components
             builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
             {
                 this.TextDescriptor.TextBehavior.Editing = false;
-                this.Canvas.State.Selected = null;
+                //this.Canvas.State.Selected = null;
             }));
 
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>

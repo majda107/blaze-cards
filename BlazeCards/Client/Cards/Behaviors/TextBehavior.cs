@@ -1,4 +1,5 @@
 ﻿using BlazeCards.Client.Cards.Components;
+using BlazeCards.Client.Cards.Models;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
@@ -54,6 +55,16 @@ namespace BlazeCards.Client.Cards.Behaviors
                 this.Caret = res;
                 this.Card.InvokeChange();
             }
+        }
+
+        public async Task<Vector2f> GetSize()
+        {
+            var size = new Vector2f();
+
+            size.X = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
+            size.Y = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextHeight", this.Card.TextRef);
+
+            return size;
         }
     }
 }

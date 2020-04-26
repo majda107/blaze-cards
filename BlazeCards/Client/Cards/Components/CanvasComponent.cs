@@ -28,9 +28,19 @@ namespace BlazeCards.Client.Cards.Components
             this.Cards = new List<Card>();
             this.Sequence = 0;
 
+
+
+
             this.Cards.Add(new RectCard());
             this.Cards.Add(new TextCard());
 
+
+            var list = new VerticalListCard();
+            list.AddChild(new RectCard());
+            list.AddChild(new RectCard());
+            list.PositionBehavior.Position = new Vector2f(100, 100);
+
+            this.Cards.Add(list);
             //this.Cards.Add(new CardComponent());
         }
 
@@ -40,7 +50,18 @@ namespace BlazeCards.Client.Cards.Components
             builder.OpenElement(this.Sequence++, "svg");
             builder.AddAttribute(this.Sequence++, "class", "canvas");
 
+            builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
+            {
+                // broken event propag
+                if (this.State.ComponentClicked)
+                {
+                    this.State.ComponentClicked = false;
+                    return;
+                }
 
+
+                Console.WriteLine("canvas down...");
+            }));
 
             builder.AddAttribute(this.Sequence++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
