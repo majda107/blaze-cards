@@ -18,18 +18,18 @@ namespace BlazeCards.Client.Cards.Components
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
-        public IList<Tuple<CardComponent, Card>> Cards { get; set; }
+        public IList<Card> Cards { get; set; }
 
         public int Sequence { get; set; }
 
         public CanvasComponent()
         {
             this.State = new CardState();
-            this.Cards = new List<Tuple<CardComponent, Card>>();
+            this.Cards = new List<Card>();
             this.Sequence = 0;
 
-            this.Cards.Add(new Tuple<CardComponent, Card>(new RectComponent(), new Card()));
-            this.Cards.Add(new Tuple<CardComponent, Card>(new TextComponent(), new Card()));
+            this.Cards.Add(new Card());
+            this.Cards.Add(new TextCard());
 
             //this.Cards.Add(new CardComponent());
         }
@@ -64,9 +64,9 @@ namespace BlazeCards.Client.Cards.Components
             foreach (var card in this.Cards)
             {
                 //card.Render().Invoke(builder);
-                builder.OpenComponent(this.Sequence++, card.Item1.GetType());
+                builder.OpenComponent(this.Sequence++, card.GetComponentType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);
-                builder.AddAttribute(this.Sequence++, "Descriptor", card.Item2);
+                builder.AddAttribute(this.Sequence++, "Descriptor", card);
                 builder.CloseComponent();
             }
 

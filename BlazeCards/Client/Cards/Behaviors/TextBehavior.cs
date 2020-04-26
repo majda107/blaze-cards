@@ -16,10 +16,14 @@ namespace BlazeCards.Client.Cards.Behaviors
         public float Caret { get; set; }
         public bool Editing { get; set; }
 
-        public TextBehavior(TextComponent card)
+        public TextBehavior()
+        {
+            this.Value = "default text";
+        }
+
+        public void AssignComponent(TextComponent card)
         {
             this.Card = card;
-            this.Value = "default text";
         }
 
         public void Focus()

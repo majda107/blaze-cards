@@ -1,4 +1,5 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
+using BlazeCards.Client.Cards.Descriptors;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,13 +12,14 @@ namespace BlazeCards.Client.Cards.Components
 {
     public class TextComponent : CardComponent
     {
-        public TextBehavior TextBehavior { get; private set; }
+        //public TextBehavior TextBehavior { get; private set; }
 
         public ElementReference TextRef { get; private set; }
+        public TextCard TextDescriptor { get => this.Descriptor as TextCard; }
 
         public TextComponent()
         {
-            this.TextBehavior = new TextBehavior(this);
+            //this.TextBehavior = new TextBehavior(this);
         }
 
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
@@ -32,7 +34,7 @@ namespace BlazeCards.Client.Cards.Components
             builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
                 //Console.WriteLine("CANVAS DOUBLE CLICCCCC...");
-                this.TextBehavior.Editing = true;
+                this.TextDescriptor.TextBehavior.Editing = true;
                 this.Canvas.State.Selected = this;
 
                 Console.WriteLine("Editing...");
@@ -40,20 +42,20 @@ namespace BlazeCards.Client.Cards.Components
 
             builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
             {
-                this.TextBehavior.Editing = false;
+                this.TextDescriptor.TextBehavior.Editing = false;
                 this.Canvas.State.Selected = null;
             }));
 
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
                 Console.WriteLine("key down...");
-                this.TextBehavior.KeyDown(e);
+                this.TextDescriptor.TextBehavior.KeyDown(e);
             }));
 
 
             this.HookMouseDown(builder, ref seq);
 
-            builder.AddContent(seq++, this.TextBehavior.Value);
+            builder.AddContent(seq++, this.TextDescriptor.TextBehavior.Value);
 
 
 
@@ -64,10 +66,10 @@ namespace BlazeCards.Client.Cards.Components
             builder.CloseElement();
 
 
-            if (this.TextBehavior.Editing)
+            if (this.TextDescriptor.TextBehavior.Editing)
             {
                 builder.OpenElement(seq++, "rect");
-                builder.AddAttribute(seq++, "x", (this.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
+                builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
                 builder.AddAttribute(seq++, "y", "4");
                 builder.AddAttribute(seq++, "height", "20px");
                 builder.AddAttribute(seq++, "width", "2px");
@@ -84,10 +86,10 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (this.TextBehavior.Editing)
+            if (this.TextDescriptor.TextBehavior.Editing)
             {
-                await this.TextBehavior.GetCaretAsync();
-                this.TextBehavior.Focus();
+                await this.TextDescriptor.TextBehavior.GetCaretAsync();
+                this.TextDescriptor.TextBehavior.Focus();
             }
 
             if (firstRender)
