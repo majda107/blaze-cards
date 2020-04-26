@@ -11,11 +11,13 @@ namespace BlazeCards.Client.Cards.Descriptors
     {
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }
+        public IList<Card> Children { get; private set; }
         public Card()
         {
             // move to asign component
             //this.PositionBehavior = new PositionBehavior(this.Component);
             this.PositionBehavior = new PositionBehavior();
+            this.Children = new List<Card>();
         }
 
         public virtual void AssignComponent(CardComponent component)
