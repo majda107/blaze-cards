@@ -34,13 +34,19 @@ namespace BlazeCards.Client.Cards.Behaviors
         public void Update()
         {
             if (!this.dirty) return;
+
+            this.dirty = false;
             this.Move(this.position);
         }
 
-        public PositionBehavior(CardComponent card)
+        public PositionBehavior()
         {
-            this.Card = card;
             this.dirty = true;
+        }
+
+        public void AssignComponent(CardComponent component)
+        {
+            this.Card = component;
         }
     }
 }

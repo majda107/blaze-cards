@@ -1,4 +1,5 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
+using BlazeCards.Client.Cards.Descriptors;
 using BlazeCards.Client.Cards.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -22,19 +23,26 @@ namespace BlazeCards.Client.Cards.Components
 
 
         // Behaviors
-        public PositionBehavior Position { get; private set; }
+        //public PositionBehavior Position { get; private set; }
+        [Parameter]
+        public Card Descriptor { get; set; }
 
         public CardComponent()
-
         {
-
+            
         }
 
-        private void Init()
+        protected override void OnInitialized()
         {
-            Console.WriteLine("Initing card...");
-            this.Position = new PositionBehavior(this);
+            this.Descriptor.AssignComponent(this);
+            base.OnInitialized();
         }
+
+        //private void Init()
+        //{
+        //    Console.WriteLine("Initing card...");
+        //    this.Position = new PositionBehavior(this);
+        //}
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
@@ -68,7 +76,7 @@ namespace BlazeCards.Client.Cards.Components
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
-            
+
         }
 
         public void InvokeChange()
@@ -78,12 +86,13 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override void OnAfterRender(bool firstRender)
         {
-            if (firstRender)
-                this.Init();
+            //if (firstRender)
+            //    this.Init();
 
-            this.Position?.Update();
+            //this.Descriptor.AssignComponent(this);
 
-            //Console.WriteLine("Re-rendering component...");
+            this.Descriptor?.PositionBehavior?.Update();
+
             base.OnAfterRender(firstRender);
         }
     }

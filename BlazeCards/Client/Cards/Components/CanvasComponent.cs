@@ -1,4 +1,5 @@
-﻿using BlazeCards.Client.Cards.Models;
+﻿using BlazeCards.Client.Cards.Descriptors;
+using BlazeCards.Client.Cards.Models;
 using BlazeCards.Client.Cards.State;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -17,18 +18,18 @@ namespace BlazeCards.Client.Cards.Components
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
-        public IList<CardComponent> Cards { get; set; }
+        public IList<Tuple<CardComponent, Card>> Cards { get; set; }
 
         public int Sequence { get; set; }
 
         public CanvasComponent()
         {
             this.State = new CardState();
-            this.Cards = new List<CardComponent>();
+            this.Cards = new List<Tuple<CardComponent, Card>>();
             this.Sequence = 0;
 
-            this.Cards.Add(new RectComponent());
-            this.Cards.Add(new TextComponent());
+            this.Cards.Add(new Tuple<CardComponent, Card>(new RectComponent(), new Card()));
+            this.Cards.Add(new Tuple<CardComponent, Card>(new TextComponent(), new Card()));
 
             //this.Cards.Add(new CardComponent());
         }
@@ -60,12 +61,12 @@ namespace BlazeCards.Client.Cards.Components
             builder.OpenElement(this.Sequence++, "g");
             builder.AddAttribute(this.Sequence++, "class", "canvas-graphics");
 
-
             foreach (var card in this.Cards)
             {
                 //card.Render().Invoke(builder);
-                builder.OpenComponent(this.Sequence++, card.GetType());
+                builder.OpenComponent(this.Sequence++, card.Item1.GetType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);
+                builder.AddAttribute(this.Sequence++, "Descriptor", card.Item2);
                 builder.CloseComponent();
             }
 

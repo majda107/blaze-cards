@@ -36,11 +36,13 @@ namespace BlazeCards.Client.Cards.State
         {
             if (!this.Down) return;
 
+            //Console.WriteLine("trying to move");
+
             //Console.WriteLine($"Mouse move: {position.X}");
             var dev = position - this.lastPosition;
 
             if (this.CardState.Selected != null)
-                this.CardState.Selected.Position.Position += dev;
+                this.CardState.Selected.Descriptor.PositionBehavior.Position += dev;
 
             this.lastPosition = position;
         }
