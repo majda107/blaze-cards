@@ -1,6 +1,7 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
 using BlazeCards.Client.Cards.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
@@ -17,26 +18,18 @@ namespace BlazeCards.Client.Cards.Components
             this.Size = new SizeBehavior(this, 30, 30);
         }
 
-        //protected override RenderFragment RenderInner()
-        //{
-        //    return new RenderFragment(builder =>
-        //    {
-        //        //builder.OpenElement(this.Canvas.Sequence++, "rect");
-        //        //builder.AddAttribute(this.Canvas.Sequence++, "width", $"{this.Size.Width}px");
-        //        //builder.AddAttribute(this.Canvas.Sequence++, "height", $"{this.Size.Height}px");
 
-        //        //this.HookMouseDown().Invoke(builder);
+        protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
+        {
+            builder.OpenElement(seq++, "rect");
+            builder.AddAttribute(seq++, "width", $"{this.Size.Width}px");
+            builder.AddAttribute(seq++, "height", $"{this.Size.Height}px");
 
-        //        //builder.AddAttribute(this.Canvas.Sequence++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-        //        //{
-        //        //    this.Canvas.State.Selected = this;
-        //        //    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-        //        //}));
+            this.HookMouseDown(builder, ref seq);
 
-        //        builder.CloseElement();
-        //    });
-        //}
+            builder.CloseElement();
+        }
     }
 
-    
+
 }

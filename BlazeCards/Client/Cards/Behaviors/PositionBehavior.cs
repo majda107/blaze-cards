@@ -13,10 +13,13 @@ namespace BlazeCards.Client.Cards.Behaviors
         public CardComponent Card;
 
         private Vector2f position;
-        public Vector2f Position {
-            get => this.position; 
+        private bool dirty;
+        public Vector2f Position
+        {
+            get => this.position;
             set
             {
+                this.dirty = true;
                 this.position = value;
                 this.Move(this.position);
             }
@@ -30,12 +33,14 @@ namespace BlazeCards.Client.Cards.Behaviors
 
         public void Update()
         {
+            if (!this.dirty) return;
             this.Move(this.position);
         }
 
         public PositionBehavior(CardComponent card)
         {
             this.Card = card;
+            this.dirty = true;
         }
     }
 }

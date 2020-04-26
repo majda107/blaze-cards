@@ -27,7 +27,7 @@ namespace BlazeCards.Client.Cards.Components
             this.Cards = new List<CardComponent>();
             this.Sequence = 0;
 
-            //this.Cards.Add(new RectComponent());
+            this.Cards.Add(new RectComponent());
             this.Cards.Add(new TextComponent());
 
             //this.Cards.Add(new CardComponent());

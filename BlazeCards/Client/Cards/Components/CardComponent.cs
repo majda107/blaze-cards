@@ -38,21 +38,13 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            //this.Render().Invoke(builder);
-
             int seq = 0;
 
 
             builder.OpenElement(seq++, "g");
 
 
-
-
-
-            //this.RenderInner().Invoke(builder);
-
             this.RenderInner(builder, ref seq);
-
 
 
             builder.AddElementReferenceCapture(seq++, (eref) =>
@@ -61,54 +53,7 @@ namespace BlazeCards.Client.Cards.Components
             });
 
             builder.CloseElement();
-
-            //base.BuildRenderTree(builder);
         }
-
-        public RenderFragment Render()
-        {
-            return null;
-            //return new RenderFragment(builder =>
-            //{
-            //    builder.OpenElement(this.Canvas.Sequence++, "g");
-
-            //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            //    {
-            //        Console.WriteLine("CANVAS DOWN");
-            //    }));
-
-            //    builder.AddAttribute(this.Canvas.Sequence++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            //    {
-            //        Console.WriteLine("CANVAS DOUBLE CLICK...");
-            //    }));
-
-
-
-            //    this.RenderInner().Invoke(builder);
-
-            //    builder.AddElementReferenceCapture(this.Canvas.Sequence++, (eref) =>
-            //    {
-            //        this.Graphics = eref;
-            //    });
-
-            //    builder.CloseElement();
-            //});
-        }
-
-        //protected RenderFragment HookMouseDown()
-        //{
-        //    //return new RenderFragment(builder =>
-        //    //{
-        //    //    builder.AddAttribute(this.Canvas.Sequence++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-        //    //    {
-        //    //        if (this.Canvas.State.Selected == this) return;
-
-        //    //        this.Canvas.State.Selected = this;
-        //    //        this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-        //    //    }));
-        //    //});
-        //    return null;
-        //}
 
         protected void HookMouseDown(RenderTreeBuilder builder, ref int seq)
         {
@@ -120,12 +65,6 @@ namespace BlazeCards.Client.Cards.Components
                 this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
         }
-
-        //protected virtual RenderFragment RenderInner()
-        //{
-        //    return new RenderFragment(builder => { });
-        //}
-
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
@@ -144,7 +83,7 @@ namespace BlazeCards.Client.Cards.Components
 
             this.Position?.Update();
 
-            Console.WriteLine("Re-rendering component...");
+            //Console.WriteLine("Re-rendering component...");
             base.OnAfterRender(firstRender);
         }
     }
