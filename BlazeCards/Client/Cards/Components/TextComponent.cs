@@ -88,6 +88,16 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
+
+
+            //if (this.TextBehavior.Editing)
+            //{
+            //    //builder.OpenElement(10000, "div");
+            //    //builder.CloseElement();
+            //}
+
+
+
             builder.OpenElement(seq++, "text");
 
             builder.AddAttribute(seq++, "tabindex", "0");
@@ -103,10 +113,43 @@ namespace BlazeCards.Client.Cards.Components
                 Console.WriteLine("Editing...");
             }));
 
+            builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
+            {
+                this.TextBehavior.Editing = false;
+                this.Canvas.State.Selected = null;
+            }));
+
+            builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
+            {
+                Console.WriteLine("key down...");
+                this.TextBehavior.KeyDown(e);
+            }));
+
+
             this.HookMouseDown(builder, ref seq);
 
-            builder.AddContent(seq++, "haha gay");
+            builder.AddContent(seq++, this.TextBehavior.Value);
+
+
+
+            builder.AddElementReferenceCapture(seq++, (eref) =>
+            {
+                this.TextRef = eref;
+            });
             builder.CloseElement();
+
+
+            if (this.TextBehavior.Editing)
+            {
+                builder.OpenElement(seq++, "rect");
+                builder.AddAttribute(seq++, "x", (this.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
+                builder.AddAttribute(seq++, "y", "4");
+                builder.AddAttribute(seq++, "height", "20px");
+                builder.AddAttribute(seq++, "width", "2px");
+                builder.AddAttribute(seq++, "class", "card-caret");
+                builder.CloseElement();
+            }
+            else seq += 6;
         }
 
         private void Init()
