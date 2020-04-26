@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazeCards.Client.Cards.Descriptors
 {
-    public class Card
+    public abstract class Card
     {
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }

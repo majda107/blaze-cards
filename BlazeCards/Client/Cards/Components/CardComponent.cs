@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BlazeCards.Client.Cards.Components
 {
-    public class CardComponent : ComponentBase
+    public abstract class CardComponent : ComponentBase
     {
         [Parameter]
         public CanvasComponent Canvas { get; set; }
