@@ -76,14 +76,14 @@ namespace BlazeCards.Client.Cards.Components
                 var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
                 pos.ToLocalFromClient(this.Box);
                 this.State.Selector.PositionBehavior.Position = pos;
+                this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                 //pos.ToLocalFromClient(this.JSRuntime, this.CanvasReference).ContinueWith(t =>
                 //{
                 //    this.State.Selector.PositionBehavior.Position = pos;
                 //});
 
-                //this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
-
                 Console.WriteLine("canvas down...");
+                this.State.Mouse.OnDown(new Vector2f((float)e.ClientX, (float)e.ClientY));
             }));
 
             builder.AddAttribute(this.Sequence++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
