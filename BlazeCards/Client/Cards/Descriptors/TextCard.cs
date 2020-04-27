@@ -25,7 +25,7 @@ namespace BlazeCards.Client.Cards.Descriptors
 
         public override Vector2f GetSize()
         {
-            return this.TextBehavior.GetSize().Result;
+            return this.TextBehavior.BufferedSize;
         }
     }
 }

@@ -10,18 +10,33 @@ namespace BlazeCards.Client.Cards.Behaviors
 {
     public class PositionBehavior
     {
-        public CardComponent Card;
-
-        private Vector2f position;
-        private bool dirty;
-        public Vector2f Position
+        private Vector2f _correction = Vector2f.Zero;
+        public Vector2f Correction
         {
-            get => this.position;
+            get => this._correction; 
             set
             {
                 this.dirty = true;
-                this.position = value;
-                this.Move(this.position);
+                this._correction = value;
+            }
+        }
+
+        public CardComponent Card;
+        private Vector2f _position;
+        private bool dirty;
+        public Vector2f Position
+        {
+            get
+            {
+                // add this lol 
+                //if (this.Correction == Vector2f.Zero) return this.position;
+                return this._position + this.Correction;
+            }
+            set
+            {
+                this.dirty = true;
+                this._position = value;
+                this.Move(this.Position);
             }
         }
 
@@ -37,7 +52,7 @@ namespace BlazeCards.Client.Cards.Behaviors
             if (!this.dirty) return;
 
             this.dirty = false;
-            this.Move(this.position);
+            this.Move(this.Position);
         }
 
         public PositionBehavior()

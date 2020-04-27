@@ -12,9 +12,10 @@ namespace BlazeCards.Client.Cards.Behaviors
     public class TextBehavior
     {
         public TextComponent Card { get; private set; }
+        public Vector2f BufferedSize { get; private set; }
 
         public string Value { get; set; }
-        public float Caret { get; set; }
+        public float Caret { get => this.BufferedSize.X; }
         public bool Editing { get; set; }
 
         public TextBehavior()
@@ -47,24 +48,29 @@ namespace BlazeCards.Client.Cards.Behaviors
             this.Value += e.Key.ToString();
         }
 
-        public async Task GetCaretAsync()
-        {
-            float res = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
-            if (res != this.Caret)
-            {
-                this.Caret = res;
-                this.Card.InvokeChange();
-            }
-        }
+        //public async Task GetCaretAsync()
+        //{
+        //    float res = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
+        //    if (res != this.Caret)
+        //    {
+        //        this.Caret = res;
+        //        this.Card.InvokeChange();
+        //    }
+        //}
 
-        public async Task<Vector2f> GetSize()
+        public async Task BufferSizeAsync()
         {
             var size = new Vector2f();
 
             size.X = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
             size.Y = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextHeight", this.Card.TextRef);
 
-            return size;
+            if (!this.BufferedSize.Equals(size))
+            {
+                Console.WriteLine("Buffering new text size");
+                this.BufferedSize = size;
+                this.Card.InvokeChange();
+            }
         }
     }
 }

@@ -16,6 +16,9 @@ namespace BlazeCards.Client.Cards.Descriptors
         public IList<Card> Children { get; private set; }
         public Card Parent { get; set; }
 
+        public bool Clickable { get; set; }
+        public List<string> Classes { get; set; }
+
         public Card(Card parent = null)
         {
             // move to asign component
@@ -23,6 +26,9 @@ namespace BlazeCards.Client.Cards.Descriptors
             this.PositionBehavior = new PositionBehavior();
             this.Children = new List<Card>();
             this.Parent = parent;
+
+            this.Clickable = true;
+            this.Classes = new List<string>();
         }
 
         public virtual void AssignComponent(CardComponent component)

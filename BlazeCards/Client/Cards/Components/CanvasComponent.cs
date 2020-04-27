@@ -1,4 +1,5 @@
 ﻿using BlazeCards.Client.Cards.Descriptors;
+using BlazeCards.Client.Cards.Factories;
 using BlazeCards.Client.Cards.Models;
 using BlazeCards.Client.Cards.State;
 using Microsoft.AspNetCore.Components;
@@ -72,15 +73,10 @@ namespace BlazeCards.Client.Cards.Components
                 }
 
 
-                this.State.Selector = new RectCard();
                 var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
                 pos.ToLocalFromClient(this.Box);
-                this.State.Selector.PositionBehavior.Position = pos;
-                this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
-                //pos.ToLocalFromClient(this.JSRuntime, this.CanvasReference).ContinueWith(t =>
-                //{
-                //    this.State.Selector.PositionBehavior.Position = pos;
-                //});
+                this.State.Selector = RectFactory.CreateSelector(pos);
+
 
                 Console.WriteLine("canvas down...");
                 this.State.Mouse.OnDown(new Vector2f((float)e.ClientX, (float)e.ClientY));
@@ -96,6 +92,7 @@ namespace BlazeCards.Client.Cards.Components
                 this.State.Mouse.OnUp(new Vector2f((int)e.ClientX, (int)e.ClientY));
                 this.State.Selected = null;
                 this.State.Selector = null;
+                this.State.Highlighter = null;
             }));
 
 
@@ -122,6 +119,15 @@ namespace BlazeCards.Client.Cards.Components
                 builder.OpenComponent(this.Sequence++, this.State.Selector.GetComponentType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);
                 builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Selector);
+                builder.CloseComponent();
+            }
+            else this.Sequence += 3;
+
+            if (this.State.Highlighter != null)
+            {
+                builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());
+                builder.AddAttribute(this.Sequence++, "Canvas", this);
+                builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Highlighter);
                 builder.CloseComponent();
             }
             else this.Sequence += 3;

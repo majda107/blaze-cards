@@ -86,9 +86,10 @@ namespace BlazeCards.Client.Cards.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await this.TextDescriptor.TextBehavior.BufferSizeAsync();
+
             if (this.TextDescriptor.TextBehavior.Editing)
             {
-                await this.TextDescriptor.TextBehavior.GetCaretAsync();
                 this.TextDescriptor.TextBehavior.Focus();
             }
 

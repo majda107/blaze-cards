@@ -20,7 +20,7 @@ namespace BlazeCards.Client.Cards.State
         public CardComponent Selected { get; set; }
 
 
-
+        public RectCard Highlighter { get; set; }
         public RectCard Selector { get; set; }
 
         public CardState()

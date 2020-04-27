@@ -1,5 +1,6 @@
 ﻿using BlazeCards.Client.Cards.Behaviors;
 using BlazeCards.Client.Cards.Descriptors;
+using BlazeCards.Client.Cards.Factories;
 using BlazeCards.Client.Cards.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -26,6 +27,7 @@ namespace BlazeCards.Client.Cards.Components
         //public PositionBehavior Position { get; private set; }
         [Parameter]
         public Card Descriptor { get; set; }
+
 
         public CardComponent()
         {
@@ -67,14 +69,15 @@ namespace BlazeCards.Client.Cards.Components
         {
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
+                if (!this.Descriptor.Clickable) return;
+
                 if (this.Canvas.State.Selected == this) return;
 
                 this.Canvas.State.ComponentClicked = true; // broken event propag
                 this.Canvas.State.Selected = this;
+                this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
                 this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
-
-            //builder.AddAttribute(seq++, "onmousedown:stopPropagation", true);
         }
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)

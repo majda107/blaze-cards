@@ -25,8 +25,11 @@ namespace BlazeCards.Client.Cards.Components
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
             builder.OpenElement(seq++, "rect");
-            builder.AddAttribute(seq++, "width", $"{this.RectDescriptor.SizeBehavior.Width}px");
-            builder.AddAttribute(seq++, "height", $"{this.RectDescriptor.SizeBehavior.Height}px");
+            builder.AddAttribute(seq++, "width", $"{Math.Abs(this.RectDescriptor.SizeBehavior.Width).ToString("0.0").Replace(',', '.')}px");
+            builder.AddAttribute(seq++, "height", $"{Math.Abs(this.RectDescriptor.SizeBehavior.Height).ToString("0.0").Replace(',', '.')}px");
+
+            foreach (var elementClass in this.Descriptor.Classes)
+                builder.AddAttribute(seq++, "class", elementClass);
 
             this.HookMouseDown(builder, ref seq);
 

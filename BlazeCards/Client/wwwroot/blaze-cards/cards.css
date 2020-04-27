@@ -30,11 +30,18 @@ text {
     fill: darkgray;
 }
 
-text:focus {
-    outline: none;
-}
+    text:focus {
+        outline: none;
+    }
 
 .card-caret {
     opacity: 1;
     transition-duration: 160ms;
+}
+
+.card-highlighter {
+    fill: transparent;
+    pointer-events: none;
+    stroke: red;
+    stroke-dasharray: 4;
 }

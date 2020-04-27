@@ -43,7 +43,12 @@ namespace BlazeCards.Client.Cards.State
                 this.CardState.Selected.Descriptor.PositionBehavior.Position += dev;
 
             if (this.CardState.Selector != null)
+            {
                 this.CardState.Selector.SizeBehavior.Size += dev;
+                //if (dev.X < 0 || dev.Y < 0)
+                //    this.CardState.Selector.PositionBehavior.Position += new Vector2f(Math.Min(dev.X, 0), Math.Min(dev.Y, 0));
+            }
+
 
 
             this.lastPosition = position;

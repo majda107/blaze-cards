@@ -31,6 +31,14 @@ namespace BlazeCards.Client.Cards.Models
             return new Vector2f(a.X + b.X, a.Y + b.Y);
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Vector2f)) return false;
+
+            var vec = (Vector2f)obj;
+            return (this.X == vec.X && this.Y == vec.Y);
+        }
+
         public void ToLocalFromClient(BoundingClientRect box)
         {
             this.X -= (float)box.Left;

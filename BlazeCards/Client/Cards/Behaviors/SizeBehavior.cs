@@ -10,6 +10,7 @@ namespace BlazeCards.Client.Cards.Behaviors
     public class SizeBehavior
     {
         public CardComponent Card;
+        public PositionBehavior PositionBehavior { get; private set; }
 
         private Vector2f _size;
         public Vector2f Size
@@ -21,6 +22,8 @@ namespace BlazeCards.Client.Cards.Behaviors
 
                 if (this.Card == null) return;
                 this.Card.InvokeChange();
+
+                this.CorrectNegativeSize();
             }
         }
 
@@ -35,6 +38,21 @@ namespace BlazeCards.Client.Cards.Behaviors
         public void AssignComponent(CardComponent card)
         {
             this.Card = card;
+        }
+
+        public void HookNegativeSize(PositionBehavior position)
+        {
+            this.PositionBehavior = position;
+        }
+        private void CorrectNegativeSize()
+        {
+            if (this.PositionBehavior == null) return;
+            if (this.Size.X >= 0 && this.Size.Y >= 0) return;
+
+            this.PositionBehavior.Correction = new Vector2f(Math.Min(this.Size.X, 0), Math.Min(this.Size.Y, 0));
+
+            //this.PositionBehavior.Position += new Vector2f(this.Size.X < 0 ? this.Size.X : 0, this.Size.Y < 0 ? this.Size.Y : 0);
+            //this._size = new Vector2f(Math.Abs(this.Size.X), Math.Abs(this.Size.Y));
         }
     }
 }
