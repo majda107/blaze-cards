@@ -42,6 +42,7 @@ namespace BlazeCards.Client.Cards.Behaviors
 
         private void Move(Vector2f position)
         {
+            Console.WriteLine($"Translatin.. {position.X} | {position.Y}");
             if (this.Card == null) return;
             //Console.WriteLine($"Translatin.. {position.X} | {position.Y}");
             this.Card.JSRuntime.InvokeVoidAsync("translateGraphics", this.Card.Graphics, position.X, position.Y);
@@ -51,6 +52,7 @@ namespace BlazeCards.Client.Cards.Behaviors
         {
             if (!this.dirty) return;
 
+            //Console.WriteLine("Updating position...");
             this.dirty = false;
             this.Move(this.Position);
         }

@@ -57,6 +57,8 @@ namespace BlazeCards.Client.Cards.Components
             await base.OnAfterRenderAsync(firstRender);
         }
 
+        public void InvokeChange() => this.StateHasChanged();
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             this.Sequence = 0;
@@ -70,6 +72,13 @@ namespace BlazeCards.Client.Cards.Components
                 {
                     this.State.ComponentClicked = false;
                     return;
+                }
+
+                if(this.State.Selected != null)
+                {
+                    this.State.Selected = null;
+                    this.State.Highlighter = null;
+                    //return;
                 }
 
 
@@ -90,9 +99,10 @@ namespace BlazeCards.Client.Cards.Components
             builder.AddAttribute(this.Sequence++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
                 this.State.Mouse.OnUp(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                this.State.Selected = null;
+                //this.State.Selected = null;
+                //this.State.Highlighter = null;
+
                 this.State.Selector = null;
-                this.State.Highlighter = null;
             }));
 
 
@@ -123,6 +133,7 @@ namespace BlazeCards.Client.Cards.Components
             }
             else this.Sequence += 3;
 
+            //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
             {
                 builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());

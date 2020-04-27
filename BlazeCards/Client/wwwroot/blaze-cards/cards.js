@@ -1,4 +1,6 @@
 ﻿function translateGraphics(graphics, x, y) {
+    //console.log("[js] translating element...")
+    //console.log(graphics)
     graphics.style.transform = `translate(${x}px, ${y}px)`;
 }
 

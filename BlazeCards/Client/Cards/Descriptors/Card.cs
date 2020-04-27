@@ -46,6 +46,11 @@ namespace BlazeCards.Client.Cards.Descriptors
         public abstract Vector2f GetSize();
 
 
+        public Vector2f GetGlobalPosition()
+        {
+            if (this.Parent == null) return this.GetPosition();
+            return this.Parent.GetPosition() + this.GetPosition();
+        }
 
         public virtual void Snap() { this.Parent?.Snap(); }
         public void AddChild(Card child)

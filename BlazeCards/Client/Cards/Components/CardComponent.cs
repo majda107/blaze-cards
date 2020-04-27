@@ -75,8 +75,11 @@ namespace BlazeCards.Client.Cards.Components
 
                 this.Canvas.State.ComponentClicked = true; // broken event propag
                 this.Canvas.State.Selected = this;
+                //this.Canvas.State.Highlighter = null;
                 this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
                 this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
+                //this.Canvas.InvokeChange();
             }));
         }
 
@@ -97,6 +100,7 @@ namespace BlazeCards.Client.Cards.Components
 
             //this.Descriptor.AssignComponent(this);
 
+            this.Descriptor?.AssignComponent(this);
             this.Descriptor?.PositionBehavior?.Update();
 
             base.OnAfterRender(firstRender);
