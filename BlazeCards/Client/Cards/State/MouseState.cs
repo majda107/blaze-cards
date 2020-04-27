@@ -40,7 +40,14 @@ namespace BlazeCards.Client.Cards.State
             var dev = position - this.lastPosition;
 
             if (this.CardState.Selected != null)
+            {
                 this.CardState.Selected.Descriptor.PositionBehavior.Position += dev;
+                if (this.CardState.Highlighter != null)
+                    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.Descriptor.GetGlobalPosition();
+            }
+
+
+
 
             if (this.CardState.Selector != null)
             {
@@ -56,7 +63,12 @@ namespace BlazeCards.Client.Cards.State
 
         public void OnUp(Vector2f position)
         {
-            this.CardState.Selected?.Descriptor?.Snap();
+            if(this.CardState.Selected != null)
+            {
+                this.CardState.Selected.Descriptor?.Snap();
+                this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.Descriptor.GetGlobalPosition();
+            }
+            
 
             this.Down = false;
         }
