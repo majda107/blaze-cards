@@ -31,12 +31,10 @@ namespace BlazeCards.Client.Cards.Models
             return new Vector2f(a.X + b.X, a.Y + b.Y);
         }
 
-        public async Task ToLocalFromClient(IJSRuntime JSRuntime, ElementReference reference)
+        public void ToLocalFromClient(BoundingClientRect box)
         {
-            var box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", reference);
-
             this.X -= (float)box.Left;
-            this.Y -= (float)box.Right;
+            this.Y -= (float)box.Top;
         }
     }
 }

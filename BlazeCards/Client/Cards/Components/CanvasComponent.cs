@@ -23,6 +23,7 @@ namespace BlazeCards.Client.Cards.Components
         public int Sequence { get; set; }
 
         public ElementReference CanvasReference { get; private set; }
+        public BoundingClientRect Box { get; private set; }
 
         public CanvasComponent()
         {
@@ -46,6 +47,15 @@ namespace BlazeCards.Client.Cards.Components
             //this.Cards.Add(new CardComponent());
         }
 
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+                this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasReference);
+
+            await base.OnAfterRenderAsync(firstRender);
+        }
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             this.Sequence = 0;
@@ -62,8 +72,10 @@ namespace BlazeCards.Client.Cards.Components
                 }
 
 
-                //this.State.Selector = new RectCard();
-                //var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
+                this.State.Selector = new RectCard();
+                var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
+                pos.ToLocalFromClient(this.Box);
+                this.State.Selector.PositionBehavior.Position = pos;
                 //pos.ToLocalFromClient(this.JSRuntime, this.CanvasReference).ContinueWith(t =>
                 //{
                 //    this.State.Selector.PositionBehavior.Position = pos;
