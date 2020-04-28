@@ -69,15 +69,16 @@ namespace BlazeCards.Client.Cards.Components
         {
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
+                this.Canvas.State.ComponentClicked = true; // broken event propag
+                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
                 if (!this.Descriptor.Clickable) return;
 
                 if (this.Canvas.State.Selected == this.Descriptor) return;
 
-                this.Canvas.State.ComponentClicked = true; // broken event propag
                 this.Canvas.State.Selected = this.Descriptor;
                 //this.Canvas.State.Highlighter = null;
                 this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
-                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
 
                 //this.Canvas.InvokeChange();
             }));
