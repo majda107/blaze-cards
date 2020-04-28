@@ -41,9 +41,9 @@ namespace BlazeCards.Client.Cards.State
 
             if (this.CardState.Selected != null)
             {
-                this.CardState.Selected.Descriptor.PositionBehavior.Position += dev;
+                this.CardState.Selected.PositionBehavior.Position += dev;
                 if (this.CardState.Highlighter != null)
-                    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.Descriptor.GetGlobalPosition();
+                    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
             }
 
 
@@ -65,8 +65,8 @@ namespace BlazeCards.Client.Cards.State
         {
             if(this.CardState.Selected != null)
             {
-                this.CardState.Selected.Descriptor?.Snap();
-                this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.Descriptor.GetGlobalPosition();
+                this.CardState.Selected.Snap();
+                this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
             }
             
 

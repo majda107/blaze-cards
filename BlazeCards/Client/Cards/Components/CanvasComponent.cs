@@ -112,7 +112,7 @@ namespace BlazeCards.Client.Cards.Components
                         //Console.WriteLine($"Element - pos left: {pos.X}, box left: {box.Position.X}");
                         if (box.Overlap(selectorBox))
                         {
-                            this.State.Selected = card.Component;
+                            this.State.Selected = card;
                             this.State.Highlighter = RectFactory.CreateHighlighter(card);
                             break;
                         }

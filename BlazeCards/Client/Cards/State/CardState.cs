@@ -17,7 +17,8 @@ namespace BlazeCards.Client.Cards.State
 
 
         // EXCHANGE FOR CARD!
-        public CardComponent Selected { get; set; }
+        //public CardComponent Selected { get; set; }
+        public Card Selected { get; set; }
 
 
         public RectCard Highlighter { get; set; }
