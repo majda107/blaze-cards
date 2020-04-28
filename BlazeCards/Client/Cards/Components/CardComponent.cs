@@ -71,23 +71,37 @@ namespace BlazeCards.Client.Cards.Components
             {
                 this.Canvas.State.ComponentClicked = true; // broken event propag
 
-                if (this.Canvas.State.Selected == this.Descriptor) // because of non-clickable lists selector selection ? does this even make sense, i am disgusted lol
-                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                else if (this.Canvas.State.Selected != null && this.Canvas.State.Selected.HasDescendant(this.Descriptor))
-                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-
-                if (this.Canvas.State.Selected != null) return;
-
                 if (!this.Descriptor.Clickable) return;
 
-                //if (this.Canvas.State.Selected == this.Descriptor) return;
+                var selected = this.Canvas.State.Selected;
+                if (selected == null)
+                {
+                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                    this.Canvas.State.Selected = this.Descriptor;
+                    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
+                }
+                else if (selected == this.Descriptor || selected.HasDescendant(this.Descriptor))
+                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
 
-                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                this.Canvas.State.Selected = this.Descriptor;
-                //this.Canvas.State.Highlighter = null;
-                this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
 
-                //this.Canvas.InvokeChange();
+
+                //if (this.Canvas.State.Selected == this.Descriptor) // because of non-clickable lists selector selection ? does this even make sense, i am disgusted lol
+                //    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                //else if (this.Canvas.State.Selected != null && this.Canvas.State.Selected.HasDescendant(this.Descriptor))
+                //    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
+                //if (this.Canvas.State.Selected != null) return;
+
+                //if (!this.Descriptor.Clickable) return;
+
+                ////if (this.Canvas.State.Selected == this.Descriptor) return;
+
+                //this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                //this.Canvas.State.Selected = this.Descriptor;
+                ////this.Canvas.State.Highlighter = null;
+                //this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
+
+                ////this.Canvas.InvokeChange();
             }));
         }
 
