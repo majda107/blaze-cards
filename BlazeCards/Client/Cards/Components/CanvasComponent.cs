@@ -102,7 +102,26 @@ namespace BlazeCards.Client.Cards.Components
                 //this.State.Selected = null;
                 //this.State.Highlighter = null;
 
-                this.State.Selector = null;
+                if(this.State.Selector != null)
+                {
+                    var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
+                    foreach(var card in this.Cards)
+                    {
+                        var pos = card.GetGlobalPosition();
+                        var box = BoundingRect.FromPositionSize(pos, card.GetSize());
+                        //Console.WriteLine($"Element - pos left: {pos.X}, box left: {box.Position.X}");
+                        if (box.Overlap(selectorBox))
+                        {
+                            this.State.Selected = card.Component;
+                            this.State.Highlighter = RectFactory.CreateHighlighter(card);
+                            break;
+                        }
+                    }
+
+                    //Console.WriteLine("No overlap");
+
+                    this.State.Selector = null;
+                }
             }));
 
 

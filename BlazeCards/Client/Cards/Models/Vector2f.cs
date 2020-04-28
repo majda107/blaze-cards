@@ -44,5 +44,10 @@ namespace BlazeCards.Client.Cards.Models
             this.X -= (float)box.Left;
             this.Y -= (float)box.Top;
         }
+
+        public override string ToString()
+        {
+            return $"{this.X} - {this.Y}";
+        }
     }
 }

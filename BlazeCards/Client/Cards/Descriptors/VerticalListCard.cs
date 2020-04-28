@@ -18,7 +18,7 @@ namespace BlazeCards.Client.Cards.Descriptors
                 var childSize = child.GetSize();
                 size.Y += childSize.Y;
 
-                if (size.X > childSize.X)
+                if (childSize.X > size.X)
                     size.X = childSize.X;
             }
 

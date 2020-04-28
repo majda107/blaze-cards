@@ -32,9 +32,7 @@ namespace BlazeCards.Client.Cards.Descriptors
         }
 
         public virtual void AssignComponent(CardComponent component)
-        {
-            Console.WriteLine("Assigning card component");
-
+        { 
             this.Component = component;
             this.PositionBehavior.AssignComponent(component);
         }
