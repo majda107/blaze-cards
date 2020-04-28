@@ -22,6 +22,34 @@ namespace BlazeCards.Client.Cards.Factories
             return highlighter;
         }
 
+        public static RectCard CreateHighlighter(IList<Card> cards)
+        {
+            if (cards.Count <= 0) return null;
+
+            var pos = cards[0].GetGlobalPosition();
+            var size = cards[0].GetSize() + pos;
+            foreach (var card in cards)
+            {
+                var cardPos = card.GetGlobalPosition();
+                var cardRightBottom = card.GetSize() + cardPos;
+                if (cardPos.X < pos.X) cardPos.X = 0;
+                if (cardPos.Y < pos.Y) cardPos.Y = 0;
+
+                if (cardRightBottom.X > size.X) size.X = cardRightBottom.X;
+                if (cardRightBottom.Y > size.Y) size.Y = cardRightBottom.Y;
+            }
+
+            size -= pos;
+
+            var highlighter = new RectCard();
+            highlighter.PositionBehavior.Position = pos;
+            highlighter.SizeBehavior.Size = size;
+            highlighter.Clickable = false;
+            highlighter.Classes.Add("card-highlighter");
+
+            return highlighter;
+        }
+
         public static RectCard CreateSelector(Vector2f pos)
         {
             var selector = new RectCard();

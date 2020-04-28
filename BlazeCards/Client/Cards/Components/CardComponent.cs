@@ -74,14 +74,21 @@ namespace BlazeCards.Client.Cards.Components
                 if (!this.Descriptor.Clickable) return;
 
                 var selected = this.Canvas.State.Selected;
-                if (selected == null)
+                if (selected.Count <= 0)
                 {
                     this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                    this.Canvas.State.Selected = this.Descriptor;
-                    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);
+                    this.Canvas.State.Selected.Add(this.Descriptor);
+                    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
                 }
-                else if (selected == this.Descriptor || selected.HasDescendant(this.Descriptor))
-                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                else
+                {
+                    foreach (var card in this.Canvas.State.Selected)
+                        if (card.HasDescendant(this.Descriptor) || card == this.Descriptor)
+                        {
+                            this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                            return;
+                        }
+                }
 
 
 

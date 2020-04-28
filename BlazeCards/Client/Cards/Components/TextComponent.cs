@@ -36,7 +36,7 @@ namespace BlazeCards.Client.Cards.Components
             {
                 //Console.WriteLine("CANVAS DOUBLE CLICCCCC...");
                 this.TextDescriptor.TextBehavior.Editing = true;
-                this.Canvas.State.Selected = this.Descriptor;
+                this.Canvas.State.Selected.Add(this.Descriptor);
 
                 Console.WriteLine("Editing...");
             }));

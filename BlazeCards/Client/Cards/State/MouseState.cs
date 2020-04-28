@@ -39,11 +39,24 @@ namespace BlazeCards.Client.Cards.State
             //Console.WriteLine($"Mouse move: {position.X}");
             var dev = position - this.lastPosition;
 
-            if (this.CardState.Selected != null)
+            if (this.CardState.Selected.Count > 0)
             {
-                this.CardState.Selected.PositionBehavior.Position += dev;
+                //this.CardState.Selected.PositionBehavior.Position += dev;
+                //if (this.CardState.Highlighter != null)
+                //    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
+
+                var minPos = new Vector2f(float.MaxValue, float.MaxValue);
+                foreach (var card in this.CardState.Selected)
+                {
+                    card.PositionBehavior.Position += dev;
+
+                    var pos = card.GetGlobalPosition();
+                    if (pos.X < minPos.X) pos.X = minPos.X;
+                    if (pos.Y < minPos.Y) pos.Y = minPos.Y;
+                }
+
                 if (this.CardState.Highlighter != null)
-                    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
+                    this.CardState.Highlighter.PositionBehavior.Position = minPos;
             }
 
 
@@ -63,12 +76,21 @@ namespace BlazeCards.Client.Cards.State
 
         public void OnUp(Vector2f position)
         {
-            if(this.CardState.Selected != null)
+            if (this.CardState.Selected.Count > 0)
             {
-                this.CardState.Selected.Snap();
-                this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
+                var minPos = this.CardState.Selected.First().GetGlobalPosition();
+                foreach (var card in this.CardState.Selected)
+                {
+                    card.Snap();
+
+                    var pos = card.GetGlobalPosition();
+                    if (pos.X < minPos.X) minPos.X = pos.X;
+                    if (pos.Y < minPos.Y) minPos.Y = pos.Y;
+                }
+
+                this.CardState.Highlighter.PositionBehavior.Position = minPos;
             }
-            
+
 
             this.Down = false;
         }

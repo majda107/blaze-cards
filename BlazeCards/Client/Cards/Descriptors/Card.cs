@@ -32,7 +32,7 @@ namespace BlazeCards.Client.Cards.Descriptors
         }
 
         public virtual void AssignComponent(CardComponent component)
-        { 
+        {
             this.Component = component;
             this.PositionBehavior.AssignComponent(component);
         }
@@ -68,6 +68,21 @@ namespace BlazeCards.Client.Cards.Descriptors
             }
 
             return false;
+        }
+
+        public void TraverseOverlap(BoundingRect box, IList<Card> cards)
+        {
+            var thisBox = BoundingRect.FromPositionSize(this.GetGlobalPosition(), this.GetSize());
+            if (thisBox.Overlap(box))
+            {
+                cards.Add(this);
+                return;
+            }
+
+            foreach (var child in this.Children)
+            {
+                child.TraverseOverlap(box, cards);
+            }
         }
     }
 }

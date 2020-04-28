@@ -33,13 +33,13 @@ namespace BlazeCards.Client.Cards.Components
             this.Sequence = 0;
 
 
-
-
             this.Cards.Add(new RectCard());
             this.Cards.Add(new TextCard());
 
 
             var list = new VerticalListCard();
+            list.AddChild(new RectCard());
+            list.AddChild(new RectCard());
             list.AddChild(new RectCard());
             list.AddChild(new RectCard());
             list.PositionBehavior.Position = new Vector2f(100, 100);
@@ -74,9 +74,9 @@ namespace BlazeCards.Client.Cards.Components
                     return;
                 }
 
-                if(this.State.Selected != null)
+                if (this.State.Selected.Count > 0)
                 {
-                    this.State.Selected = null;
+                    this.State.Selected.Clear();
                     this.State.Highlighter = null;
                     //return;
                 }
@@ -102,18 +102,32 @@ namespace BlazeCards.Client.Cards.Components
                 //this.State.Selected = null;
                 //this.State.Highlighter = null;
 
-                if(this.State.Selector != null)
+                if (this.State.Selector != null)
                 {
                     var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
-                    foreach(var card in this.Cards)
+                    var traversed = new List<Card>();
+                    foreach (var card in this.Cards)
                     {
-                        var pos = card.GetGlobalPosition();
-                        var box = BoundingRect.FromPositionSize(pos, card.GetSize());
+                        //var pos = card.GetGlobalPosition();
+                        //var box = BoundingRect.FromPositionSize(pos, card.GetSize());
                         //Console.WriteLine($"Element - pos left: {pos.X}, box left: {box.Position.X}");
-                        if (box.Overlap(selectorBox))
+
+                        //if (box.Overlap(selectorBox))
+                        //{
+                        //    this.State.Selected = card;
+                        //    this.State.Highlighter = RectFactory.CreateHighlighter(card);
+                        //    break;
+                        //}
+
+                        traversed.Clear();
+                        card.TraverseOverlap(selectorBox, traversed);
+                        if (traversed.Count > 0)
                         {
-                            this.State.Selected = card;
-                            this.State.Highlighter = RectFactory.CreateHighlighter(card);
+                            foreach (var traversedCard in traversed)
+                                this.State.Selected.Add(traversedCard);
+                            //this.State.Selected = traversedCard
+                            //this.State.Highlighter = RectFactory.CreateHighlighter(traversed.First());
+                            this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
                             break;
                         }
                     }

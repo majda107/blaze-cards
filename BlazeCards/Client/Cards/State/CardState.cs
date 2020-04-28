@@ -18,7 +18,8 @@ namespace BlazeCards.Client.Cards.State
 
         // EXCHANGE FOR CARD!
         //public CardComponent Selected { get; set; }
-        public Card Selected { get; set; }
+        //public Card Selected { get; set; }
+        public IList<Card> Selected { get; set; }
 
 
         public RectCard Highlighter { get; set; }
@@ -26,6 +27,7 @@ namespace BlazeCards.Client.Cards.State
 
         public CardState()
         {
+            this.Selected = new List<Card>();
             this.Mouse = new MouseState(this);
         }
     }
