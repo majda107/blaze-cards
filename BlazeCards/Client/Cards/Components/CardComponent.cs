@@ -31,7 +31,7 @@ namespace BlazeCards.Client.Cards.Components
 
         public CardComponent()
         {
-            
+
         }
 
         protected override void OnInitialized()
@@ -70,12 +70,19 @@ namespace BlazeCards.Client.Cards.Components
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
                 this.Canvas.State.ComponentClicked = true; // broken event propag
-                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
+                if (this.Canvas.State.Selected == this.Descriptor) // because of non-clickable lists selector selection ? does this even make sense, i am disgusted lol
+                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                else if (this.Canvas.State.Selected != null && this.Canvas.State.Selected.HasDescendant(this.Descriptor))
+                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
+
+                if (this.Canvas.State.Selected != null) return;
 
                 if (!this.Descriptor.Clickable) return;
 
-                if (this.Canvas.State.Selected == this.Descriptor) return;
+                //if (this.Canvas.State.Selected == this.Descriptor) return;
 
+                this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
                 this.Canvas.State.Selected = this.Descriptor;
                 //this.Canvas.State.Highlighter = null;
                 this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Descriptor);

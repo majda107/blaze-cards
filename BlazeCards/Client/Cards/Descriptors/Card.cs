@@ -57,5 +57,17 @@ namespace BlazeCards.Client.Cards.Descriptors
             this.Children.Add(child);
             this.Snap();
         }
+
+        // substitute this into hierarchy manager 
+        public bool HasDescendant(Card card)
+        {
+            foreach (var child in this.Children)
+            {
+                if (child == card) return true;
+                if (child.HasDescendant(card)) return true;
+            }
+
+            return false;
+        }
     }
 }
