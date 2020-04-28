@@ -27,6 +27,7 @@ namespace BlazeCards.Client.Cards.Components
 
             builder.OpenElement(seq++, "text");
 
+            builder.AddAttribute(seq++, "class", "blaze-text");
             builder.AddAttribute(seq++, "tabindex", "0");
             builder.AddAttribute(seq++, "x", "0");
             builder.AddAttribute(seq++, "y", "20");

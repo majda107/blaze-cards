@@ -45,3 +45,14 @@ text {
     stroke: red;
     stroke-dasharray: 4;
 }
+
+
+
+
+
+
+
+/* NEW BLAZE */ 
+.blaze-text:hover, .blaze-rect:hover {
+    cursor: move;
+}
