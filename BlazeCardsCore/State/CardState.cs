@@ -30,5 +30,11 @@ namespace BlazeCardsCore.State
             this.Selected = new List<Card>();
             this.Mouse = new MouseState(this);
         }
+
+        public void Deselect()
+        {
+            this.Highlighter = null;
+            this.Selected.Clear();
+        }
     }
 }
