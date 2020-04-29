@@ -28,15 +28,20 @@ namespace BlazeCards.Client.Cards.Factories
 
             var pos = cards[0].GetGlobalPosition();
             var size = cards[0].GetSize() + pos;
+
+            var notedPos = cards[0].GetGlobalPosition();
             foreach (var card in cards)
             {
                 var cardPos = card.GetGlobalPosition();
                 var cardRightBottom = card.GetSize() + cardPos;
-                if (cardPos.X < pos.X) cardPos.X = 0;
-                if (cardPos.Y < pos.Y) cardPos.Y = 0;
+                if (cardPos.X < pos.X) pos.X = cardPos.X;
+                if (cardPos.Y < pos.Y) pos.Y = cardPos.Y;
 
-                if (cardRightBottom.X > size.X) size.X = cardRightBottom.X;
-                if (cardRightBottom.Y > size.Y) size.Y = cardRightBottom.Y;
+                if (cardRightBottom.X > size.X)
+                    size.X = cardRightBottom.X;
+
+                if (cardRightBottom.Y > size.Y)
+                    size.Y = cardRightBottom.Y;
             }
 
             size -= pos;

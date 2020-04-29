@@ -109,28 +109,19 @@ namespace BlazeCards.Client.Cards.Components
                     var traversed = new List<Card>();
                     foreach (var card in this.Cards)
                     {
-                        //var pos = card.GetGlobalPosition();
-                        //var box = BoundingRect.FromPositionSize(pos, card.GetSize());
-                        //Console.WriteLine($"Element - pos left: {pos.X}, box left: {box.Position.X}");
-
-                        //if (box.Overlap(selectorBox))
-                        //{
-                        //    this.State.Selected = card;
-                        //    this.State.Highlighter = RectFactory.CreateHighlighter(card);
-                        //    break;
-                        //}
-
-                        traversed.Clear();
                         card.TraverseOverlap(selectorBox, traversed);
-                        if (traversed.Count > 0)
-                        {
-                            foreach (var traversedCard in traversed)
-                                this.State.Selected.Add(traversedCard);
-                            //this.State.Selected = traversedCard
-                            //this.State.Highlighter = RectFactory.CreateHighlighter(traversed.First());
-                            this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
-                            break;
-                        }
+                    }
+
+                    if (traversed.Count > 0)
+                    {
+                        Console.WriteLine($"Selecting {traversed.Count} items...");
+
+                        foreach (var traversedCard in traversed)
+                            this.State.Selected.Add(traversedCard);
+                        //this.State.Selected = traversedCard
+                        //this.State.Highlighter = RectFactory.CreateHighlighter(traversed.First());
+                        this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
+                        //break;
                     }
 
                     //Console.WriteLine("No overlap");
