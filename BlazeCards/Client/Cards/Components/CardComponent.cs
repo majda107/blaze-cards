@@ -119,6 +119,7 @@ namespace BlazeCards.Client.Cards.Components
 
         public void InvokeChange()
         {
+            this.Descriptor.Update();
             this.StateHasChanged();
         }
 

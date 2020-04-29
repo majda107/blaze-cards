@@ -32,11 +32,17 @@ namespace BlazeCards.Client.Cards.Descriptors
             Console.WriteLine($"List snapping {this.Children.Count} children...");
 
             var offset = 0f;
-            foreach(var child in this.Children)
+            foreach (var child in this.Children)
             {
                 child.PositionBehavior.Position = new Vector2f(0, offset);
                 offset += child.GetSize().Y;
             }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            this.Snap();
         }
 
         public override Type GetComponentType() => typeof(ListComponent);

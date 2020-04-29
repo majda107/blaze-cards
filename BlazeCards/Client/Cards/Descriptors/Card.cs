@@ -51,6 +51,7 @@ namespace BlazeCards.Client.Cards.Descriptors
         }
 
         public virtual void Snap() { this.Parent?.Snap(); }
+        public virtual void Update() { this.Parent?.Update(); }
         public void AddChild(Card child)
         {
             child.Parent = this;

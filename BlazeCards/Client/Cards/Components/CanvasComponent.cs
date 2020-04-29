@@ -40,6 +40,7 @@ namespace BlazeCards.Client.Cards.Components
             var list = new VerticalListCard();
             list.AddChild(new RectCard());
             list.AddChild(new RectCard());
+            list.AddChild(new TextCard());
             list.AddChild(new RectCard());
             list.AddChild(new RectCard());
             list.PositionBehavior.Position = new Vector2f(100, 100);
