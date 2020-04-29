@@ -3,16 +3,16 @@ using BlazeCardsCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace BlazeCardsCore.Descriptors
 {
-    public class VerticalListCard : Card
+    class HorizontalListCard : Card
     {
         public bool Fixed { get; set; }
         public int Spacing { get; set; }
 
-        public VerticalListCard(bool @fixed = false, int spacing = 0)
+        public HorizontalListCard(bool @fixed = false, int spacing = 0)
         {
             this.Fixed = @fixed;
             this.Spacing = spacing;
@@ -25,14 +25,14 @@ namespace BlazeCardsCore.Descriptors
             foreach (var child in this.Children)
             {
                 var childSize = child.GetSize();
-                size.Y += childSize.Y + this.Spacing; ;
+                size.X += childSize.X + this.Spacing;
 
-                if (childSize.X > size.X)
-                    size.X = childSize.X;
+                if (childSize.Y > size.Y)
+                    size.Y = childSize.Y;
             }
 
             if (this.Children.Count > 0)
-                size.Y -= this.Spacing;
+                size.X -= this.Spacing;
 
             return size;
         }
@@ -43,13 +43,13 @@ namespace BlazeCardsCore.Descriptors
 
             Console.WriteLine($"List snapping {this.Children.Count} children...");
 
-            if (!this.Fixed) this.Children = this.Children.OrderBy(card => card.GetPosition().Y).ToList();
+            if (!this.Fixed) this.Children = this.Children.OrderBy(card => card.GetPosition().X).ToList();
 
             var offset = 0f;
             foreach (var child in this.Children)
             {
-                child.PositionBehavior.Position = new Vector2f(0, offset);
-                offset += child.GetSize().Y + this.Spacing;
+                child.PositionBehavior.Position = new Vector2f(offset, 0);
+                offset += child.GetSize().X + this.Spacing;
             }
         }
 

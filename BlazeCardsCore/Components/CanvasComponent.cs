@@ -45,7 +45,14 @@ namespace BlazeCardsCore.Components
             list.AddChild(new RectCard());
             list.PositionBehavior.Position = new Vector2f(100, 100);
 
+            var list2 = new HorizontalListCard(false, 10);
+            list2.AddChild(new RectCard());
+            list2.AddChild(new RectCard());
+            list2.AddChild(new TextCard());
+            list2.PositionBehavior.Position = new Vector2f(100, 400);
+
             this.Cards.Add(list);
+            this.Cards.Add(list2);
             //this.Cards.Add(new CardComponent());
         }
 
