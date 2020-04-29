@@ -18,5 +18,8 @@
     <Content Remove="wwwroot\service-worker.js" />
     <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BlazeCardsCore\BlazeCardsCore.csproj" />
+  </ItemGroup>
 
 </Project>
