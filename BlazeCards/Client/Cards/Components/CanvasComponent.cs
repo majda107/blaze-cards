@@ -37,7 +37,7 @@ namespace BlazeCards.Client.Cards.Components
             this.Cards.Add(new TextCard());
 
 
-            var list = new VerticalListCard();
+            var list = new VerticalListCard(false);
             list.AddChild(new RectCard());
             list.AddChild(new RectCard());
             list.AddChild(new TextCard());

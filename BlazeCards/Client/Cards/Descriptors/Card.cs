@@ -13,7 +13,7 @@ namespace BlazeCards.Client.Cards.Descriptors
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }
 
-        public IList<Card> Children { get; private set; }
+        public IList<Card> Children { get; protected set; }
         public Card Parent { get; set; }
 
         public bool Clickable { get; set; }

@@ -9,6 +9,13 @@ namespace BlazeCards.Client.Cards.Descriptors
 {
     public class VerticalListCard : Card
     {
+        public bool Fixed { get; set; }
+
+        public VerticalListCard(bool @fixed = false)
+        {
+            this.Fixed = @fixed;
+        }
+
         public override Vector2f GetSize()
         {
             var size = Vector2f.Zero;
@@ -30,6 +37,8 @@ namespace BlazeCards.Client.Cards.Descriptors
             base.Snap();
 
             Console.WriteLine($"List snapping {this.Children.Count} children...");
+
+            if (!this.Fixed) this.Children = this.Children.OrderBy(card => card.GetPosition().Y).ToList();
 
             var offset = 0f;
             foreach (var child in this.Children)
