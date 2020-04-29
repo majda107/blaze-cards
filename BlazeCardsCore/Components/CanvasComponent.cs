@@ -16,6 +16,7 @@ namespace BlazeCardsCore.Components
 {
     public class CanvasComponent : ComponentBase
     {
+        private bool shouldTranslate;
         public CardState State { get; set; }
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -24,7 +25,9 @@ namespace BlazeCardsCore.Components
 
         public int Sequence { get; set; }
 
-        public ElementReference CanvasReference { get; private set; }
+        public ElementReference CanvasGraphicsReference { get; private set; }
+        public ElementReference CanvasZoomReference { get; private set; }
+
         public BoundingClientRect Box { get; private set; }
 
         public CanvasComponent()
@@ -58,11 +61,21 @@ namespace BlazeCardsCore.Components
             //this.Cards.Add(new CardComponent());
         }
 
+        public void BufferTranslation()
+        {
+            this.shouldTranslate = true;
+        }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-                this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasReference);
+                this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasGraphicsReference);
+
+            if (this.shouldTranslate)
+            {
+                await this.JSRuntime.InvokeVoidAsync("translateGraphics", this.CanvasGraphicsReference, this.State.Mouse.Scroll.X, this.State.Mouse.Scroll.Y);
+                this.shouldTranslate = false;
+            }
 
             await base.OnAfterRenderAsync(firstRender);
         }
@@ -111,7 +124,7 @@ namespace BlazeCardsCore.Components
                 }
 
 
-                Console.WriteLine("canvas down...");
+                //Console.WriteLine("canvas down...");
                 this.State.Mouse.OnDown(new Vector2f((float)e.ClientX, (float)e.ClientY));
             }));
 
@@ -137,7 +150,7 @@ namespace BlazeCardsCore.Components
 
                     if (traversed.Count > 0)
                     {
-                        Console.WriteLine($"Selecting {traversed.Count} items...");
+                        //Console.WriteLine($"Selecting {traversed.Count} items...");
 
                         foreach (var traversedCard in traversed)
                             this.State.Selected.Add(traversedCard);
@@ -194,12 +207,19 @@ namespace BlazeCardsCore.Components
 
             builder.AddElementReferenceCapture(this.Sequence++, (eref) =>
             {
-                this.CanvasReference = eref;
+                this.CanvasGraphicsReference = eref;
             });
 
             builder.CloseElement();
-            builder.CloseElement();
 
+
+            builder.AddElementReferenceCapture(this.Sequence++, (eref) =>
+            {
+                this.CanvasZoomReference = eref;
+            });
+
+
+            builder.CloseElement();
             builder.CloseElement();
         }
     }

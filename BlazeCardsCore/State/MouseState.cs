@@ -12,6 +12,9 @@ namespace BlazeCardsCore.State
         public CardState CardState { get; private set; }
         public bool Down { get; private set; }
 
+        public Vector2f Scroll { get; private set; }
+
+
         private Vector2f lastPosition;
 
         public MouseState(CardState state)
@@ -20,6 +23,7 @@ namespace BlazeCardsCore.State
             this.Down = false;
 
             this.lastPosition = Vector2f.Zero;
+            this.Scroll = Vector2f.Zero;
         }
 
         public void OnDown(Vector2f position)
@@ -64,12 +68,13 @@ namespace BlazeCardsCore.State
 
 
             if (this.CardState.Selector != null)
-            {
                 this.CardState.Selector.SizeBehavior.Size += dev;
-                //if (dev.X < 0 || dev.Y < 0)
-                //    this.CardState.Selector.PositionBehavior.Position += new Vector2f(Math.Min(dev.X, 0), Math.Min(dev.Y, 0));
+            else
+            {
+                this.Scroll += dev;
+                this.CardState.Canvas.BufferTranslation();
             }
-
+                
 
 
             this.lastPosition = position;
