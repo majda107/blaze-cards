@@ -9,6 +9,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Components
@@ -28,7 +29,8 @@ namespace BlazeCardsCore.Components
 
         public CanvasComponent()
         {
-            this.State = new CardState();
+
+            this.State = new CardState(this);
             this.Cards = new List<Card>();
             this.Sequence = 0;
 
@@ -72,6 +74,17 @@ namespace BlazeCardsCore.Components
             this.Sequence = 0;
             builder.OpenElement(this.Sequence++, "svg");
             builder.AddAttribute(this.Sequence++, "class", "canvas");
+            builder.AddAttribute(this.Sequence++, "tabindex", "0");
+
+            builder.AddAttribute(this.Sequence++, "onkeydown", EventCallback.Factory.Create(this, e =>
+            {
+                this.State.Keyboard.KeyDown(e.Key);
+            }));
+
+            builder.AddAttribute(this.Sequence++, "onkeyup", EventCallback.Factory.Create(this, e =>
+            {
+                this.State.Keyboard.KeyUp(e.Key);
+            }));
 
             builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
             {
@@ -90,9 +103,12 @@ namespace BlazeCardsCore.Components
                 }
 
 
-                var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
-                pos.ToLocalFromClient(this.Box);
-                this.State.Selector = RectFactory.CreateSelector(pos);
+                if (this.State.Keyboard.IsDown("Shift"))
+                {
+                    var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
+                    pos.ToLocalFromClient(this.Box);
+                    this.State.Selector = RectFactory.CreateSelector(pos);
+                }
 
 
                 Console.WriteLine("canvas down...");

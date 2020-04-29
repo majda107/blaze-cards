@@ -13,7 +13,9 @@ namespace BlazeCardsCore.State
         public bool ComponentClicked { get; set; }
 
 
+        public CanvasComponent Canvas { get; private set; }
         public MouseState Mouse { get; private set; }
+        public KeyboardState Keyboard { get; private set; }
 
 
         // EXCHANGE FOR CARD!
@@ -25,10 +27,13 @@ namespace BlazeCardsCore.State
         public RectCard Highlighter { get; set; }
         public RectCard Selector { get; set; }
 
-        public CardState()
+        public CardState(CanvasComponent canvas)
         {
+            this.Canvas = canvas;
+
             this.Selected = new List<Card>();
             this.Mouse = new MouseState(this);
+            this.Keyboard = new KeyboardState(this);
         }
 
         public void Deselect()
