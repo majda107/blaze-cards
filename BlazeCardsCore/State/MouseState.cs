@@ -79,18 +79,9 @@ namespace BlazeCardsCore.State
         {
             if (this.CardState.Selected.Count > 0)
             {
-                var minPos = new Vector2f(float.MaxValue, float.MaxValue);
                 foreach (var card in this.CardState.Selected)
-                {
                     card.Snap();
 
-                    var pos = card.GetGlobalPosition();
-                    if (pos.X < minPos.X) minPos.X = pos.X;
-                    if (pos.Y < minPos.Y) minPos.Y = pos.Y;
-                }
-
-
-                //this.CardState.Highlighter.PositionBehavior.Position = minPos;
                 this.CardState.Highlighter = RectFactory.CreateHighlighter(this.CardState.Selected);
             }
 
