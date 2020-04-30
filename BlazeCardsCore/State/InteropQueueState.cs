@@ -24,6 +24,8 @@ namespace BlazeCardsCore.State
 
         public void Flush(IJSRuntime js)
         {
+            //Console.WriteLine($"Flushing {this.Changes.Count} changes...");
+
             js.InvokeVoidAsync("changeFlush", this.Changes);
             this.Changes.Clear();
         }

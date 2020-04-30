@@ -13,7 +13,7 @@ namespace BlazeCardsCore.Behaviors
         private Vector2f _correction = Vector2f.Zero;
         public Vector2f Correction
         {
-            get => this._correction; 
+            get => this._correction;
             set
             {
                 this.dirty = true;
@@ -43,21 +43,21 @@ namespace BlazeCardsCore.Behaviors
             }
         }
 
-        private void Move(Vector2f position)
-        {
-            //Console.WriteLine($"Translatin.. {position.X} | {position.Y}");
-            if (this.Card == null) return;
-            //Console.WriteLine($"Translatin.. {position.X} | {position.Y}");
-            this.Card.JSRuntime.InvokeVoidAsync("translateGraphics", this.Card.Graphics, position.X, position.Y);
-        }
-
         public void Update()
         {
             if (!this.dirty) return;
 
             //Console.WriteLine("Updating position...");
             this.dirty = false;
-            this.Move(this.Position);
+
+            if (this.Card == null) return;
+
+            //Console.WriteLine("Flushing from position behavior!");
+            this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.Graphics, this.Position));
+            this.Card.Canvas.State.InteropQueue.Flush(this.Card.Canvas.JSRuntime);
+
+
+            //this.Move(this.Position);
         }
 
         public PositionBehavior()
