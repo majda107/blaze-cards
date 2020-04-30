@@ -32,6 +32,7 @@ text {
     font-size: 20px;
     fill: darkgray;
     white-space: pre;
+    background-color: red;
 }
 
     text:focus {

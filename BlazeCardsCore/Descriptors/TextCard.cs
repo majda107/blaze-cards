@@ -27,5 +27,10 @@ namespace BlazeCardsCore.Descriptors
         {
             return this.TextBehavior.BufferedSize;
         }
+
+        public virtual async Task BufferSizeAsync()
+        {
+            await this.TextBehavior.BufferSizeAsync();
+        }
     }
 }

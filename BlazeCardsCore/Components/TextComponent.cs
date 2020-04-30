@@ -24,6 +24,7 @@ namespace BlazeCardsCore.Components
 
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
+            this.RenderTextAddition(builder, ref seq);
 
             builder.OpenElement(seq++, "text");
 
@@ -85,9 +86,11 @@ namespace BlazeCardsCore.Components
             else seq += 6;
         }
 
+        protected virtual void RenderTextAddition(RenderTreeBuilder builder, ref int seq) { }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await this.TextDescriptor.TextBehavior.BufferSizeAsync();
+            await this.TextDescriptor.BufferSizeAsync();
 
             if (this.TextDescriptor.TextBehavior.Editing)
                 this.TextDescriptor.TextBehavior.Focus();
