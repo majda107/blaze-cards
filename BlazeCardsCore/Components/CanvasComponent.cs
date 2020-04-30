@@ -30,6 +30,8 @@ namespace BlazeCardsCore.Components
 
         public BoundingClientRect Box { get; private set; }
 
+        public bool ShouldInvalidate { get; set; }
+
         public CanvasComponent()
         {
 
@@ -37,27 +39,35 @@ namespace BlazeCardsCore.Components
             this.Cards = new List<Card>();
             this.Sequence = 0;
 
+            this.ShouldInvalidate = true;
 
             this.Cards.Add(new RectCard());
-            this.Cards.Add(new TextCard());
+            //this.Cards.Add(new TextCard());
+
+            for (int i = 0; i < 20; i++)
+            {
+                var card = new RectCard();
+                card.PositionBehavior.Position = new Vector2f(i * 30, i % 10 * 30);
+                this.Cards.Add(card);
+            }
 
 
-            var list = new VerticalListCard(false);
-            list.AddChild(new RectCard());
-            list.AddChild(new RectCard());
-            list.AddChild(new TextCard());
-            list.AddChild(new RectCard());
-            list.AddChild(new RectCard());
-            list.PositionBehavior.Position = new Vector2f(100, 100);
+            //var list = new VerticalListCard(false);
+            //list.AddChild(new RectCard());
+            //list.AddChild(new RectCard());
+            //list.AddChild(new TextCard());
+            //list.AddChild(new RectCard());
+            //list.AddChild(new RectCard());
+            //list.PositionBehavior.Position = new Vector2f(100, 100);
 
-            var list2 = new HorizontalListCard(false, 10);
-            list2.AddChild(new RectCard());
-            list2.AddChild(new RectCard());
-            list2.AddChild(new TextCard());
-            list2.PositionBehavior.Position = new Vector2f(100, 400);
+            //var list2 = new HorizontalListCard(false, 10);
+            //list2.AddChild(new RectCard());
+            //list2.AddChild(new RectCard());
+            //list2.AddChild(new TextCard());
+            //list2.PositionBehavior.Position = new Vector2f(100, 400);
 
-            this.Cards.Add(list);
-            this.Cards.Add(list2);
+            //this.Cards.Add(list);
+            //this.Cards.Add(list2);
             //this.Cards.Add(new CardComponent());
         }
 
@@ -77,7 +87,21 @@ namespace BlazeCardsCore.Components
                 this.shouldTranslate = false;
             }
 
+            Console.WriteLine("Re-rendering canvas");
+
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        protected override bool ShouldRender()
+        {
+            if (this.ShouldInvalidate)
+            {
+                this.ShouldInvalidate = false;
+                return true;
+            }
+
+            return false;
+            //return base.ShouldRender();
         }
 
         public void InvokeChange() => this.StateHasChanged();
@@ -92,11 +116,13 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(this.Sequence++, "onkeydown", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyDown(e.Key);
+                this.ShouldInvalidate = true;
             }));
 
             builder.AddAttribute(this.Sequence++, "onkeyup", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyUp(e.Key);
+                this.ShouldInvalidate = true;
             }));
 
             builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
@@ -126,6 +152,7 @@ namespace BlazeCardsCore.Components
 
                 //Console.WriteLine("canvas down...");
                 this.State.Mouse.OnDown(new Vector2f((float)e.ClientX, (float)e.ClientY));
+                this.ShouldInvalidate = true;
             }));
 
             builder.AddAttribute(this.Sequence++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
@@ -164,6 +191,8 @@ namespace BlazeCardsCore.Components
 
                     this.State.Selector = null;
                 }
+
+                this.ShouldInvalidate = true;
             }));
 
 

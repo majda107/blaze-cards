@@ -46,9 +46,6 @@ namespace BlazeCardsCore.State
 
             if (this.CardState.Selected.Count > 0)
             {
-                //this.CardState.Selected.PositionBehavior.Position += dev;
-                //if (this.CardState.Highlighter != null)
-                //    this.CardState.Highlighter.PositionBehavior.Position = this.CardState.Selected.GetGlobalPosition();
 
                 var minPos = new Vector2f(float.MaxValue, float.MaxValue);
                 foreach (var card in this.CardState.Selected)
@@ -74,7 +71,7 @@ namespace BlazeCardsCore.State
                 //this.Scroll += dev;
                 //this.CardState.Canvas.BufferTranslation();
             }
-                
+
 
 
             this.lastPosition = position;

@@ -28,10 +28,22 @@ namespace BlazeCardsCore.Components
         [Parameter]
         public Card Descriptor { get; set; }
 
+        public bool ShouldInvalidate { get; set; }
 
         public CardComponent()
         {
+            this.ShouldInvalidate = true;
+        }
 
+        protected override bool ShouldRender()
+        {
+            if (this.ShouldInvalidate)
+            {
+                this.ShouldInvalidate = false;
+                return true;
+            }
+
+            return false;
         }
 
         protected override void OnInitialized()
@@ -119,6 +131,7 @@ namespace BlazeCardsCore.Components
 
         public void InvokeChange()
         {
+            this.ShouldInvalidate = true;
             this.Descriptor.Update();
             this.StateHasChanged();
         }

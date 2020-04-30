@@ -21,6 +21,7 @@ namespace BlazeCardsCore.Behaviors
                 this._size = value;
 
                 if (this.Card == null) return;
+
                 this.Card.InvokeChange();
 
                 this.CorrectNegativeSize();
