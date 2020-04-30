@@ -46,6 +46,7 @@ namespace BlazeCardsCore.State
         {
             this.Highlighter = null;
             this.Selected.Clear();
+            this.Canvas.InvokeChange();
         }
     }
 }

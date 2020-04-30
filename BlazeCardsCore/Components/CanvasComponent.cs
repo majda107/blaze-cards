@@ -108,7 +108,11 @@ namespace BlazeCardsCore.Components
             //return base.ShouldRender();
         }
 
-        public void InvokeChange() => this.StateHasChanged();
+        public void InvokeChange()
+        {
+            this.ShouldInvalidate = true;
+            this.StateHasChanged();
+        }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {

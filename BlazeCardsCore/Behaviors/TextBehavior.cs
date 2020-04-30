@@ -43,6 +43,11 @@ namespace BlazeCardsCore.Behaviors
                 return;
             }
 
+            if (e.Key.ToLower() == "space")
+            {
+                this.Value += " ";
+            }
+
             if (e.Key.ToString().Length > 1) return;
 
             this.Value += e.Key.ToString();
@@ -62,8 +67,9 @@ namespace BlazeCardsCore.Behaviors
         {
             var size = new Vector2f();
 
-            size.X = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
-            size.Y = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextHeight", this.Card.TextRef);
+            var box = await this.Card.Canvas.JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.Card.TextRef);
+            size.X = (float)box.Width;
+            size.Y = (float)box.Height;
 
             if (!this.BufferedSize.Equals(size))
             {

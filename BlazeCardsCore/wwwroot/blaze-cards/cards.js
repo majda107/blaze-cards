@@ -8,13 +8,13 @@ function setFocus(element) {
     element.focus();
 }
 
-function getTextWidth(element) {
-    return element.getBoundingClientRect().width;
-}
+//function getTextWidth(element) {
+//    return element.getBoundingClientRect().width;
+//}
 
-function getTextHeight(element) {
-    return element.getBoundingClientRect().height;
-}
+//function getTextHeight(element) {
+//    return element.getBoundingClientRect().height;
+//}
 
 function getBoudingRect(element) {
     return element.getBoundingClientRect();

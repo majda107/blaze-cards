@@ -110,6 +110,8 @@ namespace BlazeCardsCore.Components
                             return;
                         }
                 }
+
+                this.Canvas.InvokeChange();
             }));
         }
 

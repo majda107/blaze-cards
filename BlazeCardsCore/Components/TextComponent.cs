@@ -39,6 +39,7 @@ namespace BlazeCardsCore.Components
                 //this.Canvas.State.Selected.Add(this.Descriptor);
 
                 this.Canvas.State.Deselect();
+                this.InvokeChange();
 
                 //Console.WriteLine("Editing...");
             }));
@@ -46,6 +47,7 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
             {
                 this.TextDescriptor.TextBehavior.Editing = false;
+                this.InvokeChange();
                 //this.Canvas.State.Selected = null;
             }));
 
@@ -53,6 +55,7 @@ namespace BlazeCardsCore.Components
             {
                 //Console.WriteLine("key down...");
                 this.TextDescriptor.TextBehavior.KeyDown(e);
+                this.InvokeChange();
             }));
 
 
@@ -82,22 +85,12 @@ namespace BlazeCardsCore.Components
             else seq += 6;
         }
 
-        private void Init()
-        {
-
-        }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await this.TextDescriptor.TextBehavior.BufferSizeAsync();
 
             if (this.TextDescriptor.TextBehavior.Editing)
-            {
                 this.TextDescriptor.TextBehavior.Focus();
-            }
-
-            if (firstRender)
-                this.Init();
 
             await base.OnAfterRenderAsync(firstRender);
         }
