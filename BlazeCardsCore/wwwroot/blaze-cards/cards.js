@@ -4,6 +4,10 @@
     graphics.style.transform = `translate(${x}px, ${y}px)`;
 }
 
+function scaleGraphics(graphics, zoom) {
+    graphics.style.transform = `scale(${zoom}, ${zoom})`
+}
+
 function setFocus(element) {
     element.focus();
 }

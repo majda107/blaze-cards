@@ -82,6 +82,11 @@ namespace BlazeCardsCore.Components
             this.State.InteropQueue.Flush(this.JSRuntime);
         }
 
+        public void Zoom()
+        {
+            this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom);
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -117,6 +122,14 @@ namespace BlazeCardsCore.Components
             builder.OpenElement(this.Sequence++, "svg");
             builder.AddAttribute(this.Sequence++, "class", "canvas");
             builder.AddAttribute(this.Sequence++, "tabindex", "0");
+
+            builder.AddAttribute(this.Sequence++, "onwheel", EventCallback.Factory.Create(this, e =>
+            {
+                Console.WriteLine("Zoomin !");
+
+                this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
+                this.Zoom();
+            }));
 
             builder.AddAttribute(this.Sequence++, "onkeydown", EventCallback.Factory.Create(this, e =>
             {

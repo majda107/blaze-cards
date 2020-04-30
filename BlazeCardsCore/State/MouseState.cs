@@ -13,6 +13,7 @@ namespace BlazeCardsCore.State
         public bool Down { get; private set; }
 
         public Vector2f Scroll { get; private set; }
+        public float Zoom { get; set; }
 
 
         private Vector2f lastPosition;
@@ -24,6 +25,7 @@ namespace BlazeCardsCore.State
 
             this.lastPosition = Vector2f.Zero;
             this.Scroll = Vector2f.Zero;
+            this.Zoom = 1.0f;
         }
 
         public void OnDown(Vector2f position)
@@ -44,6 +46,7 @@ namespace BlazeCardsCore.State
             if (!this.Down) return;
 
             var dev = position - this.lastPosition;
+            dev /= this.Zoom;
 
             //Console.WriteLine($"Mouse move: {position.X}");
 

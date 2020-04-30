@@ -31,6 +31,16 @@ namespace BlazeCardsCore.Models
             return new Vector2f(a.X + b.X, a.Y + b.Y);
         }
 
+        public static Vector2f operator /(Vector2f vec, float scalar)
+        {
+            return new Vector2f(vec.X / scalar, vec.Y / scalar);
+        }
+
+        public static Vector2f operator *(Vector2f vec, float scalar)
+        {
+            return new Vector2f(vec.X * scalar, vec.Y * scalar);
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is Vector2f)) return false;
