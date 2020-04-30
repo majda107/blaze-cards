@@ -71,9 +71,12 @@ namespace BlazeCardsCore.Behaviors
             size.X = (float)box.Width;
             size.Y = (float)box.Height;
 
+            // oh god fix
+            size /= this.Card.Canvas.State.Mouse.Zoom;
+
             if (!this.BufferedSize.Equals(size))
             {
-                //Console.WriteLine("Buffering new text size");
+                Console.WriteLine("Buffering new text size");
                 this.BufferedSize = size;
                 this.Card.InvokeChange();
             }

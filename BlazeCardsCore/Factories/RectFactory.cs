@@ -29,6 +29,8 @@ namespace BlazeCardsCore.Factories
             var pos = cards[0].GetGlobalPosition();
             var size = cards[0].GetSize() + pos;
 
+            //Console.WriteLine($"Creating highlighter with BASE size x:{cards[0].GetSize().X} y:{cards[0].GetSize().Y}");
+
             var notedPos = cards[0].GetGlobalPosition();
             foreach (var card in cards)
             {
@@ -45,6 +47,7 @@ namespace BlazeCardsCore.Factories
             }
 
             size -= pos;
+
 
             var highlighter = new RectCard();
             highlighter.PositionBehavior.Position = pos;

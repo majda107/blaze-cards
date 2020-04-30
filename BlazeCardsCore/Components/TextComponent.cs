@@ -75,7 +75,7 @@ namespace BlazeCardsCore.Components
             if (this.TextDescriptor.TextBehavior.Editing)
             {
                 builder.OpenElement(seq++, "rect");
-                builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
+                builder.AddAttribute(seq++, "x", ((this.TextDescriptor.TextBehavior.Caret + 2) / this.Canvas.State.Mouse.Zoom).ToString("0.0").Replace(',', '.'));
                 builder.AddAttribute(seq++, "y", "4");
                 builder.AddAttribute(seq++, "height", "20px");
                 builder.AddAttribute(seq++, "width", "2px");
