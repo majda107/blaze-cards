@@ -12,20 +12,22 @@ namespace BlazeCardsCore.Behaviors
     public class TextBehavior
     {
         public TextComponent Card { get; private set; }
-        public Vector2f BufferedSize { get; private set; }
+        public SizeBehavior BufferedSize { get; private set; }
 
         public string Value { get; set; }
-        public float Caret { get => this.BufferedSize.X; }
+        public float Caret { get => this.BufferedSize.Size.X; }
         public bool Editing { get; set; }
 
         public TextBehavior()
         {
             this.Value = "default text";
+            this.BufferedSize = new SizeBehavior();
         }
 
         public void AssignComponent(TextComponent card)
         {
             this.Card = card;
+            this.BufferedSize.AssignComponent(card);
         }
 
         public void Focus()
@@ -74,10 +76,10 @@ namespace BlazeCardsCore.Behaviors
             // oh god fix
             size /= this.Card.Canvas.State.Mouse.Zoom;
 
-            if (!this.BufferedSize.Equals(size))
+            if (!this.BufferedSize.Size.Equals(size))
             {
                 Console.WriteLine("Buffering new text size");
-                this.BufferedSize = size;
+                this.BufferedSize.Size = size;
                 this.Card.InvokeChange();
             }
         }

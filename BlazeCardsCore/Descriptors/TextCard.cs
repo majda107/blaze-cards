@@ -25,7 +25,7 @@ namespace BlazeCardsCore.Descriptors
 
         public override Vector2f GetSize()
         {
-            return this.TextBehavior.BufferedSize;
+            return this.TextBehavior.BufferedSize.Size;
         }
 
         public virtual async Task BufferSizeAsync()
