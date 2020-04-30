@@ -70,12 +70,13 @@ namespace BlazeCardsCore.State
 
 
 
-            if (this.CardState.Selector != null)
+            if (this.CardState.Selector.Visible)
                 this.CardState.Selector.SizeBehavior.Size += dev;
-            else
+
+            if(!this.CardState.Selector.Visible && this.CardState.Selected.Count <= 0)
             {
-                //this.Scroll += dev;
-                //this.CardState.Canvas.BufferTranslation();
+                this.Scroll += dev;
+                this.CardState.Canvas.Translate();
             }
 
 

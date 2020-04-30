@@ -75,9 +75,11 @@ namespace BlazeCardsCore.Components
             //this.Cards.Add(new CardComponent());
         }
 
-        public void BufferTranslation()
+        public void Translate()
         {
-            this.shouldTranslate = true;
+            //this.shouldTranslate = true;
+            this.State.InteropQueue.QueueChange(new PositionChange(this.CanvasGraphicsReference, this.State.Mouse.Scroll));
+            this.State.InteropQueue.Flush(this.JSRuntime);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -85,11 +87,6 @@ namespace BlazeCardsCore.Components
             if (firstRender)
                 this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasGraphicsReference);
 
-            if (this.shouldTranslate)
-            {
-                await this.JSRuntime.InvokeVoidAsync("translateGraphics", this.CanvasGraphicsReference, this.State.Mouse.Scroll.X, this.State.Mouse.Scroll.Y);
-                this.shouldTranslate = false;
-            }
 
             Console.WriteLine("Re-rendering canvas");
 
@@ -155,7 +152,6 @@ namespace BlazeCardsCore.Components
                     var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
                     pos.ToLocalFromClient(this.Box);
 
-                    //Console.WriteLine("Creating selector...");
                     //this.State.Selector = RectFactory.CreateSelector(pos);
 
                     // reset selector
