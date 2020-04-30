@@ -41,17 +41,17 @@ namespace BlazeCardsCore.Components
 
             this.ShouldInvalidate = true;
 
-            this.Cards.Add(new RectCard());
+            //this.Cards.Add(new RectCard());
             //this.Cards.Add(new TextCard());
 
             for (int i = 0; i < 20; i++)
             {
                 var card = new RectCard();
-                card.PositionBehavior.Position = new Vector2f(i * 30 + 200, i % 10 * 30 + 300);
+                card.PositionBehavior.Position = new Vector2f(i * 30 + 300, i % 10 * 30 + 300);
                 this.Cards.Add(card);
 
                 var textCard = new TextCard();
-                textCard.PositionBehavior.Position = new Vector2f(i * 30 + 240, i % 10 * 30 + 300);
+                textCard.PositionBehavior.Position = new Vector2f(i * 30 + 340, i % 10 * 30 + 300);
                 this.Cards.Add(textCard);
             }
 
