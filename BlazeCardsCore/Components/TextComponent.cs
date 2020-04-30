@@ -22,6 +22,28 @@ namespace BlazeCardsCore.Components
             //this.TextBehavior = new TextBehavior(this);
         }
 
+        protected void HookDoubleClick(RenderTreeBuilder builder, ref int seq)
+        {
+            builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
+            {
+                this.TextDescriptor.TextBehavior.Editing = true;
+
+                this.Canvas.State.Deselect();
+                this.InvokeChange();
+            }));
+        }
+
+        protected void HookBlur(RenderTreeBuilder builder, ref int seq)
+        {
+            builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
+            {
+                this.TextDescriptor.TextBehavior.Editing = false;
+                this.InvokeChange();
+                //this.Canvas.State.Selected = null;
+            }));
+        }
+            
+
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
             this.RenderTextAddition(builder, ref seq);
@@ -30,27 +52,11 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "class", "blaze-text");
             builder.AddAttribute(seq++, "tabindex", "0");
-            builder.AddAttribute(seq++, "x", "0");
-            builder.AddAttribute(seq++, "y", "20");
+            builder.AddAttribute(seq++, "x", $"{this.TextDescriptor.TextBehavior.Padding.X}px");
+            builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 20}px");
 
-            builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
-            {
-                //Console.WriteLine("CANVAS DOUBLE CLICCCCC...");
-                this.TextDescriptor.TextBehavior.Editing = true;
-                //this.Canvas.State.Selected.Add(this.Descriptor);
-
-                this.Canvas.State.Deselect();
-                this.InvokeChange();
-
-                //Console.WriteLine("Editing...");
-            }));
-
-            builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
-            {
-                this.TextDescriptor.TextBehavior.Editing = false;
-                this.InvokeChange();
-                //this.Canvas.State.Selected = null;
-            }));
+            this.HookDoubleClick(builder, ref seq);
+            this.HookBlur(builder, ref seq);
 
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
@@ -76,8 +82,8 @@ namespace BlazeCardsCore.Components
             if (this.TextDescriptor.TextBehavior.Editing)
             {
                 builder.OpenElement(seq++, "rect");
-                builder.AddAttribute(seq++, "x", ((this.TextDescriptor.TextBehavior.Caret + 2) / this.Canvas.State.Mouse.Zoom).ToString("0.0").Replace(',', '.'));
-                builder.AddAttribute(seq++, "y", "4");
+                builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
+                builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 4}px");
                 builder.AddAttribute(seq++, "height", "20px");
                 builder.AddAttribute(seq++, "width", "2px");
                 builder.AddAttribute(seq++, "class", "card-caret");

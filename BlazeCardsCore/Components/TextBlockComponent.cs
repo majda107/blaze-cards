@@ -16,7 +16,11 @@ namespace BlazeCardsCore.Components
             builder.OpenElement(seq++, "rect");
             builder.AddAttribute(seq++, "x", "0");
             builder.AddAttribute(seq++, "y", "0");
-            builder.AddAttribute(seq++, "class", "text-background");
+            builder.AddAttribute(seq++, "class", "text-background blaze-rect");
+
+            this.HookMouseDown(builder, ref seq);
+            this.HookDoubleClick(builder, ref seq);
+            this.HookBlur(builder, ref seq);
 
             builder.AddElementReferenceCapture(seq++, eref =>
             {

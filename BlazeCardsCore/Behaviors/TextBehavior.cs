@@ -13,6 +13,7 @@ namespace BlazeCardsCore.Behaviors
     {
         public TextComponent Card { get; private set; }
         public SizeBehavior BufferedSize { get; private set; }
+        public Vector2f Padding { get; set; }
 
         public string Value { get; set; }
         public float Caret { get => this.BufferedSize.Size.X; }
@@ -22,6 +23,7 @@ namespace BlazeCardsCore.Behaviors
         {
             this.Value = "default text";
             this.BufferedSize = new SizeBehavior();
+            this.Padding = new Vector2f(8.0f, 4.0f);
         }
 
         public void AssignComponent(TextComponent card)
@@ -75,6 +77,8 @@ namespace BlazeCardsCore.Behaviors
 
             // oh god fix
             size /= this.Card.Canvas.State.Mouse.Zoom;
+
+            size += this.Padding * 2f;
 
             if (!this.BufferedSize.Size.Equals(size))
             {
