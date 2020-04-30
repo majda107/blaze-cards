@@ -53,6 +53,7 @@ namespace BlazeCardsCore.Components
 
         protected override void OnInitialized()
         {
+            Console.WriteLine("Element initialized!");
             this.Descriptor.AssignComponent(this);
             base.OnInitialized();
         }
@@ -69,6 +70,9 @@ namespace BlazeCardsCore.Components
 
 
             builder.OpenElement(seq++, "g");
+            //if (this.Descriptor.Visible)
+            //    builder.AddAttribute(seq++, "class", "visible");
+            //else seq++;
 
 
             this.RenderInner(builder, ref seq);

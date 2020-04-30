@@ -61,7 +61,7 @@ namespace BlazeCardsCore.Factories
             selector.PositionBehavior.Position = pos;
             selector.SizeBehavior.Size = Vector2f.Zero;
             selector.SizeBehavior.HookNegativeSize(selector.PositionBehavior);
-            selector.Classes.Add("card-highlighter");
+            selector.Classes.Add("card-selector");
 
             return selector;
         }

@@ -1,5 +1,7 @@
 ﻿using BlazeCardsCore.Components;
 using BlazeCardsCore.Descriptors;
+using BlazeCardsCore.Factories;
+using BlazeCardsCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +38,8 @@ namespace BlazeCardsCore.State
             this.Mouse = new MouseState(this);
             this.Keyboard = new KeyboardState(this);
             this.InteropQueue = new InteropQueueState(this);
+
+            this.Selector = RectFactory.CreateSelector(Vector2f.Zero);
         }
 
         public void Deselect()

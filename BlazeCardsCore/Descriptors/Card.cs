@@ -17,6 +17,25 @@ namespace BlazeCardsCore.Descriptors
         public Card Parent { get; set; }
 
         public bool Clickable { get; set; }
+
+        private bool _visible;
+        public bool Visible
+        {
+            get => this._visible;
+            set
+            {
+                if (value && !this.Classes.Contains("visible"))
+                    this.Classes.Add("visible");
+                else if (!value && this.Classes.Contains("visible"))
+                    this.Classes.Remove("visible");
+
+                this._visible = value;
+            }
+        }
+
+
+
+
         public List<string> Classes { get; set; }
 
         public Card(Card parent = null)
@@ -29,6 +48,8 @@ namespace BlazeCardsCore.Descriptors
 
             this.Clickable = true;
             this.Classes = new List<string>();
+
+            this.Visible = true;
         }
 
         public virtual void AssignComponent(CardComponent component)

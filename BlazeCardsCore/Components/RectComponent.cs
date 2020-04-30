@@ -26,10 +26,20 @@ namespace BlazeCardsCore.Components
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
             builder.OpenElement(seq++, "rect");
-            builder.AddAttribute(seq++, "class", "blaze-rect");
 
+            var classList = "blaze-rect";
             foreach (var elementClass in this.Descriptor.Classes)
-                builder.AddAttribute(seq++, "class", elementClass);
+            {
+                classList += $" {elementClass}";
+                Console.WriteLine($"Adding class {elementClass}");
+            }
+                
+
+            builder.AddAttribute(seq++, "class", classList);
+
+            //foreach (var elementClass in this.Descriptor.Classes)
+            //    builder.AddAttribute(seq++, "class", elementClass);
+
 
             this.HookMouseDown(builder, ref seq);
 

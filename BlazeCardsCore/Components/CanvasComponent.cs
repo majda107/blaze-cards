@@ -150,7 +150,17 @@ namespace BlazeCardsCore.Components
                 {
                     var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
                     pos.ToLocalFromClient(this.Box);
-                    this.State.Selector = RectFactory.CreateSelector(pos);
+
+                    //Console.WriteLine("Creating selector...");
+                    //this.State.Selector = RectFactory.CreateSelector(pos);
+
+                    // reset selector
+                    this.State.Selector.PositionBehavior.Position = pos;
+                    this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
+                    this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
+                    this.State.Selector.Visible = true;
+                    this.State.Selector.Component.ShouldInvalidate = true;
+                    this.State.Selector.Component.InvokeChange();
                 }
 
 
@@ -170,7 +180,7 @@ namespace BlazeCardsCore.Components
                 //this.State.Selected = null;
                 //this.State.Highlighter = null;
 
-                if (this.State.Selector != null)
+                if (this.State.Selector != null && this.State.Selector.Visible)
                 {
                     var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
                     var traversed = new List<Card>();
@@ -193,7 +203,9 @@ namespace BlazeCardsCore.Components
 
                     //Console.WriteLine("No overlap");
 
-                    this.State.Selector = null;
+                    this.State.Selector.Visible = false;
+                    this.State.Selector.Component.ShouldInvalidate = true;
+                    this.State.Selector.Component.InvokeChange();
                 }
 
                 this.ShouldInvalidate = true;

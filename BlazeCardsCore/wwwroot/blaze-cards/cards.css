@@ -46,6 +46,21 @@ text {
     stroke-dasharray: 4;
 }
 
+.card-selector {
+    fill: transparent;
+    pointer-events: none;
+    user-select: none;
+    stroke: rgba(190, 190, 190, 0.7);
+    fill: rgba(230, 230, 230, 0.3);
+    stroke-width: 0.5px;
+    opacity: 0;
+    transition: opacity 400ms;
+}
+
+.visible {
+    transition: opacity 0ms;
+    opacity: 1.0 !important;
+}
 
 
 
