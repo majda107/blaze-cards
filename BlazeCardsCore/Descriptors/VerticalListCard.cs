@@ -41,7 +41,7 @@ namespace BlazeCardsCore.Descriptors
         {
             base.Snap();
 
-            Console.WriteLine($"List snapping {this.Children.Count} children...");
+            //Console.WriteLine($"List snapping {this.Children.Count} children...");
 
             if (!this.Fixed) this.Children = this.Children.OrderBy(card => card.GetPosition().Y).ToList();
 

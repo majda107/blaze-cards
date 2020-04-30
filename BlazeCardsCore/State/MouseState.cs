@@ -71,8 +71,8 @@ namespace BlazeCardsCore.State
                 this.CardState.Selector.SizeBehavior.Size += dev;
             else
             {
-                this.Scroll += dev;
-                this.CardState.Canvas.BufferTranslation();
+                //this.Scroll += dev;
+                //this.CardState.Canvas.BufferTranslation();
             }
                 
 
