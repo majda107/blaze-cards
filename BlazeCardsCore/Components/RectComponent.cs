@@ -16,6 +16,7 @@ namespace BlazeCardsCore.Components
         //public SizeBehavior Size { get; private set; }
 
         public RectCard RectDescriptor { get => this.Descriptor as RectCard; }
+        public ElementReference RectElement { get; private set; }
         public RectComponent()
         {
             //this.Size = new SizeBehavior(this, 30, 30);
@@ -26,17 +27,30 @@ namespace BlazeCardsCore.Components
         {
             builder.OpenElement(seq++, "rect");
             builder.AddAttribute(seq++, "class", "blaze-rect");
-            builder.AddAttribute(seq++, "width", $"{Math.Abs(this.RectDescriptor.SizeBehavior.Width).ToString("0.0").Replace(',', '.')}px");
-            builder.AddAttribute(seq++, "height", $"{Math.Abs(this.RectDescriptor.SizeBehavior.Height).ToString("0.0").Replace(',', '.')}px");
 
             foreach (var elementClass in this.Descriptor.Classes)
                 builder.AddAttribute(seq++, "class", elementClass);
 
             this.HookMouseDown(builder, ref seq);
 
+            builder.AddElementReferenceCapture(seq++, eref =>
+            {
+                this.RectElement = eref;
+            });
+
             builder.CloseElement();
         }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            this.OnBlazeRender();
+            base.OnAfterRender(firstRender);
+        }
+
+        public override void OnBlazeRender()
+        {
+            this.RectDescriptor.SizeBehavior.SetWidthHeightAttribute(this.RectElement);
+            base.OnBlazeRender();
+        }
     }
-
-
 }

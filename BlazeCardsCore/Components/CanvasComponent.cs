@@ -120,13 +120,13 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(this.Sequence++, "onkeydown", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyDown(e.Key);
-                this.ShouldInvalidate = true;
+                //this.ShouldInvalidate = true;
             }));
 
             builder.AddAttribute(this.Sequence++, "onkeyup", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyUp(e.Key);
-                this.ShouldInvalidate = true;
+                //this.ShouldInvalidate = true;
             }));
 
             builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>

@@ -42,6 +42,8 @@ namespace BlazeCardsCore.State
             if (!this.Down) return;
 
             //Console.WriteLine($"Mouse move: {position.X}");
+
+
             var dev = position - this.lastPosition;
 
             if (this.CardState.Selected.Count > 0)

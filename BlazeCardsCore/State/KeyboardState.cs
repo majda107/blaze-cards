@@ -23,7 +23,7 @@ namespace BlazeCardsCore.State
             if (this.KeysDown.Contains(key)) return;
             this.KeysDown.Add(key);
 
-            Console.WriteLine($"Key down... {key}");
+            //Console.WriteLine($"Key down... {key}");
         }
 
 
@@ -33,7 +33,7 @@ namespace BlazeCardsCore.State
             if (!this.KeysDown.Contains(key)) return;
             this.KeysDown.Remove(key);
 
-            Console.WriteLine($"Key up... {key}");
+            //Console.WriteLine($"Key up... {key}");
         }
 
         public bool IsDown(string key) => this.KeysDown.Contains(key);

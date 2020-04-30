@@ -28,5 +28,11 @@ namespace BlazeCardsCore.Descriptors
         {
             return this.SizeBehavior.Size;
         }
+
+        //public override void Update()
+        //{
+        //    this.SizeBehavior.set
+        //    base.Update();
+        //}
     }
 }

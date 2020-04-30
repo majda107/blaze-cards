@@ -1,5 +1,7 @@
 ﻿using BlazeCardsCore.Components;
 using BlazeCardsCore.Models;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +24,11 @@ namespace BlazeCardsCore.Behaviors
 
                 if (this.Card == null) return;
 
-                this.Card.InvokeChange();
+                //this.Card.InvokeChange();
 
                 this.CorrectNegativeSize();
+
+                this.Card.OnBlazeRender();
             }
         }
 
@@ -54,6 +58,13 @@ namespace BlazeCardsCore.Behaviors
 
             //this.PositionBehavior.Position += new Vector2f(this.Size.X < 0 ? this.Size.X : 0, this.Size.Y < 0 ? this.Size.Y : 0);
             //this._size = new Vector2f(Math.Abs(this.Size.X), Math.Abs(this.Size.Y));
+        }
+
+        public void SetWidthHeightAttribute(ElementReference element)
+        {
+            if (this.Card == null) return;
+
+            this.Card.JSRuntime.InvokeVoidAsync("setWidthHeightAttribute", element, Math.Abs(this.Width), Math.Abs(this.Height));
         }
     }
 }

@@ -46,6 +46,11 @@ namespace BlazeCardsCore.Components
             return false;
         }
 
+        public virtual void OnBlazeRender()
+        {
+            this.Descriptor?.PositionBehavior?.Update();
+        }
+
         protected override void OnInitialized()
         {
             this.Descriptor.AssignComponent(this);
@@ -143,8 +148,10 @@ namespace BlazeCardsCore.Components
 
             //this.Descriptor.AssignComponent(this);
 
+            Console.WriteLine($"Rendering component {this.GetType().ToString()}");
+
             this.Descriptor?.AssignComponent(this);
-            this.Descriptor?.PositionBehavior?.Update();
+            this.OnBlazeRender();
 
             base.OnAfterRender(firstRender);
         }

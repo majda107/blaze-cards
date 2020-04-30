@@ -40,7 +40,7 @@ namespace BlazeCardsCore.Components
 
                 this.Canvas.State.Deselect();
 
-                Console.WriteLine("Editing...");
+                //Console.WriteLine("Editing...");
             }));
 
             builder.AddAttribute(seq++, "onblur", EventCallback.Factory.Create(this, () =>
@@ -51,7 +51,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
-                Console.WriteLine("key down...");
+                //Console.WriteLine("key down...");
                 this.TextDescriptor.TextBehavior.KeyDown(e);
             }));
 

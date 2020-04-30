@@ -19,3 +19,8 @@ function getTextHeight(element) {
 function getBoudingRect(element) {
     return element.getBoundingClientRect();
 }
+
+function setWidthHeightAttribute(element, width, height) {
+    element.setAttribute("width", width);
+    element.setAttribute("height", height);
+}

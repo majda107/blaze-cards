@@ -18,7 +18,7 @@ namespace BlazeCardsCore.Factories
             highlighter.Classes.Add("card-highlighter");
             //highlighter.PositionBehavior.Update();
 
-            Console.WriteLine($"Created highlighter with size: {highlighter.SizeBehavior.Width} {highlighter.SizeBehavior.Height}, position {highlighter.PositionBehavior.Position.X}, {highlighter.PositionBehavior.Position.Y}");
+            //Console.WriteLine($"Created highlighter with size: {highlighter.SizeBehavior.Width} {highlighter.SizeBehavior.Height}, position {highlighter.PositionBehavior.Position.X}, {highlighter.PositionBehavior.Position.Y}");
             return highlighter;
         }
 
