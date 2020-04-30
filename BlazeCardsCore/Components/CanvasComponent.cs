@@ -159,7 +159,6 @@ namespace BlazeCardsCore.Components
                     this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
                     this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                     this.State.Selector.Visible = true;
-                    this.State.Selector.Component.ShouldInvalidate = true;
                     this.State.Selector.Component.InvokeChange();
                 }
 
@@ -204,7 +203,6 @@ namespace BlazeCardsCore.Components
                     //Console.WriteLine("No overlap");
 
                     this.State.Selector.Visible = false;
-                    this.State.Selector.Component.ShouldInvalidate = true;
                     this.State.Selector.Component.InvokeChange();
                 }
 

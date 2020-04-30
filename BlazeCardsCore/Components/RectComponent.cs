@@ -29,11 +29,8 @@ namespace BlazeCardsCore.Components
 
             var classList = "blaze-rect";
             foreach (var elementClass in this.Descriptor.Classes)
-            {
                 classList += $" {elementClass}";
-                Console.WriteLine($"Adding class {elementClass}");
-            }
-                
+
 
             builder.AddAttribute(seq++, "class", classList);
 
