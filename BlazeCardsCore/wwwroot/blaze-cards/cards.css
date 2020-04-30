@@ -1,8 +1,11 @@
 ﻿.canvas {
     width: 100%;
     height: 100%;
-    border: 1px solid black;
 }
+
+    .canvas:focus {
+        outline: none;
+    }
 
 .canvas-zoom {
     /*transform-origin: 0;
@@ -68,7 +71,7 @@ text {
 
 
 
-/* NEW BLAZE */ 
+/* NEW BLAZE */
 .blaze-text:hover, .blaze-rect:hover {
     cursor: move;
 }

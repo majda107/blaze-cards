@@ -47,11 +47,11 @@ namespace BlazeCardsCore.Components
             for (int i = 0; i < 20; i++)
             {
                 var card = new RectCard();
-                card.PositionBehavior.Position = new Vector2f(i * 30, i % 10 * 30);
+                card.PositionBehavior.Position = new Vector2f(i * 30 + 200, i % 10 * 30 + 300);
                 this.Cards.Add(card);
 
                 var textCard = new TextCard();
-                textCard.PositionBehavior.Position = new Vector2f(i * 30 + 40, i % 10 * 30);
+                textCard.PositionBehavior.Position = new Vector2f(i * 30 + 240, i % 10 * 30 + 300);
                 this.Cards.Add(textCard);
             }
 
@@ -114,6 +114,37 @@ namespace BlazeCardsCore.Components
         {
             this.ShouldInvalidate = true;
             this.StateHasChanged();
+        }
+
+        private void OnUpLeaveCallback(MouseEventArgs e)
+        {
+            var pos = e == null ? Vector2f.Zero : new Vector2f((int)e.ClientX, (int)e.ClientY);
+            this.State.Mouse.OnUp(pos);
+
+            if (this.State.Selector != null && this.State.Selector.Visible)
+            {
+                var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
+                var traversed = new List<Card>();
+                foreach (var card in this.Cards)
+                {
+                    card.TraverseOverlap(selectorBox, traversed);
+                }
+
+                if (traversed.Count > 0)
+                {
+                    //Console.WriteLine($"Selecting {traversed.Count} items...");
+
+                    foreach (var traversedCard in traversed)
+                        this.State.Selected.Add(traversedCard);
+
+                    this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
+                }
+
+                this.State.Selector.Visible = false;
+                this.State.Selector.Component.InvokeChange();
+            }
+
+            this.ShouldInvalidate = true;
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -189,38 +220,12 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(this.Sequence++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
-                this.State.Mouse.OnUp(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                //this.State.Selected = null;
-                //this.State.Highlighter = null;
+                this.OnUpLeaveCallback(e);
+            }));
 
-                if (this.State.Selector != null && this.State.Selector.Visible)
-                {
-                    var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
-                    var traversed = new List<Card>();
-                    foreach (var card in this.Cards)
-                    {
-                        card.TraverseOverlap(selectorBox, traversed);
-                    }
-
-                    if (traversed.Count > 0)
-                    {
-                        //Console.WriteLine($"Selecting {traversed.Count} items...");
-
-                        foreach (var traversedCard in traversed)
-                            this.State.Selected.Add(traversedCard);
-                        //this.State.Selected = traversedCard
-                        //this.State.Highlighter = RectFactory.CreateHighlighter(traversed.First());
-                        this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
-                        //break;
-                    }
-
-                    //Console.WriteLine("No overlap");
-
-                    this.State.Selector.Visible = false;
-                    this.State.Selector.Component.InvokeChange();
-                }
-
-                this.ShouldInvalidate = true;
+            builder.AddAttribute(this.Sequence++, "onmouseleave", EventCallback.Factory.Create(this, async (_) =>
+            {
+                this.OnUpLeaveCallback(null);
             }));
 
 

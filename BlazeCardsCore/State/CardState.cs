@@ -40,6 +40,7 @@ namespace BlazeCardsCore.State
             this.InteropQueue = new InteropQueueState(this);
 
             this.Selector = RectFactory.CreateSelector(Vector2f.Zero);
+            this.Selector.Visible = false;
         }
 
         public void Deselect()
