@@ -49,18 +49,22 @@ namespace BlazeCardsCore.State
             if (this.CardState.Selected.Count > 0)
             {
 
-                var minPos = new Vector2f(float.MaxValue, float.MaxValue);
+                //var minPos = new Vector2f(float.MaxValue, float.MaxValue);
                 foreach (var card in this.CardState.Selected)
                 {
                     card.PositionBehavior.Position += dev;
+                    //this.CardState.InteropQueue.QueueChange(new PositionChange(card.Component.Graphics, card.GetPosition()));
 
-                    var pos = card.GetGlobalPosition();
-                    if (pos.X < minPos.X) minPos.X = pos.X;
-                    if (pos.Y < minPos.Y) minPos.Y = pos.Y;
+
+                    //var pos = card.GetGlobalPosition();
+                    //if (pos.X < minPos.X) minPos.X = pos.X;
+                    //if (pos.Y < minPos.Y) minPos.Y = pos.Y;
                 }
 
                 if (this.CardState.Highlighter != null)
-                    this.CardState.Highlighter.PositionBehavior.Position = minPos;
+                    this.CardState.Highlighter.PositionBehavior.Position += dev;
+
+                this.CardState.InteropQueue.Flush(this.CardState.Canvas.JSRuntime);
             }
 
 

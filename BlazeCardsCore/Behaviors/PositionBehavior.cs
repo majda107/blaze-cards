@@ -36,7 +36,10 @@ namespace BlazeCardsCore.Behaviors
             {
                 this.dirty = true;
                 this._position = value;
-                this.Move(this.Position);
+                //this.Move(this.Position);
+
+                if (this.Card == null) return;
+                this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.Graphics, this.Position));
             }
         }
 

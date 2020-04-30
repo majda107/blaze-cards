@@ -24,3 +24,9 @@ function setWidthHeightAttribute(element, width, height) {
     element.setAttribute("width", width);
     element.setAttribute("height", height);
 }
+
+function changeFlush(changes) {
+    for (let change of changes) {
+        translateGraphics(change.element, change.change.x, change.change.y);
+    }
+}
