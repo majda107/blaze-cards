@@ -5,8 +5,8 @@
 }
 
 .canvas-zoom {
-    transform-origin: 0;
-    -webkit-transform-origin: 0;
+    /*transform-origin: 0;
+    -webkit-transform-origin: 0;*/
 }
 
 g {
