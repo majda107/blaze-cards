@@ -133,6 +133,7 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
             {
                 // broken event propag
+
                 if (this.State.ComponentClicked)
                 {
                     this.State.ComponentClicked = false;
@@ -155,7 +156,7 @@ namespace BlazeCardsCore.Components
                     //this.State.Selector = RectFactory.CreateSelector(pos);
 
                     // reset selector
-                    this.State.Selector.PositionBehavior.Position = pos;
+                    this.State.Selector.PositionBehavior.Position = pos - this.State.Mouse.Scroll;
                     this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
                     this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                     this.State.Selector.Visible = true;

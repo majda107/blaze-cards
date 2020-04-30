@@ -28,6 +28,8 @@ namespace BlazeCardsCore.State
 
         public void OnDown(Vector2f position)
         {
+            //position -= this.Scroll;
+
             this.Down = true;
             //Console.WriteLine($"Mouse down: {position.X}");
 
@@ -41,10 +43,10 @@ namespace BlazeCardsCore.State
         {
             if (!this.Down) return;
 
+            var dev = position - this.lastPosition;
+
             //Console.WriteLine($"Mouse move: {position.X}");
 
-
-            var dev = position - this.lastPosition;
 
             if (this.CardState.Selected.Count > 0)
             {
@@ -73,19 +75,20 @@ namespace BlazeCardsCore.State
             if (this.CardState.Selector.Visible)
                 this.CardState.Selector.SizeBehavior.Size += dev;
 
-            if(!this.CardState.Selector.Visible && this.CardState.Selected.Count <= 0)
+            if (!this.CardState.Selector.Visible && this.CardState.Selected.Count <= 0)
             {
                 this.Scroll += dev;
                 this.CardState.Canvas.Translate();
             }
 
 
-
             this.lastPosition = position;
+
         }
 
         public void OnUp(Vector2f position)
         {
+            //position -= this.Scroll;
             if (this.CardState.Selected.Count > 0)
             {
                 foreach (var card in this.CardState.Selected)
