@@ -49,6 +49,10 @@ namespace BlazeCardsCore.Components
                 var card = new RectCard();
                 card.PositionBehavior.Position = new Vector2f(i * 30, i % 10 * 30);
                 this.Cards.Add(card);
+
+                var textCard = new TextCard();
+                textCard.PositionBehavior.Position = new Vector2f(i * 30 + 40, i % 10 * 30);
+                this.Cards.Add(textCard);
             }
 
 
