@@ -23,10 +23,10 @@ namespace BlazeCardsCore.Components
 
 
 
-        public int Sequence { get; set; }
-
         public ElementReference CanvasGraphicsReference { get; private set; }
         public ElementReference CanvasZoomReference { get; private set; }
+
+
 
         public BoundingClientRect Box { get; private set; }
 
@@ -35,8 +35,6 @@ namespace BlazeCardsCore.Components
         public CanvasComponent()
         {
             this.State = new CardState(this);
-            this.Sequence = 0;
-
             this.ShouldInvalidate = true;
         }
 
@@ -97,12 +95,12 @@ namespace BlazeCardsCore.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            this.Sequence = 0;
-            builder.OpenElement(this.Sequence++, "svg");
-            builder.AddAttribute(this.Sequence++, "class", "canvas");
-            builder.AddAttribute(this.Sequence++, "tabindex", "0");
+            int seq = 0;
+            builder.OpenElement(seq++, "svg");
+            builder.AddAttribute(seq++, "class", "canvas");
+            builder.AddAttribute(seq++, "tabindex", "0");
 
-            builder.AddAttribute(this.Sequence++, "onwheel", EventCallback.Factory.Create(this, e =>
+            builder.AddAttribute(seq++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
                 //Console.WriteLine("Zoomin !");
 
@@ -110,19 +108,19 @@ namespace BlazeCardsCore.Components
                 this.Zoom();
             }));
 
-            builder.AddAttribute(this.Sequence++, "onkeydown", EventCallback.Factory.Create(this, e =>
+            builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyDown(e.Key);
                 //this.ShouldInvalidate = true;
             }));
 
-            builder.AddAttribute(this.Sequence++, "onkeyup", EventCallback.Factory.Create(this, e =>
+            builder.AddAttribute(seq++, "onkeyup", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyUp(e.Key);
                 //this.ShouldInvalidate = true;
             }));
 
-            builder.AddAttribute(this.Sequence++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
+            builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
             {
                 // broken event propag
 
@@ -161,35 +159,35 @@ namespace BlazeCardsCore.Components
                 this.ShouldInvalidate = true;
             }));
 
-            builder.AddAttribute(this.Sequence++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
+            builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
                 this.State.Mouse.OnMove(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
 
-            builder.AddAttribute(this.Sequence++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
+            builder.AddAttribute(seq++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
                 this.OnUpLeaveCallback(e);
             }));
 
-            builder.AddAttribute(this.Sequence++, "onmouseleave", EventCallback.Factory.Create(this, async (_) =>
+            builder.AddAttribute(seq++, "onmouseleave", EventCallback.Factory.Create(this, async (_) =>
             {
                 this.OnUpLeaveCallback(null);
             }));
 
 
 
-            builder.OpenElement(this.Sequence++, "g");
-            builder.AddAttribute(this.Sequence++, "class", "canvas-zoom");
+            builder.OpenElement(seq++, "g");
+            builder.AddAttribute(seq++, "class", "canvas-zoom");
 
-            builder.OpenElement(this.Sequence++, "g");
-            builder.AddAttribute(this.Sequence++, "class", "canvas-graphics");
+            builder.OpenElement(seq++, "g");
+            builder.AddAttribute(seq++, "class", "canvas-graphics");
 
             foreach (var card in this.State.Storage.Cards)
             {
                 //card.Render().Invoke(builder);
-                builder.OpenComponent(this.Sequence++, card.GetComponentType());
-                builder.AddAttribute(this.Sequence++, "Canvas", this);
-                builder.AddAttribute(this.Sequence++, "Descriptor", card);
+                builder.OpenComponent(seq++, card.GetComponentType());
+                builder.AddAttribute(seq++, "Canvas", this);
+                builder.AddAttribute(seq++, "Descriptor", card);
                 builder.CloseComponent();
             }
 
@@ -197,25 +195,25 @@ namespace BlazeCardsCore.Components
 
             if (this.State.Selector != null)
             {
-                builder.OpenComponent(this.Sequence++, this.State.Selector.GetComponentType());
-                builder.AddAttribute(this.Sequence++, "Canvas", this);
-                builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Selector);
+                builder.OpenComponent(seq++, this.State.Selector.GetComponentType());
+                builder.AddAttribute(seq++, "Canvas", this);
+                builder.AddAttribute(seq++, "Descriptor", this.State.Selector);
                 builder.CloseComponent();
             }
-            else this.Sequence += 3;
+            else seq += 3; // fix capture ref error
 
             //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
             {
-                builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());
-                builder.AddAttribute(this.Sequence++, "Canvas", this);
-                builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Highlighter);
+                builder.OpenComponent(seq++, this.State.Highlighter.GetComponentType());
+                builder.AddAttribute(seq++, "Canvas", this);
+                builder.AddAttribute(seq++, "Descriptor", this.State.Highlighter);
                 builder.CloseComponent();
             }
-            else this.Sequence += 3;
+            else seq += 3; // fix capture ref error
 
 
-            builder.AddElementReferenceCapture(this.Sequence++, (eref) =>
+            builder.AddElementReferenceCapture(seq++, (eref) =>
             {
                 this.CanvasGraphicsReference = eref;
             });
@@ -223,7 +221,7 @@ namespace BlazeCardsCore.Components
             builder.CloseElement();
 
 
-            builder.AddElementReferenceCapture(this.Sequence++, (eref) =>
+            builder.AddElementReferenceCapture(seq++, (eref) =>
             {
                 this.CanvasZoomReference = eref;
             });

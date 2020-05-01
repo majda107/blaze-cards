@@ -45,7 +45,7 @@ namespace BlazeCardsCore.Behaviors
 
         public void Update()
         {
-            //if (!this.dirty) return;
+            if (!this.dirty) return;
 
             this.dirty = false;
 

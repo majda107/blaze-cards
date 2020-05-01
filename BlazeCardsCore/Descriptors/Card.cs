@@ -74,12 +74,29 @@ namespace BlazeCardsCore.Descriptors
 
         public virtual void Snap() { this.Parent?.Snap(); }
         public virtual void Update() { this.Parent?.Update(); }
+
+
         public void AddChild(Card child)
         {
+            if (child.Parent != null) child.UnhookFromParent();
+
             child.Parent = this;
             this.Children.Add(child);
+
+            //this.Component?.InvokeChange();
             this.Snap();
         }
+
+        public void UnhookChild(Card child)
+        {
+            if (!this.Children.Contains(child)) return;
+            this.Children.Remove(child);
+
+            child.Parent = null;
+        }
+
+        public void UnhookFromParent() => this.Parent.UnhookChild(this);
+
 
         // substitute this into hierarchy manager 
         public bool HasDescendant(Func<Card, bool> comparer)
