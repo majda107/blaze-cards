@@ -84,11 +84,6 @@ namespace BlazeCardsCore.Components
 
 
             builder.OpenElement(seq++, "g");
-            builder.AddAttribute(seq++, "blaze-uid", this.Descriptor.GetHashCode().ToString());
-
-            //if (this.Descriptor.Visible)
-            //    builder.AddAttribute(seq++, "class", "visible");
-            //else seq++;
 
 
             this.RenderInner(builder, ref seq);

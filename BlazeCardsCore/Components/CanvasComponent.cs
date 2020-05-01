@@ -163,7 +163,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(this.Sequence++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
-                Console.WriteLine("Zoomin !");
+                //Console.WriteLine("Zoomin !");
 
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
                 this.Zoom();
@@ -266,8 +266,6 @@ namespace BlazeCardsCore.Components
             //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
             {
-                Console.WriteLine($"Re-rendering highlighter {this.State.Highlighter.GetHashCode()}");
-
                 builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);
                 builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Highlighter);

@@ -100,7 +100,6 @@ namespace BlazeCardsCore.State
                 this.CardState.InteropQueue.Flush(this.CardState.Canvas.JSRuntime);
 
                 this.CardState.Highlighter = RectFactory.CreateHighlighter(this.CardState.Selected);
-                //Console.WriteLine(this.CardState.Highlighter.GetHashCode());
             }
 
 

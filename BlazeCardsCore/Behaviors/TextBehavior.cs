@@ -82,7 +82,7 @@ namespace BlazeCardsCore.Behaviors
 
             if (!this.BufferedSize.Size.Equals(size))
             {
-                Console.WriteLine("Buffering new text size");
+                //Console.WriteLine("Buffering new text size");
                 this.BufferedSize.Size = size;
                 this.Card.InvokeChange();
             }
