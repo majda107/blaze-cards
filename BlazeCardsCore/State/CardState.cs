@@ -19,6 +19,7 @@ namespace BlazeCardsCore.State
         public MouseState Mouse { get; private set; }
         public KeyboardState Keyboard { get; private set; }
         public InteropQueueState InteropQueue { get; private set; }
+        public StorageState Storage { get; private set; }
 
 
         // EXCHANGE FOR CARD!
@@ -38,6 +39,7 @@ namespace BlazeCardsCore.State
             this.Mouse = new MouseState(this);
             this.Keyboard = new KeyboardState(this);
             this.InteropQueue = new InteropQueueState(this);
+            this.Storage = new StorageState(this);
 
             this.Selector = RectFactory.CreateSelector(Vector2f.Zero);
             this.Selector.Visible = false;

@@ -10,7 +10,7 @@ namespace BlazeCardsCore.State
 {
     public class MouseState
     {
-        public CardState CardState { get; private set; }
+        public CardState State { get; private set; }
         public bool Down { get; private set; }
 
         public Vector2f Scroll { get; private set; }
@@ -21,7 +21,7 @@ namespace BlazeCardsCore.State
 
         public MouseState(CardState state)
         {
-            this.CardState = state;
+            this.State = state;
             this.Down = false;
 
             this.lastPosition = Vector2f.Zero;
@@ -31,12 +31,12 @@ namespace BlazeCardsCore.State
 
         public void CheckDrop()
         {
-            if (this.CardState.Highlighter == null) return;
+            if (this.State.Highlighter == null) return;
 
             // TEST DROP
-            var box = BoundingRect.FromPositionSize(this.CardState.Highlighter.GetGlobalPosition(), this.CardState.Highlighter.GetSize());
+            var box = BoundingRect.FromPositionSize(this.State.Highlighter.GetGlobalPosition(), this.State.Highlighter.GetSize());
             var droppables = new List<Card>();
-            foreach (var card in this.CardState.Canvas.Cards) // exchange for cardstate.cards
+            foreach (var card in this.State.Storage.Cards) // exchange for cardstate.cards
                 card.TraverseCard((c) => c.GetType() == typeof(DropAreaCard), droppables);
 
             Console.WriteLine($"Found {droppables.Count} droppables");
@@ -48,17 +48,17 @@ namespace BlazeCardsCore.State
                 droppable.TraverseTouches(box, dropped);
 
                 if (dropped.Count > 0)
-                    (droppable as DropAreaCard).FireDrop(this.CardState.Selected);
+                    (droppable as DropAreaCard).FireDrop(this.State.Selected);
             }
         }
 
         public void CheckSelector()
         {
-            if (this.CardState.Selector == null || !this.CardState.Selector.Visible) return;
+            if (this.State.Selector == null || !this.State.Selector.Visible) return;
 
-            var selectorBox = BoundingRect.FromPositionSize(this.CardState.Selector.GetGlobalPosition(), this.CardState.Selector.GetSize());
+            var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
             var traversed = new List<Card>();
-            foreach (var card in this.CardState.Canvas.Cards)
+            foreach (var card in this.State.Storage.Cards)
                 card.TraverseOverlap(selectorBox, traversed);
 
             if (traversed.Count > 0)
@@ -66,13 +66,13 @@ namespace BlazeCardsCore.State
                 //Console.WriteLine($"Selecting {traversed.Count} items...");
 
                 foreach (var traversedCard in traversed)
-                    this.CardState.Selected.Add(traversedCard);
+                    this.State.Selected.Add(traversedCard);
 
-                this.CardState.Highlighter = RectFactory.CreateHighlighter(traversed);
+                this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
             }
 
-            this.CardState.Selector.Visible = false;
-            this.CardState.Selector.Component.InvokeChange();
+            this.State.Selector.Visible = false;
+            this.State.Selector.Component.InvokeChange();
         }
 
         public void OnDown(Vector2f position)
@@ -98,11 +98,11 @@ namespace BlazeCardsCore.State
             //Console.WriteLine($"Mouse move: {position.X}");
 
 
-            if (this.CardState.Selected.Count > 0)
+            if (this.State.Selected.Count > 0)
             {
 
                 //var minPos = new Vector2f(float.MaxValue, float.MaxValue);
-                foreach (var card in this.CardState.Selected)
+                foreach (var card in this.State.Selected)
                 {
                     card.PositionBehavior.Position += dev;
                     //this.CardState.InteropQueue.QueueChange(new PositionChange(card.Component.Graphics, card.GetPosition()));
@@ -113,22 +113,22 @@ namespace BlazeCardsCore.State
                     //if (pos.Y < minPos.Y) minPos.Y = pos.Y;
                 }
 
-                if (this.CardState.Highlighter != null)
-                    this.CardState.Highlighter.PositionBehavior.Position += dev;
+                if (this.State.Highlighter != null)
+                    this.State.Highlighter.PositionBehavior.Position += dev;
 
-                this.CardState.InteropQueue.Flush(this.CardState.Canvas.JSRuntime);
+                this.State.InteropQueue.Flush(this.State.Canvas.JSRuntime);
             }
 
 
 
 
-            if (this.CardState.Selector.Visible)
-                this.CardState.Selector.SizeBehavior.Size += dev;
+            if (this.State.Selector.Visible)
+                this.State.Selector.SizeBehavior.Size += dev;
 
-            if (!this.CardState.Selector.Visible && this.CardState.Selected.Count <= 0)
+            if (!this.State.Selector.Visible && this.State.Selected.Count <= 0)
             {
                 this.Scroll += dev;
-                this.CardState.Canvas.Translate();
+                this.State.Canvas.Translate();
             }
 
 
@@ -139,14 +139,14 @@ namespace BlazeCardsCore.State
         public void OnUp(Vector2f position)
         {
             //position -= this.Scroll;
-            if (this.CardState.Selected.Count > 0)
+            if (this.State.Selected.Count > 0)
             {
-                foreach (var card in this.CardState.Selected)
+                foreach (var card in this.State.Selected)
                     card.Snap();
 
-                this.CardState.InteropQueue.Flush(this.CardState.Canvas.JSRuntime);
+                this.State.InteropQueue.Flush(this.State.Canvas.JSRuntime);
 
-                this.CardState.Highlighter = RectFactory.CreateHighlighter(this.CardState.Selected);
+                this.State.Highlighter = RectFactory.CreateHighlighter(this.State.Selected);
 
             }
 
