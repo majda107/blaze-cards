@@ -182,14 +182,21 @@ namespace BlazeCardsCore.Components
             builder.OpenElement(seq++, "g");
             builder.AddAttribute(seq++, "class", "canvas-graphics");
 
+
+
+
+            int seqHotFix = seq;
+            seq += 100000; // another ugly hotfix
             foreach (var card in this.State.Storage.Cards)
             {
                 //card.Render().Invoke(builder);
-                builder.OpenComponent(seq++, card.GetComponentType());
-                builder.AddAttribute(seq++, "Canvas", this);
-                builder.AddAttribute(seq++, "Descriptor", card);
+                builder.OpenComponent(seqHotFix++, card.GetComponentType());
+                builder.AddAttribute(seqHotFix++, "Canvas", this);
+                builder.AddAttribute(seqHotFix++, "Descriptor", card);
                 builder.CloseComponent();
             }
+
+
 
 
 

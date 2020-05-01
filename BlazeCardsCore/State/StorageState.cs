@@ -53,7 +53,10 @@ namespace BlazeCardsCore.State
                 //this.State.Canvas.JSRuntime.InvokeVoidAsync("blazeAlert", $"{e.Cards.Count} has been dropped...");
 
                 foreach (var card in e.Cards) // add on drop
+                {
+                    if (this.Cards.Contains(card)) this.Cards.Remove(card);
                     list.AddChild(card);
+                }
 
             };
 

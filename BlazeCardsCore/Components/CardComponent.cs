@@ -62,7 +62,7 @@ namespace BlazeCardsCore.Components
 
         public virtual void OnBlazeRender()
         {
-            this.Descriptor?.PositionBehavior?.Update();
+            this.Descriptor.PositionBehavior.Update(); // lol idk
         }
 
         protected override void OnInitialized()

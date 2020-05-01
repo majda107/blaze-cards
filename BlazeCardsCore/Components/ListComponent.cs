@@ -10,11 +10,14 @@ namespace BlazeCardsCore.Components
     {
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
+            int hotFix = seq;
+            seq += 100000; // yup, this is pretty ugly but don't want to mess up with it rn
+
             foreach (var child in this.Descriptor.Children)
             {
-                builder.OpenComponent(seq++, child.GetComponentType());
-                builder.AddAttribute(seq++, "Canvas", this.Canvas);
-                builder.AddAttribute(seq++, "Descriptor", child);
+                builder.OpenComponent(hotFix++, child.GetComponentType());
+                builder.AddAttribute(hotFix++, "Canvas", this.Canvas);
+                builder.AddAttribute(hotFix++, "Descriptor", child);
                 builder.CloseComponent();
             }
         }
