@@ -83,14 +83,16 @@ namespace BlazeCardsCore.Descriptors
             child.Parent = this;
             this.Children.Add(child);
 
-            //this.Component?.InvokeChange();
+            this.Component?.InvokeChange();
             this.Snap();
         }
 
         public void UnhookChild(Card child)
         {
             if (!this.Children.Contains(child)) return;
+
             this.Children.Remove(child);
+            this.Component?.InvokeChange();
 
             child.Parent = null;
         }
