@@ -97,32 +97,42 @@ namespace BlazeCardsCore.Components
             builder.CloseElement();
         }
 
+        private void MouseDownCallback(float clientX, float clientY)
+        {
+            this.Canvas.State.ComponentClicked = true; // broken event propag
+
+            if (!this.Descriptor.Clickable) return;
+
+            var selected = this.Canvas.State.Selected;
+            if (selected.Count <= 0)
+            {
+                this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+                this.Canvas.State.Selected.Add(this.Descriptor);
+                this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
+            }
+            else
+            {
+                foreach (var card in this.Canvas.State.Selected)
+                    if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
+                    {
+                        this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+                        return;
+                    }
+            }
+
+            this.Canvas.InvokeChange();
+        }
+
         protected void HookMouseDown(RenderTreeBuilder builder, ref int seq)
         {
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
-                this.Canvas.State.ComponentClicked = true; // broken event propag
+                this.MouseDownCallback((float)e.ClientX, (float)e.ClientY);
+            }));
 
-                if (!this.Descriptor.Clickable) return;
-
-                var selected = this.Canvas.State.Selected;
-                if (selected.Count <= 0)
-                {
-                    this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                    this.Canvas.State.Selected.Add(this.Descriptor);
-                    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
-                }
-                else
-                {
-                    foreach (var card in this.Canvas.State.Selected)
-                        if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
-                        {
-                            this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
-                            return;
-                        }
-                }
-
-                this.Canvas.InvokeChange();
+            builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
+            {
+                this.MouseDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
             }));
         }
 

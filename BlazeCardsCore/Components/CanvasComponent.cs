@@ -79,9 +79,9 @@ namespace BlazeCardsCore.Components
             this.StateHasChanged();
         }
 
-        private void OnUpLeaveCallback(MouseEventArgs e)
+        private void OnUpLeaveCallback(float clientX, float clientY)
         {
-            var pos = e == null ? Vector2f.Zero : new Vector2f((int)e.ClientX, (int)e.ClientY);
+            var pos = new Vector2f(clientX, clientY);
 
 
             this.State.Mouse.CheckDrop();
@@ -90,6 +90,45 @@ namespace BlazeCardsCore.Components
 
 
             this.InvokeChange();
+            this.ShouldInvalidate = true;
+        }
+
+        private void OnDownCallback(float clientX, float clientY)
+        {
+            // broken event propag
+
+            if (this.State.ComponentClicked)
+            {
+                this.State.ComponentClicked = false;
+                return;
+            }
+
+            if (this.State.Selected.Count > 0)
+            {
+                this.State.Selected.Clear();
+                this.State.Highlighter = null;
+                //return;
+            }
+
+
+            if (this.State.Keyboard.IsDown("Shift"))
+            {
+                var pos = new Vector2f(clientX, clientY);
+                pos.ToLocalFromClient(this.Box);
+
+                //this.State.Selector = RectFactory.CreateSelector(pos);
+
+                // reset selector
+                this.State.Selector.PositionBehavior.Position = (pos / this.State.Mouse.Zoom) - this.State.Mouse.Scroll;
+                this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
+                this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
+                this.State.Selector.Visible = true;
+                this.State.Selector.Component.InvokeChange();
+            }
+
+
+            //Console.WriteLine("canvas down...");
+            this.State.Mouse.OnDown(new Vector2f(clientX, clientY));
             this.ShouldInvalidate = true;
         }
 
@@ -120,58 +159,53 @@ namespace BlazeCardsCore.Components
                 //this.ShouldInvalidate = true;
             }));
 
+
+
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
             {
-                // broken event propag
-
-                if (this.State.ComponentClicked)
-                {
-                    this.State.ComponentClicked = false;
-                    return;
-                }
-
-                if (this.State.Selected.Count > 0)
-                {
-                    this.State.Selected.Clear();
-                    this.State.Highlighter = null;
-                    //return;
-                }
-
-
-                if (this.State.Keyboard.IsDown("Shift"))
-                {
-                    var pos = new Vector2f((float)e.ClientX, (float)e.ClientY);
-                    pos.ToLocalFromClient(this.Box);
-
-                    //this.State.Selector = RectFactory.CreateSelector(pos);
-
-                    // reset selector
-                    this.State.Selector.PositionBehavior.Position = (pos / this.State.Mouse.Zoom) - this.State.Mouse.Scroll;
-                    this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
-                    this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
-                    this.State.Selector.Visible = true;
-                    this.State.Selector.Component.InvokeChange();
-                }
-
-
-                //Console.WriteLine("canvas down...");
-                this.State.Mouse.OnDown(new Vector2f((float)e.ClientX, (float)e.ClientY));
-                this.ShouldInvalidate = true;
+                this.OnDownCallback((float)e.ClientX, (float)e.ClientY);
             }));
+
+            builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
+            {
+                this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
+            }));
+
+
 
             builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
                 this.State.Mouse.OnMove(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
 
+            builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
+            {
+                this.State.Mouse.OnMove(new Vector2f((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY));
+            }));
+
+
+
             builder.AddAttribute(seq++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
-                this.OnUpLeaveCallback(e);
+                this.OnUpLeaveCallback((float)e.ClientX, (float)e.ClientY);
             }));
+
+
+            builder.AddAttribute(seq++, "ontouchend", EventCallback.Factory.Create(this, (_) =>
+            {
+                this.OnUpLeaveCallback(0, 0);
+            }));
+
+
 
             builder.AddAttribute(seq++, "onmouseleave", EventCallback.Factory.Create(this, async (_) =>
             {
-                this.OnUpLeaveCallback(null);
+                this.OnUpLeaveCallback(0, 0);
+            }));
+
+            builder.AddAttribute(seq++, "ontouchcancel", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
+            {
+                this.OnUpLeaveCallback(0, 0);
             }));
 
 
