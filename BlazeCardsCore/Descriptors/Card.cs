@@ -93,6 +93,13 @@ namespace BlazeCardsCore.Descriptors
             return false;
         }
 
+        public void TraverseCard(Func<Card, bool> comparer, IList<Card> cards)
+        {
+            if (comparer(this)) cards.Add(this);
+
+            foreach (var child in this.Children)
+                child.TraverseCard(comparer, cards);
+        }
         public void TraverseOverlap(BoundingRect box, IList<Card> cards)
         {
             var thisBox = BoundingRect.FromPositionSize(this.GetGlobalPosition(), this.GetSize());
@@ -103,9 +110,21 @@ namespace BlazeCardsCore.Descriptors
             }
 
             foreach (var child in this.Children)
-            {
                 child.TraverseOverlap(box, cards);
+        }
+
+        public void TraverseTouches(BoundingRect box, IList<Card> cards)
+        {
+            var thisBox = BoundingRect.FromPositionSize(this.GetGlobalPosition(), this.GetSize());
+
+            if (box.Right > thisBox.Left && box.Left < thisBox.Right && box.Bottom > thisBox.Top && box.Top < thisBox.Bottom)
+            {
+                cards.Add(this);
+                return;
             }
+
+            foreach (var child in this.Children)
+                child.TraverseTouches(box, cards);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BlazeCardsCore.Behaviors
         {
             this.Value = "default text";
             this.BufferedSize = new SizeBehavior();
-            this.Padding = new Vector2f(8.0f, 4.0f);
+            this.Padding = new Vector2f(6.0f, 3.0f);
         }
 
         public void AssignComponent(TextComponent card)

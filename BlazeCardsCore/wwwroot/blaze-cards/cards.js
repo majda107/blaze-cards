@@ -12,14 +12,6 @@ function setFocus(element) {
     element.focus();
 }
 
-//function getTextWidth(element) {
-//    return element.getBoundingClientRect().width;
-//}
-
-//function getTextHeight(element) {
-//    return element.getBoundingClientRect().height;
-//}
-
 function getBoudingRect(element) {
     return element.getBoundingClientRect();
 }
@@ -33,4 +25,10 @@ function changeFlush(changes) {
     for (let change of changes) {
         translateGraphics(change.element, change.change.x, change.change.y);
     }
+}
+
+
+// DEBUG
+function blazeAlert(text) {
+    alert(text)
 }

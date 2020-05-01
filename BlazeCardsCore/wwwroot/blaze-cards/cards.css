@@ -76,3 +76,8 @@ text {
 .blaze-text:hover, .blaze-rect:hover {
     cursor: move;
 }
+
+.blaze-droparea {
+    fill: rgba(255, 105, 0, 0.3);
+    stroke: rgba(255, 105, 0, 0.7);
+}

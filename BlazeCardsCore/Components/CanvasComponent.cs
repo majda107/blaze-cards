@@ -68,8 +68,16 @@ namespace BlazeCardsCore.Components
             var list = new VerticalListCard(false);
             list.AddChild(new RectCard());
             list.AddChild(new TextCard());
-            list.AddChild(new RectCard());
-            list.PositionBehavior.Position = new Vector2f(400, 700);
+
+            var drop = new DropAreaCard();
+            drop.OnDrop += (o, e) =>
+            {
+                this.JSRuntime.InvokeVoidAsync("blazeAlert", $"{e.Cards.Count} has been dropped...");
+            };
+
+            list.AddChild(drop);
+
+            list.PositionBehavior.Position = new Vector2f(300, 740);
 
             var innerList = new HorizontalListCard(false, 10);
             innerList.AddChild(new RectCard());
@@ -125,30 +133,12 @@ namespace BlazeCardsCore.Components
         private void OnUpLeaveCallback(MouseEventArgs e)
         {
             var pos = e == null ? Vector2f.Zero : new Vector2f((int)e.ClientX, (int)e.ClientY);
-            this.State.Mouse.OnUp(pos);
 
-            if (this.State.Selector != null && this.State.Selector.Visible)
-            {
-                var selectorBox = BoundingRect.FromPositionSize(this.State.Selector.GetGlobalPosition(), this.State.Selector.GetSize());
-                var traversed = new List<Card>();
-                foreach (var card in this.Cards)
-                {
-                    card.TraverseOverlap(selectorBox, traversed);
-                }
 
-                if (traversed.Count > 0)
-                {
-                    //Console.WriteLine($"Selecting {traversed.Count} items...");
+            this.State.Mouse.CheckDrop();
+            this.State.Mouse.OnUp(pos); // will snap
+            this.State.Mouse.CheckSelector();
 
-                    foreach (var traversedCard in traversed)
-                        this.State.Selected.Add(traversedCard);
-
-                    this.State.Highlighter = RectFactory.CreateHighlighter(traversed);
-                }
-
-                this.State.Selector.Visible = false;
-                this.State.Selector.Component.InvokeChange();
-            }
 
             this.InvokeChange();
             this.ShouldInvalidate = true;
