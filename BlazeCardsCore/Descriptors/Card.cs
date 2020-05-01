@@ -1,6 +1,7 @@
 ﻿using BlazeCardsCore.Behaviors;
 using BlazeCardsCore.Components;
 using BlazeCardsCore.Models;
+using BlazeCardsCore.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +69,7 @@ namespace BlazeCardsCore.Descriptors
         public Vector2f GetGlobalPosition()
         {
             if (this.Parent == null) return this.GetPosition();
-            return this.Parent.GetPosition() + this.GetPosition();
+            return this.Parent.GetGlobalPosition() + this.GetPosition();
         }
 
         public virtual void Snap() { this.Parent?.Snap(); }

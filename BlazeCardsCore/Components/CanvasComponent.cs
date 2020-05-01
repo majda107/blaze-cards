@@ -50,7 +50,7 @@ namespace BlazeCardsCore.Components
                 card.PositionBehavior.Position = new Vector2f(i * 30 + 300, i % 10 * 30 + 300);
                 this.Cards.Add(card);
 
-                if(i <= 10)
+                if (i <= 10)
                 {
                     var textCard = new TextCard();
                     textCard.PositionBehavior.Position = new Vector2f(i * 30 + 340, i % 10 * 30 + 300);
@@ -65,23 +65,20 @@ namespace BlazeCardsCore.Components
             }
 
 
-            //var list = new VerticalListCard(false);
-            //list.AddChild(new RectCard());
-            //list.AddChild(new RectCard());
-            //list.AddChild(new TextCard());
-            //list.AddChild(new RectCard());
-            //list.AddChild(new RectCard());
-            //list.PositionBehavior.Position = new Vector2f(100, 100);
+            var list = new VerticalListCard(false);
+            list.AddChild(new RectCard());
+            list.AddChild(new TextCard());
+            list.AddChild(new RectCard());
+            list.PositionBehavior.Position = new Vector2f(400, 700);
 
-            //var list2 = new HorizontalListCard(false, 10);
-            //list2.AddChild(new RectCard());
-            //list2.AddChild(new RectCard());
-            //list2.AddChild(new TextCard());
-            //list2.PositionBehavior.Position = new Vector2f(100, 400);
+            var innerList = new HorizontalListCard(false, 10);
+            innerList.AddChild(new RectCard());
+            innerList.AddChild(new TextCard());
+            innerList.AddChild(new RectCard());
 
-            //this.Cards.Add(list);
-            //this.Cards.Add(list2);
-            //this.Cards.Add(new CardComponent());
+            list.AddChild(innerList);
+
+            this.Cards.Add(list);
         }
 
         public void Translate()
@@ -153,6 +150,7 @@ namespace BlazeCardsCore.Components
                 this.State.Selector.Component.InvokeChange();
             }
 
+            this.InvokeChange();
             this.ShouldInvalidate = true;
         }
 
@@ -268,6 +266,8 @@ namespace BlazeCardsCore.Components
             //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
             {
+                Console.WriteLine("Re-rendering highlighter");
+
                 builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);
                 builder.AddAttribute(this.Sequence++, "Descriptor", this.State.Highlighter);

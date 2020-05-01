@@ -97,6 +97,8 @@ namespace BlazeCardsCore.State
                 foreach (var card in this.CardState.Selected)
                     card.Snap();
 
+                this.CardState.InteropQueue.Flush(this.CardState.Canvas.JSRuntime);
+
                 this.CardState.Highlighter = RectFactory.CreateHighlighter(this.CardState.Selected);
             }
 

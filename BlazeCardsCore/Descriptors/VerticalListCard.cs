@@ -1,5 +1,6 @@
 ﻿using BlazeCardsCore.Components;
 using BlazeCardsCore.Models;
+using BlazeCardsCore.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,7 @@ namespace BlazeCardsCore.Descriptors
             foreach (var child in this.Children)
             {
                 child.PositionBehavior.Position = new Vector2f(0, offset);
+
                 offset += child.GetSize().Y + this.Spacing;
             }
         }

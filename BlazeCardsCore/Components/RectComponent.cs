@@ -48,12 +48,6 @@ namespace BlazeCardsCore.Components
             builder.CloseElement();
         }
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            this.OnBlazeRender();
-            base.OnAfterRender(firstRender);
-        }
-
         public override void OnBlazeRender()
         {
             this.RectDescriptor.SizeBehavior.SetWidthHeightAttribute(this.RectElement);

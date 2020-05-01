@@ -137,6 +137,8 @@ namespace BlazeCardsCore.Components
             Console.WriteLine($"Rendering component {this.GetType().ToString()}");
 
             this.Descriptor?.AssignComponent(this);
+            this.Descriptor?.PositionBehavior?.Update();
+
             this.OnBlazeRender();
 
             base.OnAfterRender(firstRender);
