@@ -32,6 +32,8 @@ namespace BlazeCardsCore.State
         public void CheckDrop()
         {
             if (this.State.Highlighter == null) return;
+            foreach (var selectedCard in this.State.Selected)
+                if (selectedCard.GetType() == typeof(DropAreaCard) || selectedCard.HasDescendant(c => c.GetType() == typeof(DropAreaCard))) return;
 
             // TEST DROP
             var box = BoundingRect.FromPositionSize(this.State.Highlighter.GetGlobalPosition(), this.State.Highlighter.GetSize());

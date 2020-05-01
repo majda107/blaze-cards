@@ -82,12 +82,12 @@ namespace BlazeCardsCore.Descriptors
         }
 
         // substitute this into hierarchy manager 
-        public bool HasDescendant(Card card)
+        public bool HasDescendant(Func<Card, bool> comparer)
         {
             foreach (var child in this.Children)
             {
-                if (child == card) return true;
-                if (child.HasDescendant(card)) return true;
+                if (comparer(child)) return true;
+                if (child.HasDescendant(comparer)) return true;
             }
 
             return false;

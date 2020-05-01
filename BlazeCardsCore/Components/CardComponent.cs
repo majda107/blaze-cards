@@ -115,7 +115,7 @@ namespace BlazeCardsCore.Components
                 else
                 {
                     foreach (var card in this.Canvas.State.Selected)
-                        if (card.HasDescendant(this.Descriptor) || card == this.Descriptor)
+                        if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
                         {
                             this.Canvas.State.Mouse.OnDown(new Vector2f((int)e.ClientX, (int)e.ClientY));
                             return;
