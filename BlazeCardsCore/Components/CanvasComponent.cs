@@ -266,7 +266,7 @@ namespace BlazeCardsCore.Components
             //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
             {
-                Console.WriteLine("Re-rendering highlighter");
+                Console.WriteLine($"Re-rendering highlighter {this.State.Highlighter.GetHashCode()}");
 
                 builder.OpenComponent(this.Sequence++, this.State.Highlighter.GetComponentType());
                 builder.AddAttribute(this.Sequence++, "Canvas", this);

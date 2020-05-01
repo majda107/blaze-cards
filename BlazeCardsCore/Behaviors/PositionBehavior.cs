@@ -45,11 +45,11 @@ namespace BlazeCardsCore.Behaviors
 
         public void Update()
         {
-            if (!this.dirty) return;
+            //if (!this.dirty) return;
 
-            //Console.WriteLine("Updating position...");
             this.dirty = false;
 
+            Console.WriteLine("Updatin...");
             if (this.Card == null) return;
 
             //Console.WriteLine("Flushing from position behavior!");
@@ -64,6 +64,7 @@ namespace BlazeCardsCore.Behaviors
         {
             this.dirty = true;
         }
+
 
         public void AssignComponent(CardComponent component)
         {

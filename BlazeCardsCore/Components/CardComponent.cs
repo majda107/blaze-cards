@@ -25,8 +25,22 @@ namespace BlazeCardsCore.Components
 
         // Behaviors
         //public PositionBehavior Position { get; private set; }
+
+        private Card _descriptor;
+
+
         [Parameter]
-        public Card Descriptor { get; set; }
+        public Card Descriptor
+        {
+            get => this._descriptor;
+            set
+            {
+                if (this._descriptor != null && value.GetHashCode() != this._descriptor.GetHashCode())
+                    this.ShouldInvalidate = true;
+
+                this._descriptor = value;
+            }
+        }
 
         public bool ShouldInvalidate { get; set; }
 
@@ -70,6 +84,8 @@ namespace BlazeCardsCore.Components
 
 
             builder.OpenElement(seq++, "g");
+            builder.AddAttribute(seq++, "blaze-uid", this.Descriptor.GetHashCode().ToString());
+
             //if (this.Descriptor.Visible)
             //    builder.AddAttribute(seq++, "class", "visible");
             //else seq++;
@@ -123,9 +139,13 @@ namespace BlazeCardsCore.Components
         public void InvokeChange()
         {
             this.ShouldInvalidate = true;
+
             this.Descriptor.Update();
+            this.Descriptor.PositionBehavior.Update(); // lol idk
+
             this.StateHasChanged();
         }
+
 
         protected override void OnAfterRender(bool firstRender)
         {
@@ -137,7 +157,6 @@ namespace BlazeCardsCore.Components
             Console.WriteLine($"Rendering component {this.GetType().ToString()}");
 
             this.Descriptor?.AssignComponent(this);
-            this.Descriptor?.PositionBehavior?.Update();
 
             this.OnBlazeRender();
 
