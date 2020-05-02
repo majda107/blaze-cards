@@ -56,7 +56,7 @@ namespace BlazeCardsCore.Components
                 this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasGraphicsReference);
 
 
-            Console.WriteLine("Re-rendering canvas");
+            //Console.WriteLine("Re-rendering canvas");
 
             await base.OnAfterRenderAsync(firstRender);
         }

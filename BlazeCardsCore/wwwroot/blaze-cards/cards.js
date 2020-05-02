@@ -1,23 +1,34 @@
 ﻿var frame;
+var lastTranslation;
+var lastFrame;
 
 async function translateGraphics(graphics, x, y) {
 
-    let transformStr = `translate3d(${x}px, ${y}px, 0)`;
-    graphics.style.webkitTransform = graphics.style.transform = transformStr;
+    //let transformStr = `translate3d(${x}px, ${y}px, 0)`;
+    //graphics.style.webkitTransform = graphics.style.transform = transformStr;
 
     //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
 
     //console.log("requesting frame...")
 
     //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
-    //frame = window.requestAnimationFrame(function () {
 
-    //    let transformStr = `translate3d(${x}px, ${y}px, 0)`;
-    //    graphics.style.webkitTransform = graphics.style.transform = transformStr;
+    let nowTranslation = performance.now();
+    console.log(`Translation delta: ${nowTranslation - lastTranslation}`);
+    lastTranslation = nowTranslation;
 
-    //    //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
+    frame = window.requestAnimationFrame(function () {
 
-    //})
+        let transformStr = `translate3d(${x}px, ${y}px, 0)`;
+        graphics.style.webkitTransform = graphics.style.transform = transformStr;
+
+        let nowFrame = performance.now();
+        console.log(`Frame delta: ${nowFrame - lastFrame}`);
+        lastFrame = nowFrame;
+
+        //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
+
+    })
 }
 
 function scaleGraphics(graphics, zoom) {
@@ -34,7 +45,7 @@ function getBoudingRect(element) {
 
 function setWidthHeightAttribute(element, width, height) {
     element.setAttribute("width", width);
-    element.setAttribute("height", height); 
+    element.setAttribute("height", height);
 }
 
 async function changeFlush(changes) {
