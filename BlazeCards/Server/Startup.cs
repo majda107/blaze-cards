@@ -11,19 +11,18 @@ namespace BlazeCards.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
 
-            //services.AddControllersWithViews();
+            //services.AddHttpClient<Data.Movie.MovieService>();
+
+            //services.AddResponseCompression(opts =>
+            //{
+            //    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+            //        new[] { "application/octet-stream" });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,25 +31,20 @@ namespace BlazeCards.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebAssemblyDebugging();
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseBlazorFrameworkFiles();
-            app.UseWebAssemblyDebugging();
-            app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseStaticFiles();
+
+            //app.UseClientSideBlazorFiles<OMDbPW1ClientSide.Program>();
+            //app.UseBlazorDebugging
+            app.UseWebAssemblyDebugging();
+            app.UseBlazorFrameworkFiles();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapFallbackToFile("index.html");
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
         }
     }

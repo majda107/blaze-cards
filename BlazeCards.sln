@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazeCards.Server", "BlazeC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazeCards.Client", "BlazeCards\Client\BlazeCards.Client.csproj", "{A3D151C6-952F-41C6-9603-569E8B15B2E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazeCardsCore", "BlazeCardsCore\BlazeCardsCore.csproj", "{E18DB063-FBD5-48EA-9E41-039CB6F06B1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazeCardsCore", "BlazeCardsCore\BlazeCardsCore.csproj", "{E18DB063-FBD5-48EA-9E41-039CB6F06B1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

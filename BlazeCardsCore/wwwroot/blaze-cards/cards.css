@@ -10,6 +10,7 @@
 .canvas-zoom {
     /*transform-origin: 0;
     -webkit-transform-origin: 0;*/
+    touch-action: none;
 }
 
 g {

@@ -1,7 +1,23 @@
-﻿function translateGraphics(graphics, x, y) {
-    //console.log("[js] translating element...")
-    //console.log(graphics)
-    graphics.style.transform = `translate(${x}px, ${y}px)`;
+﻿var frame;
+
+async function translateGraphics(graphics, x, y) {
+
+    let transformStr = `translate3d(${x}px, ${y}px, 0)`;
+    graphics.style.webkitTransform = graphics.style.transform = transformStr;
+
+    //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
+
+    //console.log("requesting frame...")
+
+    //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
+    //frame = window.requestAnimationFrame(function () {
+
+    //    let transformStr = `translate3d(${x}px, ${y}px, 0)`;
+    //    graphics.style.webkitTransform = graphics.style.transform = transformStr;
+
+    //    //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
+
+    //})
 }
 
 function scaleGraphics(graphics, zoom) {
@@ -18,12 +34,14 @@ function getBoudingRect(element) {
 
 function setWidthHeightAttribute(element, width, height) {
     element.setAttribute("width", width);
-    element.setAttribute("height", height);
+    element.setAttribute("height", height); 
 }
 
-function changeFlush(changes) {
+async function changeFlush(changes) {
+    //console.log(changes);
+
     for (let change of changes) {
-        translateGraphics(change.element, change.change.x, change.change.y);
+        await translateGraphics(change.element, change.change.x, change.change.y);
     }
 }
 

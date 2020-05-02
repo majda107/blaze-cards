@@ -70,6 +70,9 @@ namespace BlazeCardsCore.Components
             }
 
             return false;
+
+            //return true; // debug
+
             //return base.ShouldRender();
         }
 
@@ -171,17 +174,34 @@ namespace BlazeCardsCore.Components
                 this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
             }));
 
+            //builder.AddEventPreventDefaultAttribute(seq++, "ontouchstart", true);
+            //builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
+
 
 
             builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
+                //if (!EventPrevention.EventsEnabled) return;
+
                 this.State.Mouse.OnMove(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
-                this.State.Mouse.OnMove(new Vector2f((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY));
+                //if (!EventPrevention.EventsEnabled)
+                //{
+                //    Console.WriteLine("CANT FIRE BECAUSE OF MUTEX...");
+                //    return;
+                //}
+
+                var pos = new Vector2f((int)e.Touches[e.Touches.Length - 1].ClientX, (int)e.Touches[e.Touches.Length - 1].ClientY);
+                //Console.WriteLine($"Touch moved {pos.X} {pos.Y}");
+
+                this.State.Mouse.OnMove(pos);
             }));
+
+            //builder.AddEventPreventDefaultAttribute(seq++, "ontouchmove", true);
+            builder.AddEventStopPropagationAttribute(seq++, "ontouchmove", true);
 
 
 

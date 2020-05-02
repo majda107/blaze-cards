@@ -93,11 +93,13 @@ namespace BlazeCardsCore.State
         public void OnMove(Vector2f position)
         {
             if (!this.Down) return;
+            //Console.WriteLine("MOVIN");
 
             var dev = position - this.lastPosition;
             dev /= this.Zoom;
 
-            //Console.WriteLine($"Mouse move: {position.X}");
+            //if(dev.X == 0)
+            //    Console.WriteLine($"X LAG");
 
 
             if (this.State.Selected.Count > 0)
@@ -129,6 +131,7 @@ namespace BlazeCardsCore.State
 
             if (!this.State.Selector.Visible && this.State.Selected.Count <= 0)
             {
+                //Console.WriteLine("Movin canvas");
                 this.Scroll += dev;
                 this.State.Canvas.Translate();
             }
