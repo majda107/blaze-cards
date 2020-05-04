@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BlazeCardsCore.Extension;
 using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Components
@@ -172,6 +173,9 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
                 this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
+
+                if (e.Touches.Length > 1)
+                    this.State.Touch.LastPinchHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
             }));
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchstart", true);
@@ -189,9 +193,26 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
                 var pos = new Vector2f((int)e.Touches[e.Touches.Length - 1].ClientX, (int)e.Touches[e.Touches.Length - 1].ClientY);
-                //Console.WriteLine($"Touch moved {pos.X} {pos.Y}");
 
-                this.State.Mouse.OnMove(pos);
+                if (e.Touches.Length == 1)
+                    this.State.Mouse.OnMove(pos);
+                else if (e.Touches.Length > 1)
+                {
+                    var currentHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
+
+                    var val = currentHypot - this.State.Touch.LastPinchHypot;
+
+                    this.State.Touch.LastPinchHypot = currentHypot;
+
+                    if (currentHypot > 160.0f)
+                    {
+                        this.State.Mouse.Zoom += (float)val / 100f;
+                        this.Zoom();
+                    }
+                    else
+                        this.State.Mouse.OnMove(pos);
+                }
+
             }));
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchmove", true);

@@ -17,6 +17,7 @@ namespace BlazeCardsCore.State
 
         public CanvasComponent Canvas { get; private set; }
         public MouseState Mouse { get; private set; }
+        public TouchState Touch { get; private set; }
         public KeyboardState Keyboard { get; private set; }
         public InteropQueueState InteropQueue { get; private set; }
         public StorageState Storage { get; private set; }
@@ -37,6 +38,7 @@ namespace BlazeCardsCore.State
 
             this.Selected = new List<Card>();
             this.Mouse = new MouseState(this);
+            this.Touch = new TouchState(this);
             this.Keyboard = new KeyboardState(this);
             this.InteropQueue = new InteropQueueState(this);
             this.Storage = new StorageState(this);
