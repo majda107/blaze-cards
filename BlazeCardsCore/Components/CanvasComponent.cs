@@ -147,7 +147,10 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
+                this.State.Mouse.ScrollToZoom(e.DeltaY > 0);
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
+
+                this.Translate();
                 this.Zoom();
             }));
 

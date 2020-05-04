@@ -29,6 +29,16 @@ namespace BlazeCardsCore.State
             this.Zoom = 1.0f;
         }
 
+        public void ScrollToZoom(bool negate)
+        {
+            Console.WriteLine(this.lastPosition.ToString());
+
+            if (negate)
+                this.Scroll -= this.lastPosition / 10f;
+            else
+                this.Scroll += this.lastPosition / 10f;
+        }
+
         public void CheckDrop()
         {
             if (this.State.Highlighter == null) return;
@@ -90,16 +100,18 @@ namespace BlazeCardsCore.State
         public void OnFakeMove(Vector2f position)
         {
             if (!this.Down) return;
-           
+
             this.lastPosition = position;
         }
 
         public void OnMove(Vector2f position)
         {
-            if (!this.Down) return;
-
-            var dev =  this.lastPosition - position;
+            var dev = this.lastPosition - position;
             dev /= this.Zoom;
+
+            this.lastPosition = position;
+
+            if (!this.Down) return;
 
 
             if (this.State.Selected.Count > 0)
@@ -126,10 +138,6 @@ namespace BlazeCardsCore.State
                 this.Scroll += dev;
                 this.State.Canvas.Translate();
             }
-
-
-            this.lastPosition = position;
-
         }
 
         public void OnUp(Vector2f position)
