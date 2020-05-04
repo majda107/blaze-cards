@@ -58,6 +58,8 @@ namespace BlazeCardsCore.State
                     list.AddChild(card);
                 }
 
+                //this.State.Canvas.InvokeChange();
+
             };
 
             list.AddChild(drop);

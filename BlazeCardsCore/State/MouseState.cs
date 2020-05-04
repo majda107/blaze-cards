@@ -31,7 +31,7 @@ namespace BlazeCardsCore.State
 
         public void ScrollToZoom(bool negate)
         {
-            Console.WriteLine(this.lastPosition.ToString());
+            //Console.WriteLine(this.lastPosition.ToString());
 
             if (negate)
                 this.Scroll -= this.lastPosition / 10f;

@@ -183,7 +183,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
-                this.State.Mouse.OnMove(this.Box.Center - new Vector2f((float)e.ClientX, (float)e.ClientY));
+                this.State.Mouse.OnMove(this.Box.ToCenterCoords(new Vector2f((float)e.ClientX, (float)e.ClientY)));
             }));
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
@@ -195,7 +195,7 @@ namespace BlazeCardsCore.Components
                     if (!this.State.Selector.Visible && this.State.Selected.Count == 0)
                         this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY, true);
 
-                    this.State.Mouse.OnMove(pos);
+                    this.State.Mouse.OnMove(this.Box.ToCenterCoords(pos));
                 }
                 else if (e.Touches.Length > 1)
                 {
@@ -210,10 +210,10 @@ namespace BlazeCardsCore.Components
                     {
                         this.State.Mouse.Zoom += val < 0 ? -0.05f : 0.05f;
                         this.Zoom();
-                        this.State.Mouse.OnFakeMove(pos);
+                        this.State.Mouse.OnFakeMove(this.Box.ToCenterCoords(pos));
                     }
                     else
-                        this.State.Mouse.OnMove(pos);
+                        this.State.Mouse.OnMove(this.Box.ToCenterCoords(pos));
                 }
 
             }));
