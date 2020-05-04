@@ -1,8 +1,4 @@
-﻿var frame;
-var lastTranslation;
-var lastFrame;
-
-async function translateGraphics(graphics, x, y) {
+﻿function translateGraphics(graphics, x, y) {
 
     //let transformStr = `translate3d(${x}px, ${y}px, 0)`;
     //graphics.style.webkitTransform = graphics.style.transform = transformStr;
@@ -13,22 +9,23 @@ async function translateGraphics(graphics, x, y) {
 
     //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
 
-    let nowTranslation = performance.now();
-    console.log(`Translation delta: ${nowTranslation - lastTranslation}`);
-    lastTranslation = nowTranslation;
+    //let nowTranslation = performance.now();
+    //console.log(`Translation delta: ${nowTranslation - lastTranslation}`);
+    //lastTranslation = nowTranslation;
+    let transformStr = `translate3d(${x}px, ${y}px, 0)`;
+    graphics.style.webkitTransform = graphics.style.transform = transformStr;
 
-    frame = window.requestAnimationFrame(function () {
+    //frame = window.requestAnimationFrame(function () {
 
-        let transformStr = `translate3d(${x}px, ${y}px, 0)`;
-        graphics.style.webkitTransform = graphics.style.transform = transformStr;
 
-        let nowFrame = performance.now();
-        console.log(`Frame delta: ${nowFrame - lastFrame}`);
-        lastFrame = nowFrame;
 
-        //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
+    //let nowFrame = performance.now();
+    //console.log(`Frame delta: ${nowFrame - lastFrame}`);
+    //lastFrame = nowFrame;
 
-    })
+    //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
+
+    //})
 }
 
 function scaleGraphics(graphics, zoom) {
@@ -48,11 +45,11 @@ function setWidthHeightAttribute(element, width, height) {
     element.setAttribute("height", height);
 }
 
-async function changeFlush(changes) {
+function changeFlush(changes) {
     //console.log(changes);
 
     for (let change of changes) {
-        await translateGraphics(change.element, change.change.x, change.change.y);
+        translateGraphics(change.element, change.change.x, change.change.y);
     }
 }
 

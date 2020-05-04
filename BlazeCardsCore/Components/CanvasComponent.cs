@@ -156,11 +156,11 @@ namespace BlazeCardsCore.Components
                 //this.ShouldInvalidate = true;
             }));
 
-            builder.AddAttribute(seq++, "onkeyup", EventCallback.Factory.Create(this, e =>
-            {
-                this.State.Keyboard.KeyUp(e.Key);
-                //this.ShouldInvalidate = true;
-            }));
+            //builder.AddAttribute(seq++, "onkeyup", EventCallback.Factory.Create(this, e =>
+            //{
+            //    this.State.Keyboard.KeyUp(e.Key);
+            //    //this.ShouldInvalidate = true;
+            //}));
 
 
 
@@ -175,7 +175,7 @@ namespace BlazeCardsCore.Components
             }));
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchstart", true);
-            //builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
+            builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
 
 
 
@@ -188,12 +188,6 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
-                //if (!EventPrevention.EventsEnabled)
-                //{
-                //    Console.WriteLine("CANT FIRE BECAUSE OF MUTEX...");
-                //    return;
-                //}
-
                 var pos = new Vector2f((int)e.Touches[e.Touches.Length - 1].ClientX, (int)e.Touches[e.Touches.Length - 1].ClientY);
                 //Console.WriteLine($"Touch moved {pos.X} {pos.Y}");
 
@@ -201,7 +195,7 @@ namespace BlazeCardsCore.Components
             }));
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchmove", true);
-            builder.AddEventStopPropagationAttribute(seq++, "ontouchmove", true);
+            //builder.AddEventStopPropagationAttribute(seq++, "ontouchmove", true);
 
 
 
