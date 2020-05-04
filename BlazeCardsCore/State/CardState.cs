@@ -50,7 +50,12 @@ namespace BlazeCardsCore.State
         public void Deselect()
         {
             this.Highlighter = null;
+
+            foreach (var card in this.Selected)
+                card.Deselect();
+
             this.Selected.Clear();
+
             this.Canvas.InvokeChange();
         }
     }

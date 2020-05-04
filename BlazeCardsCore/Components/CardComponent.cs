@@ -65,6 +65,11 @@ namespace BlazeCardsCore.Components
             this.Descriptor.PositionBehavior.Update(); // lol idk
         }
 
+        public virtual void Deselect()
+        {
+
+        }
+
         protected override void OnInitialized()
         {
             Console.WriteLine("Element initialized!");

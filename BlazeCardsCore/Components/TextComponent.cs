@@ -1,5 +1,6 @@
 ﻿using BlazeCardsCore.Behaviors;
 using BlazeCardsCore.Descriptors;
+using BlazeCardsCore.Factories;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -26,9 +27,9 @@ namespace BlazeCardsCore.Components
         {
             builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
-                this.TextDescriptor.TextBehavior.Editing = true;
+                //this.Canvas.State.Deselect();
 
-                this.Canvas.State.Deselect();
+                this.TextDescriptor.TextBehavior.Editing = true;
                 this.InvokeChange();
             }));
         }
@@ -42,7 +43,15 @@ namespace BlazeCardsCore.Components
                 //this.Canvas.State.Selected = null;
             }));
         }
-            
+
+
+        public override void Deselect()
+        {
+            this.TextDescriptor.TextBehavior.Editing = false;
+            this.InvokeChange();
+
+            base.Deselect();
+        }
 
         protected override void RenderInner(RenderTreeBuilder builder, ref int seq)
         {
@@ -56,7 +65,7 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 20}px");
 
             this.HookDoubleClick(builder, ref seq);
-            this.HookBlur(builder, ref seq);
+            //this.HookBlur(builder, ref seq);
 
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
@@ -82,7 +91,7 @@ namespace BlazeCardsCore.Components
             if (this.TextDescriptor.TextBehavior.Editing)
             {
                 builder.OpenElement(seq++, "rect");
-                builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret + 2).ToString("0.0").Replace(',', '.'));
+                builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret + 4).ToString("0.0").Replace(',', '.'));
                 builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 4}px");
                 builder.AddAttribute(seq++, "height", "20px");
                 builder.AddAttribute(seq++, "width", "2px");
@@ -99,7 +108,10 @@ namespace BlazeCardsCore.Components
             await this.TextDescriptor.BufferSizeAsync();
 
             if (this.TextDescriptor.TextBehavior.Editing)
+            {
                 this.TextDescriptor.TextBehavior.Focus();
+                this.Canvas.State.Highlighter.SizeBehavior.Size = this.Descriptor.GetSize();
+            }
 
             await base.OnAfterRenderAsync(firstRender);
         }

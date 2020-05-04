@@ -34,9 +34,9 @@ namespace BlazeCardsCore.State
             //Console.WriteLine(this.lastPosition.ToString());
 
             if (negate)
-                this.Scroll -= this.lastPosition / 10f;
+                this.Scroll -= this.lastPosition / 25f;
             else
-                this.Scroll += this.lastPosition / 10f;
+                this.Scroll += this.lastPosition / 25f;
         }
 
         public void CheckDrop()

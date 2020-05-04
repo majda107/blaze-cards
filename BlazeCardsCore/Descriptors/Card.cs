@@ -112,6 +112,7 @@ namespace BlazeCardsCore.Descriptors
             return false;
         }
 
+        public void Deselect() => this.Component?.Deselect();
         public void TraverseCard(Func<Card, bool> comparer, IList<Card> cards)
         {
             if (comparer(this)) cards.Add(this);

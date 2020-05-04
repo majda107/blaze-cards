@@ -109,7 +109,8 @@ namespace BlazeCardsCore.Components
 
             if (this.State.Selected.Count > 0)
             {
-                this.State.Selected.Clear();
+                //this.State.Selected.Clear();
+                this.State.Deselect();
                 this.State.Highlighter = null;
                 //return;
             }
@@ -176,7 +177,6 @@ namespace BlazeCardsCore.Components
                 this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY, false);
             }));
 
-            //builder.AddEventPreventDefaultAttribute(seq++, "ontouchstart", true);
             builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
 
 
@@ -203,7 +203,7 @@ namespace BlazeCardsCore.Components
                     var currentHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
 
                     var val = currentHypot - this.State.Touch.LastPinchHypot;
-
+                     
                     this.State.Touch.LastPinchHypot = currentHypot;
 
                     if (currentHypot > 130.0f)

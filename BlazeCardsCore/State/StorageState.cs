@@ -54,7 +54,9 @@ namespace BlazeCardsCore.State
 
                 foreach (var card in e.Cards) // add on drop
                 {
-                    if (this.Cards.Contains(card)) this.Cards.Remove(card);
+                    if (this.Cards.Contains(card))
+                        this.Cards.Remove(card);
+
                     list.AddChild(card);
                 }
 
