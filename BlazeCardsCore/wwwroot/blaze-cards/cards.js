@@ -1,32 +1,14 @@
-﻿function translateGraphics(graphics, x, y) {
+﻿function changeFlush(changes) {
+    for (let change of changes) {
+        translateGraphics(change.element, change.change.x, change.change.y);
+    }
+}
 
-    //let transformStr = `translate3d(${x}px, ${y}px, 0)`;
-    //graphics.style.webkitTransform = graphics.style.transform = transformStr;
-
-    //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
-
-    //console.log("requesting frame...")
-
-    //DotNet.invokeMethodAsync('BlazeCardsCore', 'DisableEvents')
-
-    //let nowTranslation = performance.now();
-    //console.log(`Translation delta: ${nowTranslation - lastTranslation}`);
-    //lastTranslation = nowTranslation;
+function translateGraphics(graphics, x, y) {
     let transformStr = `translate3d(${x}px, ${y}px, 0)`;
     graphics.style.webkitTransform = graphics.style.transform = transformStr;
-
-    //frame = window.requestAnimationFrame(function () {
-
-
-
-    //let nowFrame = performance.now();
-    //console.log(`Frame delta: ${nowFrame - lastFrame}`);
-    //lastFrame = nowFrame;
-
-    //DotNet.invokeMethodAsync('BlazeCardsCore', 'EnableEvents')
-
-    //})
 }
+
 
 function scaleGraphics(graphics, zoom) {
     graphics.style.transform = `scale(${zoom}, ${zoom})`
@@ -45,12 +27,21 @@ function setWidthHeightAttribute(element, width, height) {
     element.setAttribute("height", height);
 }
 
-function changeFlush(changes) {
-    //console.log(changes);
 
-    for (let change of changes) {
-        translateGraphics(change.element, change.change.x, change.change.y);
-    }
+
+
+let canvasElement;
+let canvasInstance;
+
+function hookCanvasElement(element, instance) {
+    canvasElement = element;
+    canvasInstance = instance;
+
+    instance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
+
+    window.addEventListener('resize', () => {
+        instance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
+    })
 }
 
 

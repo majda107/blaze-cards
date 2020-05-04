@@ -24,6 +24,7 @@ namespace BlazeCardsCore.Components
 
 
 
+        public ElementReference CanvasReference { get; private set; }
         public ElementReference CanvasGraphicsReference { get; private set; }
         public ElementReference CanvasZoomReference { get; private set; }
 
@@ -51,11 +52,15 @@ namespace BlazeCardsCore.Components
             this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom);
         }
 
+        [JSInvokable]
+        public void CanvasSizeChanged(BoundingClientRect rect)
+        {
+            this.Box = rect;
+        }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-                this.Box = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.CanvasGraphicsReference);
-
+                await this.JSRuntime.InvokeVoidAsync("hookCanvasElement", this.CanvasReference, DotNetObjectReference.Create(this));
 
             //Console.WriteLine("Re-rendering canvas");
 
@@ -298,8 +303,14 @@ namespace BlazeCardsCore.Components
                 this.CanvasZoomReference = eref;
             });
 
-
             builder.CloseElement();
+
+
+            builder.AddElementReferenceCapture(seq++, (eref) =>
+            {
+                this.CanvasReference = eref;
+            });
+
             builder.CloseElement();
         }
     }
