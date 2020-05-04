@@ -151,6 +151,8 @@ namespace BlazeCardsCore.Components
                 this.State.Mouse.ScrollToZoom(e.DeltaY > 0);
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
 
+                if (this.State.Mouse.Zoom < 0) this.State.Mouse.Zoom = 0.001f;
+
                 this.Translate();
                 this.Zoom();
             }));

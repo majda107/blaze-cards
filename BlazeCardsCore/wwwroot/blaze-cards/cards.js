@@ -1,4 +1,6 @@
 ﻿function changeFlush(changes) {
+    console.log(`Moving ${changes.length} elements at once`)
+
     for (let change of changes) {
         translateGraphics(change.element, change.change.x, change.change.y);
     }
