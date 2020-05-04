@@ -17,7 +17,6 @@ namespace BlazeCardsCore.Components
 {
     public class CanvasComponent : ComponentBase
     {
-        private bool shouldTranslate;
         public CardState State { get; set; }
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -49,7 +48,7 @@ namespace BlazeCardsCore.Components
 
         public void Zoom()
         {
-            this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom);
+            this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom, this.Box.CenterX, this.Box.CenterY);
         }
 
         [JSInvokable]
@@ -126,7 +125,8 @@ namespace BlazeCardsCore.Components
                 //this.State.Selector = RectFactory.CreateSelector(pos);
 
                 // reset selector
-                this.State.Selector.PositionBehavior.Position = (pos / this.State.Mouse.Zoom) - this.State.Mouse.Scroll;
+                //this.State.Selector.PositionBehavior.Position = (pos / this.State.Mouse.Zoom) - this.State.Mouse.Scroll;
+                this.State.Selector.PositionBehavior.Position = pos - this.State.Mouse.Scroll;
                 this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
                 this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                 this.State.Selector.Visible = true;

@@ -10,8 +10,13 @@ function translateGraphics(graphics, x, y) {
 }
 
 
-function scaleGraphics(graphics, zoom) {
-    graphics.style.transform = `scale(${zoom}, ${zoom})`
+function scaleGraphics(graphics, zoom, centerX, centerY) {
+    //console.log(`PEPEGA: ${centerX} ${centerY}`)
+
+    graphics.style.webkitTransformOrigin = `${centerX}px ${centerY}px`;
+    graphics.style.transformOrigin = `${centerX}px ${centerY}px`;
+
+    graphics.style.transform = `scale(${zoom}, ${zoom})`;
 }
 
 function setFocus(element) {

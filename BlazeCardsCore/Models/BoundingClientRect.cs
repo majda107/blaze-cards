@@ -15,5 +15,8 @@ namespace BlazeCardsCore.Models
         public double Right { get; set; }
         public double Bottom { get; set; }
         public double Left { get; set; }
+
+        public double CenterX { get => this.Width / 2; }
+        public double CenterY { get => this.Height / 2; }
     }
 }
