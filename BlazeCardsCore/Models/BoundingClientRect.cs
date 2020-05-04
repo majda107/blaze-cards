@@ -18,5 +18,6 @@ namespace BlazeCardsCore.Models
 
         public double CenterX { get => this.Width / 2; }
         public double CenterY { get => this.Height / 2; }
+        public Vector2f Center { get => new Vector2f((float)this.CenterX, (float)this.CenterY); }
     }
 }

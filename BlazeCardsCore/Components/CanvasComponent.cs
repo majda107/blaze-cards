@@ -87,11 +87,8 @@ namespace BlazeCardsCore.Components
 
         private void OnUpLeaveCallback(float clientX, float clientY)
         {
-            var pos = new Vector2f(clientX, clientY);
-
-
             this.State.Mouse.CheckDrop();
-            this.State.Mouse.OnUp(pos); // will snap
+            this.State.Mouse.OnUp(this.Box.Center - new Vector2f(clientX, clientY)); // will snap
             this.State.Mouse.CheckSelector();
 
 
@@ -101,6 +98,7 @@ namespace BlazeCardsCore.Components
 
         private void OnDownCallback(float clientX, float clientY, bool createSelector)
         {
+            var local = this.Box.Center - new Vector2f(clientX, clientY);
             // broken event propag
 
             if (this.State.ComponentClicked)
@@ -119,14 +117,15 @@ namespace BlazeCardsCore.Components
 
             if (createSelector)
             {
-                var pos = new Vector2f(clientX, clientY);
-                pos.ToLocalFromClient(this.Box);
+                var pos = new Vector2f(local.X, local.Y);
+                //var pos = new Vector2f(clientX, clientY);
+                //pos.ToLocalFromClient(this.Box);
 
                 //this.State.Selector = RectFactory.CreateSelector(pos);
 
                 // reset selector
-                //this.State.Selector.PositionBehavior.Position = (pos / this.State.Mouse.Zoom) - this.State.Mouse.Scroll;
-                this.State.Selector.PositionBehavior.Position = pos - this.State.Mouse.Scroll;
+                this.State.Selector.PositionBehavior.Position = (this.Box.Center - (pos / this.State.Mouse.Zoom)) - this.State.Mouse.Scroll;
+                //this.State.Selector.PositionBehavior.Position = pos - this.State.Mouse.Scroll;
                 this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
                 this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                 this.State.Selector.Visible = true;
@@ -135,7 +134,7 @@ namespace BlazeCardsCore.Components
 
 
             //Console.WriteLine("canvas down...");
-            this.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+            this.State.Mouse.OnDown(local);
             this.ShouldInvalidate = true;
         }
 
@@ -181,7 +180,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
-                this.State.Mouse.OnMove(new Vector2f((int)e.ClientX, (int)e.ClientY));
+                this.State.Mouse.OnMove(this.Box.Center - new Vector2f((float)e.ClientX, (float)e.ClientY));
             }));
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>

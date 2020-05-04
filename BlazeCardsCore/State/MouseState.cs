@@ -98,7 +98,7 @@ namespace BlazeCardsCore.State
         {
             if (!this.Down) return;
 
-            var dev = position - this.lastPosition;
+            var dev =  this.lastPosition - position;
             dev /= this.Zoom;
 
 
