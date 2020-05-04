@@ -83,13 +83,17 @@ namespace BlazeCardsCore.Components
         //    this.Position = new PositionBehavior(this);
         //}
 
+        public string GetUniquieID()
+        {
+            return $"blaze-g-{this.GetHashCode()}";
+        }
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             int seq = 0;
 
 
             builder.OpenElement(seq++, "g");
-
+            builder.AddAttribute(seq++, "id", this.GetUniquieID());
 
             this.RenderInner(builder, ref seq);
 

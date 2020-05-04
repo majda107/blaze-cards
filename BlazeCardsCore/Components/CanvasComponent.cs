@@ -23,9 +23,9 @@ namespace BlazeCardsCore.Components
 
 
 
-        public ElementReference CanvasReference { get; private set; }
-        public ElementReference CanvasGraphicsReference { get; private set; }
-        public ElementReference CanvasZoomReference { get; private set; }
+        //public ElementReference CanvasReference { get; private set; }
+        //public ElementReference CanvasGraphicsReference { get; private set; }
+        //public ElementReference CanvasZoomReference { get; private set; }
 
 
 
@@ -39,16 +39,22 @@ namespace BlazeCardsCore.Components
             this.ShouldInvalidate = true;
         }
 
+        public string GetCanvasID() => $"blaze-canvas-{this.GetHashCode()}";
+        public string GetTranslateID() => $"blaze-translate-{this.GetHashCode()}";
+        public string GetZoomID() => $"blaze-zoom-{this.GetHashCode()}";
         public void Translate()
         {
             //this.shouldTranslate = true;
-            this.State.InteropQueue.QueueChange(new PositionChange(this.CanvasGraphicsReference, this.State.Mouse.Scroll));
+            this.State.InteropQueue.QueueChange(new PositionChange(this.GetTranslateID(), this.State.Mouse.Scroll));
             this.State.InteropQueue.Flush(this.JSRuntime);
         }
 
         public void Zoom()
         {
-            this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom, this.Box.CenterX, this.Box.CenterY);
+            //this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom, this.Box.CenterX, this.Box.CenterY);
+            MonoInteropState.InvokeScale(this.GetZoomID(), this.State.Mouse.Zoom, (float)this.Box.CenterX, (float)this.Box.CenterY);
+
+            //this.InvokeChange();
         }
 
         [JSInvokable]
@@ -59,9 +65,7 @@ namespace BlazeCardsCore.Components
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-                await this.JSRuntime.InvokeVoidAsync("hookCanvasElement", this.CanvasReference, DotNetObjectReference.Create(this));
-
-            //Console.WriteLine("Re-rendering canvas");
+                await this.JSRuntime.InvokeVoidAsync("hookCanvasElement", this.GetCanvasID(), DotNetObjectReference.Create(this));
 
             await base.OnAfterRenderAsync(firstRender);
         }
@@ -144,14 +148,17 @@ namespace BlazeCardsCore.Components
             int seq = 0;
             builder.OpenElement(seq++, "svg");
             builder.AddAttribute(seq++, "class", "canvas");
+            builder.AddAttribute(seq++, "id", this.GetCanvasID());
             builder.AddAttribute(seq++, "tabindex", "0");
 
             builder.AddAttribute(seq++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
-                this.State.Mouse.ScrollToZoom(e.DeltaY > 0);
+                //this.State.Mouse.ScrollToZoom(e.DeltaY > 0);
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
-
-                if (this.State.Mouse.Zoom < 0) this.State.Mouse.Zoom = 0.001f;
+                //Console.WriteLine(this.State.Mouse.Zoom2);
+                //Console.WriteLine(e.DeltaY);
+                //var zoom = (float)e.DeltaY * 0.001f;
+                //if (this.State.Mouse.Zoom2 < 0) this.State.Mouse.Zoom2 = 0.001f;
 
                 this.Translate();
                 this.Zoom();
@@ -183,7 +190,7 @@ namespace BlazeCardsCore.Components
 
 
 
-            builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
+            builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
                 this.State.Mouse.OnMove(this.Box.ToCenterCoords(new Vector2f((float)e.ClientX, (float)e.ClientY)));
             }));
@@ -205,7 +212,7 @@ namespace BlazeCardsCore.Components
                     var currentHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
 
                     var val = currentHypot - this.State.Touch.LastPinchHypot;
-                     
+
                     this.State.Touch.LastPinchHypot = currentHypot;
 
                     if (currentHypot > 130.0f)
@@ -225,7 +232,7 @@ namespace BlazeCardsCore.Components
 
 
 
-            builder.AddAttribute(seq++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
+            builder.AddAttribute(seq++, "onmouseup", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
                 this.OnUpLeaveCallback((float)e.ClientX, (float)e.ClientY);
             }));
@@ -238,7 +245,7 @@ namespace BlazeCardsCore.Components
 
 
 
-            builder.AddAttribute(seq++, "onmouseleave", EventCallback.Factory.Create(this, async (_) =>
+            builder.AddAttribute(seq++, "onmouseleave", EventCallback.Factory.Create(this, (_) =>
             {
                 this.OnUpLeaveCallback(0, 0);
             }));
@@ -252,10 +259,11 @@ namespace BlazeCardsCore.Components
 
             builder.OpenElement(seq++, "g");
             builder.AddAttribute(seq++, "class", "canvas-zoom");
+            builder.AddAttribute(seq++, "id", this.GetZoomID());
 
             builder.OpenElement(seq++, "g");
             builder.AddAttribute(seq++, "class", "canvas-graphics");
-
+            builder.AddAttribute(seq++, "id", this.GetTranslateID());
 
 
 
@@ -271,9 +279,6 @@ namespace BlazeCardsCore.Components
             }
 
 
-
-
-
             if (this.State.Selector != null)
             {
                 builder.OpenComponent(seq++, this.State.Selector.GetComponentType());
@@ -282,6 +287,7 @@ namespace BlazeCardsCore.Components
                 builder.CloseComponent();
             }
             else seq += 3; // fix capture ref error
+
 
             //Console.WriteLine("Re-rendering highlighter");
             if (this.State.Highlighter != null)
@@ -294,27 +300,9 @@ namespace BlazeCardsCore.Components
             else seq += 3; // fix capture ref error
 
 
-            builder.AddElementReferenceCapture(seq++, (eref) =>
-            {
-                this.CanvasGraphicsReference = eref;
-            });
 
             builder.CloseElement();
-
-
-            builder.AddElementReferenceCapture(seq++, (eref) =>
-            {
-                this.CanvasZoomReference = eref;
-            });
-
             builder.CloseElement();
-
-
-            builder.AddElementReferenceCapture(seq++, (eref) =>
-            {
-                this.CanvasReference = eref;
-            });
-
             builder.CloseElement();
         }
     }

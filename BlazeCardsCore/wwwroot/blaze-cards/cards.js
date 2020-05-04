@@ -1,9 +1,25 @@
 ﻿function changeFlush(changes) {
-    console.log(`Moving ${changes.length} elements at once`)
+    //console.log(`Moving ${changes.length} elements at once`)
 
     for (let change of changes) {
         translateGraphics(change.element, change.change.x, change.change.y);
     }
+}
+
+function changeFlushPacket(packet) {
+    let text = BINDING.conv_string(packet);
+
+    let changes = text.split('|');
+
+    for (let change of changes) {
+        let changeData = change.split(';');
+        let el = document.querySelector(`#${changeData[0]}`);
+
+        //console.log(changeData[1]);
+        translateGraphics(el, changeData[1], changeData[2])
+    }
+
+    //console.log(text);
 }
 
 function translateGraphics(graphics, x, y) {
@@ -12,13 +28,15 @@ function translateGraphics(graphics, x, y) {
 }
 
 
-function scaleGraphics(graphics, zoom, centerX, centerY) {
-    //console.log(`PEPEGA: ${centerX} ${centerY}`)
+function scaleGraphics(packet) {
+    //console.log(BINDING.conv_string(packet));
+    let split = BINDING.conv_string(packet).split(';');
+    let graphics = document.querySelector(`#${split[0]}`);
 
-    graphics.style.webkitTransformOrigin = `${centerX}px ${centerY}px`;
-    graphics.style.transformOrigin = `${centerX}px ${centerY}px`;
+    graphics.style.webkitTransformOrigin = `${split[2]}px ${split[3]}px`;
+    graphics.style.transformOrigin = `${split[2]}px ${split[3]}px`;
 
-    graphics.style.transform = `scale(${zoom}, ${zoom})`;
+    graphics.style.transform = `scale(${split[1]}, ${split[1]})`;
 }
 
 function setFocus(element) {
@@ -40,8 +58,8 @@ function setWidthHeightAttribute(element, width, height) {
 let canvasElement;
 let canvasInstance;
 
-function hookCanvasElement(element, instance) {
-    canvasElement = element;
+function hookCanvasElement(elementID, instance) {
+    canvasElement = document.querySelector(`#${elementID}`);
     canvasInstance = instance;
 
     instance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
@@ -54,5 +72,9 @@ function hookCanvasElement(element, instance) {
 
 // DEBUG
 function blazeAlert(text) {
-    alert(text)
+    //text = String.fromCharCode.apply(null, byteText);
+    id = BINDING.conv_string(text)
+
+    alert(id);
+    console.log(id);
 }

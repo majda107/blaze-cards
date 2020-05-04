@@ -15,6 +15,7 @@ namespace BlazeCardsCore.State
 
         public Vector2f Scroll { get; private set; }
         public float Zoom { get; set; }
+        public float Zoom2 { get; set; }
 
 
         private Vector2f lastPosition;

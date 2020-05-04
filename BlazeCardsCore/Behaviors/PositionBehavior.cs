@@ -34,7 +34,7 @@ namespace BlazeCardsCore.Behaviors
                 this._position = value;
 
                 if (this.Card == null) return;
-                this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.Graphics, this.Position));
+                this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.GetUniquieID(), this.Position));
             }
         }
 
@@ -43,7 +43,7 @@ namespace BlazeCardsCore.Behaviors
             if (this.Card == null) return;
 
             //Console.WriteLine("Flushing from position behavior!");
-            this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.Graphics, this.Position));
+            this.Card.Canvas.State.InteropQueue.QueueChange(new PositionChange(this.Card.GetUniquieID(), this.Position));
             this.Card.Canvas.State.InteropQueue.Flush(this.Card.Canvas.JSRuntime);
 
 

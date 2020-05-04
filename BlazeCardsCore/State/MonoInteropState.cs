@@ -1,21 +1,41 @@
-﻿using System;
+﻿using BlazeCardsCore.Extension;
+using BlazeCardsCore.Models;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.RenderTree;
+using Mono.WebAssembly.Interop;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BlazeCardsCore.State
 {
-    class MonoInteropState
+    public class MonoInteropState
     {
-        //public MonoWebAssemblyJSRuntime JSRuntime { get; private set; }
+        public static readonly MonoWebAssemblyJSRuntime MonoRuntime = new MonoWebAssemblyJSRuntime();
 
-        public MonoInteropState()
+        public static void InvokeChangeQueue(PositionChange[] changes)
         {
-            //this.JSRuntime = new MonoWebAssemblyJSRuntime();
+            if (changes.Length <= 0) return;
+
+            var packet = String.Empty;
+            for (int i = 0; i < changes.Length; i++)
+            {
+                packet += changes[i].ToString();
+                if (i < changes.Length - 1)
+                    packet += "|";
+            }
+
+            //Console.WriteLine($"Sending packet: {packet}");
+            MonoRuntime.InvokeUnmarshalled<string, object>("changeFlushPacket", packet);
         }
 
-        public void TestInvoke<TRes>()
-        { 
-            //var res = this.JSRuntime.InvokeUnmarshalled<TRes>("alert('nigga');");
+        public static void InvokeScale(string elementID, float scale, float centerX, float centerY)
+        {
+            var packet = $"{elementID};{scale.ToJSStr()};{centerX.ToJSStr()};{centerY.ToJSStr()}";
+            //MonoRuntime.InvokeUnmarshalled<string, object>("scaleGraphics", packet);
+
+            MonoRuntime.InvokeUnmarshalled<string, object>("scaleGraphics", packet);
         }
     }
 }

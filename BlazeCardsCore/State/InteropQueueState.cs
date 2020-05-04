@@ -62,7 +62,9 @@ namespace BlazeCardsCore.State
             //}).Start();
 
             //Console.WriteLine("Movin!");
-            FireAndForget(js.InvokeVoidAsync("changeFlush", this.Changes).AsTask());
+            //FireAndForget(js.InvokeVoidAsync("changeFlush", this.Changes).AsTask());
+
+            MonoInteropState.InvokeChangeQueue(this.Changes.ToArray());
 
             this.Changes.Clear();
         }
