@@ -79,10 +79,7 @@ namespace BlazeCardsCore.State
 
         public void OnDown(Vector2f position)
         {
-            //position -= this.Scroll;
-
             this.Down = true;
-            //Console.WriteLine($"Mouse down: {position.X}");
 
             this.lastPosition = position;
 
@@ -90,31 +87,26 @@ namespace BlazeCardsCore.State
             //    this.CardState.Selected.Position.Position = position;
         }
 
+        public void OnFakeMove(Vector2f position)
+        {
+            if (!this.Down) return;
+           
+            this.lastPosition = position;
+        }
+
         public void OnMove(Vector2f position)
         {
             if (!this.Down) return;
-            //Console.WriteLine("MOVIN");
 
             var dev = position - this.lastPosition;
             dev /= this.Zoom;
 
-            //if(dev.X == 0)
-            //    Console.WriteLine($"X LAG");
-
 
             if (this.State.Selected.Count > 0)
             {
-
-                //var minPos = new Vector2f(float.MaxValue, float.MaxValue);
                 foreach (var card in this.State.Selected)
                 {
                     card.PositionBehavior.Position += dev;
-                    //this.CardState.InteropQueue.QueueChange(new PositionChange(card.Component.Graphics, card.GetPosition()));
-
-
-                    //var pos = card.GetGlobalPosition();
-                    //if (pos.X < minPos.X) minPos.X = pos.X;
-                    //if (pos.Y < minPos.Y) minPos.Y = pos.Y;
                 }
 
                 if (this.State.Highlighter != null)
@@ -131,7 +123,6 @@ namespace BlazeCardsCore.State
 
             if (!this.State.Selector.Visible && this.State.Selected.Count <= 0)
             {
-                //Console.WriteLine("Movin canvas");
                 this.Scroll += dev;
                 this.State.Canvas.Translate();
             }

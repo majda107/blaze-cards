@@ -73,8 +73,6 @@ namespace BlazeCardsCore.Components
             return false;
 
             //return true; // debug
-
-            //return base.ShouldRender();
         }
 
         public void InvokeChange()
@@ -97,7 +95,7 @@ namespace BlazeCardsCore.Components
             this.ShouldInvalidate = true;
         }
 
-        private void OnDownCallback(float clientX, float clientY)
+        private void OnDownCallback(float clientX, float clientY, bool createSelector)
         {
             // broken event propag
 
@@ -115,7 +113,7 @@ namespace BlazeCardsCore.Components
             }
 
 
-            if (this.State.Keyboard.IsDown("Shift"))
+            if (createSelector)
             {
                 var pos = new Vector2f(clientX, clientY);
                 pos.ToLocalFromClient(this.Box);
@@ -167,15 +165,12 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onmousedown", EventCallback.Factory.Create(this, (e) =>
             {
-                this.OnDownCallback((float)e.ClientX, (float)e.ClientY);
+                this.OnDownCallback((float)e.ClientX, (float)e.ClientY, this.State.Keyboard.IsDown("Shift"));
             }));
 
             builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
-                this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
-
-                if (e.Touches.Length > 1)
-                    this.State.Touch.LastPinchHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
+                this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY, false);
             }));
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchstart", true);
@@ -185,29 +180,34 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onmousemove", EventCallback.Factory.Create<MouseEventArgs>(this, async (e) =>
             {
-                //if (!EventPrevention.EventsEnabled) return;
-
                 this.State.Mouse.OnMove(new Vector2f((int)e.ClientX, (int)e.ClientY));
             }));
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
-                var pos = new Vector2f((int)e.Touches[e.Touches.Length - 1].ClientX, (int)e.Touches[e.Touches.Length - 1].ClientY);
+                var pos = new Vector2f((int)e.Touches[0].ClientX, (int)e.Touches[0].ClientY);
 
                 if (e.Touches.Length == 1)
+                {
+                    if (!this.State.Selector.Visible && this.State.Selected.Count == 0)
+                        this.OnDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY, true);
+
                     this.State.Mouse.OnMove(pos);
+                }
                 else if (e.Touches.Length > 1)
                 {
+
                     var currentHypot = MathExtension.Hypot(e.Touches[0].PageX - e.Touches[1].PageX, e.Touches[0].PageY - e.Touches[1].PageY);
 
                     var val = currentHypot - this.State.Touch.LastPinchHypot;
 
                     this.State.Touch.LastPinchHypot = currentHypot;
 
-                    if (currentHypot > 160.0f)
+                    if (currentHypot > 130.0f)
                     {
-                        this.State.Mouse.Zoom += (float)val / 100f;
+                        this.State.Mouse.Zoom += val < 0 ? -0.05f : 0.05f;
                         this.Zoom();
+                        this.State.Mouse.OnFakeMove(pos);
                     }
                     else
                         this.State.Mouse.OnMove(pos);

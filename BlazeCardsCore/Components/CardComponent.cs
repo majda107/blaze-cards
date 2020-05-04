@@ -132,6 +132,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
+                if (e.Touches.Length > 1) return;
                 this.MouseDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
             }));
         }
