@@ -143,8 +143,6 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
-                //Console.WriteLine("Zoomin !");
-
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
                 this.Zoom();
             }));
@@ -152,14 +150,12 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create(this, e =>
             {
                 this.State.Keyboard.KeyDown(e.Key);
-                //this.ShouldInvalidate = true;
             }));
 
-            //builder.AddAttribute(seq++, "onkeyup", EventCallback.Factory.Create(this, e =>
-            //{
-            //    this.State.Keyboard.KeyUp(e.Key);
-            //    //this.ShouldInvalidate = true;
-            //}));
+            builder.AddAttribute(seq++, "onkeyup", EventCallback.Factory.Create(this, e =>
+            {
+                this.State.Keyboard.KeyUp(e.Key);
+            }));
 
 
 

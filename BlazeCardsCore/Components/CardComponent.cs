@@ -103,22 +103,34 @@ namespace BlazeCardsCore.Components
 
             if (!this.Descriptor.Clickable) return;
 
-            var selected = this.Canvas.State.Selected;
-            if (selected.Count <= 0)
-            {
-                this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
-                this.Canvas.State.Selected.Add(this.Descriptor);
-                this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
-            }
-            else
-            {
-                foreach (var card in this.Canvas.State.Selected)
-                    if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
-                    {
-                        this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
-                        return;
-                    }
-            }
+            //var selected = this.Canvas.State.Selected;
+            //if (selected.Count <= 0)
+            //{
+            //    this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+            //    this.Canvas.State.Selected.Add(this.Descriptor);
+            //    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
+            //}
+            //else
+            //{
+            //    foreach (var card in this.Canvas.State.Selected)
+            //        if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
+            //        {
+            //            this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+            //            return;
+            //        }
+            //}
+
+            foreach (var card in this.Canvas.State.Selected)
+                if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
+                {
+                    this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+                    return;
+                }
+
+            this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
+            this.Canvas.State.Selected.Clear();
+            this.Canvas.State.Selected.Add(this.Descriptor);
+            this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
 
             this.Canvas.InvokeChange();
         }
