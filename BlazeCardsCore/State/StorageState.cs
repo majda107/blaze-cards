@@ -38,6 +38,7 @@ namespace BlazeCardsCore.State
                 {
                     var textBlockCard = new TextBlockCard();
                     textBlockCard.PositionBehavior.Position = new Vector2f(i * 30 + 340, i % 10 * 30 + 300);
+                    textBlockCard.TextBehavior.Value = "SHIFT & DRAG to multi-select";
                     this.Cards.Add(textBlockCard);
                 }
             }

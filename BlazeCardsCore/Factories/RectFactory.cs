@@ -3,27 +3,32 @@ using BlazeCardsCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Factories
 {
     public static class RectFactory
     {
-        public static RectCard CreateHighlighter(Card card)
-        {
-            var highlighter = new RectCard();
-            highlighter.PositionBehavior.Position = card.GetGlobalPosition();
-            highlighter.SizeBehavior.Size = card.GetSize();
-            highlighter.Clickable = false;
-            highlighter.Classes.Add("card-highlighter");
-            //highlighter.PositionBehavior.Update();
+        //public static RectCard CreateHighlighter(Card card)
+        //{
+        //    //Console.WriteLine($"Creatin highlighter!! {card.GetType()} {card.Highlightable}");
+        //    if (!card.Highlightable) return null;
 
-            //Console.WriteLine($"Created highlighter with size: {highlighter.SizeBehavior.Width} {highlighter.SizeBehavior.Height}, position {highlighter.PositionBehavior.Position.X}, {highlighter.PositionBehavior.Position.Y}");
-            return highlighter;
-        }
+        //    var highlighter = new RectCard();
+        //    highlighter.PositionBehavior.Position = card.GetGlobalPosition();
+        //    highlighter.SizeBehavior.Size = card.GetSize();
+        //    highlighter.Clickable = false;
+        //    highlighter.Classes.Add("card-highlighter");
+        //    //highlighter.PositionBehavior.Update();
+
+        //    //Console.WriteLine($"Created highlighter with size: {highlighter.SizeBehavior.Width} {highlighter.SizeBehavior.Height}, position {highlighter.PositionBehavior.Position.X}, {highlighter.PositionBehavior.Position.Y}");
+        //    return highlighter;
+        //}
 
         public static RectCard CreateHighlighter(IList<Card> cards)
         {
+            if (cards.Count == 1 && !cards[0].Highlightable) return null;
             if (cards.Count <= 0) return null;
 
             var pos = cards[0].GetGlobalPosition();
