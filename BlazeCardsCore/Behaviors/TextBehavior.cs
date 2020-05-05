@@ -16,7 +16,9 @@ namespace BlazeCardsCore.Behaviors
         public Vector2f Padding { get; set; }
 
         public string Value { get; set; }
+        public string Highlighted { get; set; }
         public float Caret { get => this.BufferedSize.Size.X; }
+
         public bool Editing { get; set; }
 
         public TextBehavior()
@@ -24,6 +26,11 @@ namespace BlazeCardsCore.Behaviors
             this.Value = "default text";
             this.BufferedSize = new SizeBehavior();
             this.Padding = new Vector2f(6.0f, 3.0f);
+        }
+
+        public void Highlight(int start, int end)
+        {
+            this.Highlighted = this.Value.Substring(start, end - start);
         }
 
         public void AssignComponent(TextComponent card)
@@ -34,7 +41,7 @@ namespace BlazeCardsCore.Behaviors
 
         public void Focus()
         {
-            this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.TextRef);
+            this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.GetTextID());
         }
 
         public void KeyDown(KeyboardEventArgs e)
@@ -67,11 +74,17 @@ namespace BlazeCardsCore.Behaviors
         //    }
         //}
 
+        public async Task<BoundingClientRect> CalculateTextRect(string text)
+        {
+            var box = await this.Card.Canvas.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", text);
+            return box;
+        }
+
         public async Task BufferSizeAsync()
         {
             var size = new Vector2f();
 
-            var box = await this.Card.Canvas.JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.Card.TextRef);
+            var box = await this.Card.Canvas.JSRuntime.InvokeAsync<BoundingClientRect>("getBoudingRect", this.Card.GetTextID());
             size.X = (float)box.Width;
             size.Y = (float)box.Height;
 

@@ -16,6 +16,7 @@ namespace BlazeCardsCore.Descriptors
 
             this.TextBehavior.Value = name;
             this.Highlightable = false;
+            this.Editable = false;
 
             this.Classes.Add("blaze-button");
 

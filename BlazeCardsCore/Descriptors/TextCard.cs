@@ -11,10 +11,26 @@ namespace BlazeCardsCore.Descriptors
     public class TextCard : Card
     {
         public TextBehavior TextBehavior { get; private set; }
+
+        public bool Editable { get; set; }
         public TextCard() : base()
         {
             this.TextBehavior = new TextBehavior();
+            this.Editable = true;
+
+            this.OnUp += (s, e) =>
+            {
+                if (this.TextBehavior.Value == "")
+                {
+                    Console.WriteLine("Deleting empty text card!");
+                    s.UnhookFromParent();
+                }
+
+                s.InvokeComponentChange();
+            };
         }
+
+            
         public override Type GetComponentType() => typeof(TextComponent);
 
         public override void AssignComponent(CardComponent component)

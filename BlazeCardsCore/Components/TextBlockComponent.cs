@@ -21,7 +21,6 @@ namespace BlazeCardsCore.Components
 
             this.HookMouseDown(builder, ref seq);
             this.HookDoubleClick(builder, ref seq);
-            this.HookBlur(builder, ref seq);
 
             builder.AddElementReferenceCapture(seq++, eref =>
             {

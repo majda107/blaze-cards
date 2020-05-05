@@ -32,11 +32,36 @@ function scaleGraphics(packet) {
     graphics.style.transform = `scale(${split[1]}, ${split[1]})`;
 }
 
-function setFocus(element) {
+function setFocus(elementID) {
+    element = document.querySelector(`#${elementID}`);
+    if (element == undefined) return;
     element.focus();
 }
 
-function getBoudingRect(element) {
+function calculateTextRect(text) {
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.classList.add("blaze-calculate-hidden");
+
+    let textsvg = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    textsvg.classList.add("blaze-text");
+    textsvg.setAttribute("id", "text-calculation-id");
+    textsvg.innerHTML = text;
+    svg.appendChild(textsvg);
+
+    document.body.appendChild(svg);
+    let rect = getBoudingRect("text-calculation-id");
+
+    //console.log("CALCULATING TEXT RECT");
+    //console.log(rect);
+
+    document.body.removeChild(svg);
+
+    return rect;
+}
+
+function getBoudingRect(elementID) {
+    element = document.querySelector(`#${elementID}`);
+    if (element == undefined) return;
     return element.getBoundingClientRect();
 }
 

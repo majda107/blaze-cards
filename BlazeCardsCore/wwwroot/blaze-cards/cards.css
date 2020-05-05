@@ -80,15 +80,32 @@ text {
     cursor: move;
 }
 
+/* DROP AREA */
 .blaze-droparea {
     fill: rgba(255, 105, 0, 0.3);
     stroke: rgba(255, 105, 0, 0.7);
 }
 
+/* BUTTON */
 .blaze-button {
     fill: rgba(60, 60, 230, 0.9);
 }
 
+    .blaze-button:hover {
+        cursor: pointer;
+    }
+
 .blaze-button-down {
     fill: rgba(60, 230, 60, 0.9);
+}
+
+/* TEXT */
+.blaze-text-select {
+    fill: rgba(160, 160, 250, 0.5);
+}
+
+/* HIDDEN WORKAROUND */
+.blaze-calculate-hidden {
+    position: absolute;
+    visibility: hidden;
 }
