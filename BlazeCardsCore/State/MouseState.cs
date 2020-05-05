@@ -15,7 +15,6 @@ namespace BlazeCardsCore.State
 
         public Vector2f Scroll { get; private set; }
         public float Zoom { get; set; }
-        public float Zoom2 { get; set; }
 
 
         private Vector2f lastPosition;
@@ -93,9 +92,6 @@ namespace BlazeCardsCore.State
             this.Down = true;
 
             this.lastPosition = position;
-
-            //if (this.CardState.Selected != null)
-            //    this.CardState.Selected.Position.Position = position;
         }
 
         public void OnFakeMove(Vector2f position)
@@ -143,7 +139,6 @@ namespace BlazeCardsCore.State
 
         public void OnUp(Vector2f position)
         {
-            //position -= this.Scroll;
             if (this.State.Selected.Count > 0)
             {
                 foreach (var card in this.State.Selected)

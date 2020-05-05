@@ -50,8 +50,6 @@ namespace BlazeCardsCore.State
             var drop = new DropAreaCard();
             drop.OnDrop += (o, e) =>
             {
-                //this.State.Canvas.JSRuntime.InvokeVoidAsync("blazeAlert", $"{e.Cards.Count} has been dropped...");
-
                 foreach (var card in e.Cards) // add on drop
                 {
                     if (this.Cards.Contains(card))
@@ -59,9 +57,6 @@ namespace BlazeCardsCore.State
 
                     list.AddChild(card);
                 }
-
-                //this.State.Canvas.InvokeChange();
-
             };
 
             list.AddChild(drop);

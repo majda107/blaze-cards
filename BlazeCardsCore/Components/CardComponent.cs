@@ -108,26 +108,7 @@ namespace BlazeCardsCore.Components
 
         private void MouseDownCallback(float clientX, float clientY)
         {
-            this.Canvas.State.ComponentClicked = true; // broken event propag
-
             if (!this.Descriptor.Clickable) return;
-
-            //var selected = this.Canvas.State.Selected;
-            //if (selected.Count <= 0)
-            //{
-            //    this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
-            //    this.Canvas.State.Selected.Add(this.Descriptor);
-            //    this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
-            //}
-            //else
-            //{
-            //    foreach (var card in this.Canvas.State.Selected)
-            //        if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
-            //        {
-            //            this.Canvas.State.Mouse.OnDown(new Vector2f(clientX, clientY));
-            //            return;
-            //        }
-            //}
 
             foreach (var card in this.Canvas.State.Selected)
                 if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
@@ -151,11 +132,15 @@ namespace BlazeCardsCore.Components
                 this.MouseDownCallback((float)e.ClientX, (float)e.ClientY);
             }));
 
+            builder.AddEventStopPropagationAttribute(seq++, "onmousedown", true);
+
             builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
                 if (e.Touches.Length > 1) return;
                 this.MouseDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
             }));
+
+            builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
         }
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)

@@ -103,13 +103,6 @@ namespace BlazeCardsCore.Components
         private void OnDownCallback(float clientX, float clientY, bool createSelector)
         {
             var local = this.Box.Center - new Vector2f(clientX, clientY);
-            // broken event propag
-
-            if (this.State.ComponentClicked)
-            {
-                this.State.ComponentClicked = false;
-                return;
-            }
 
             if (this.State.Selected.Count > 0)
             {
@@ -153,12 +146,8 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "onwheel", EventCallback.Factory.Create(this, e =>
             {
-                //this.State.Mouse.ScrollToZoom(e.DeltaY > 0);
                 this.State.Mouse.Zoom -= (float)e.DeltaY * 0.001f;
-                //Console.WriteLine(this.State.Mouse.Zoom2);
-                //Console.WriteLine(e.DeltaY);
-                //var zoom = (float)e.DeltaY * 0.001f;
-                //if (this.State.Mouse.Zoom2 < 0) this.State.Mouse.Zoom2 = 0.001f;
+                if (this.State.Mouse.Zoom < 0) this.State.Mouse.Zoom = 0.001f;
 
                 this.Translate();
                 this.Zoom();
@@ -226,6 +215,9 @@ namespace BlazeCardsCore.Components
                 }
 
             }));
+
+            //var b = new RenderTreeBuilder();
+            
 
             //builder.AddEventPreventDefaultAttribute(seq++, "ontouchmove", true);
             //builder.AddEventStopPropagationAttribute(seq++, "ontouchmove", true);

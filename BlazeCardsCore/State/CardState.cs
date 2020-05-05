@@ -11,9 +11,6 @@ namespace BlazeCardsCore.State
 {
     public class CardState
     {
-        // because of broken event propagation
-        public bool ComponentClicked { get; set; }
-
 
         public CanvasComponent Canvas { get; private set; }
         public MouseState Mouse { get; private set; }
@@ -23,9 +20,7 @@ namespace BlazeCardsCore.State
         public StorageState Storage { get; private set; }
 
 
-        // EXCHANGE FOR CARD!
-        //public CardComponent Selected { get; set; }
-        //public Card Selected { get; set; }
+
         public IList<Card> Selected { get; set; }
 
 

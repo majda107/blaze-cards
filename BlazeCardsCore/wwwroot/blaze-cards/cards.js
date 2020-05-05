@@ -1,12 +1,4 @@
-﻿function changeFlush(changes) {
-    //console.log(`Moving ${changes.length} elements at once`)
-
-    for (let change of changes) {
-        translateGraphics(change.element, change.change.x, change.change.y);
-    }
-}
-
-function changeFlushPacket(packet) {
+﻿function changeFlushPacket(packet) {
     let text = BINDING.conv_string(packet);
 
     let changes = text.split('|');
