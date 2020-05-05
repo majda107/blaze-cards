@@ -116,12 +116,15 @@ namespace BlazeCardsCore.State
 
             if (this.State.Selected.Count > 0)
             {
+                bool moveHighlighter = true; // HIGHLIGHTER DRAGGING WORKAROUND, FIX LATER!!!!
                 foreach (var card in this.State.Selected)
-                {
-                    card.PositionBehavior.Position += dev;
-                }
+                    if (card.Draggable)
+                        card.PositionBehavior.Position += dev;
+                    else
+                        moveHighlighter = false;
 
-                if (this.State.Highlighter != null)
+
+                if (this.State.Highlighter != null && moveHighlighter)
                     this.State.Highlighter.PositionBehavior.Position += dev;
 
                 this.State.InteropQueue.Flush(this.State.Canvas.JSRuntime);

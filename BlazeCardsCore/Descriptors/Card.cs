@@ -23,8 +23,11 @@ namespace BlazeCardsCore.Descriptors
         public IList<Card> Children { get; protected set; }
         public Card Parent { get; set; }
 
+
         public bool Clickable { get; set; }
+        public bool Draggable { get; set; }
         public bool Highlightable { get; set; }
+
 
         private bool _visible;
         public bool Visible
@@ -53,6 +56,7 @@ namespace BlazeCardsCore.Descriptors
             this.Parent = parent;
 
             this.Clickable = true;
+            this.Draggable = true;
             this.Highlightable = true;
             this.Classes = new List<string>();
 

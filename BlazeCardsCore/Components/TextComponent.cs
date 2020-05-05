@@ -40,7 +40,11 @@ namespace BlazeCardsCore.Components
                 if (this.TextDescriptor.TextBehavior.Editing)
                     this.TextDescriptor.TextBehavior.Highlight(0, this.TextDescriptor.TextBehavior.Value.Length);
                 else
+                {
+                    this.TextDescriptor.Draggable = false;
                     this.TextDescriptor.TextBehavior.Editing = true;
+                }
+                    
 
                 this.InvokeChange();
             }));
@@ -48,6 +52,7 @@ namespace BlazeCardsCore.Components
 
         public override void Deselect()
         {
+            this.TextDescriptor.Draggable = true;
             this.TextDescriptor.TextBehavior.Editing = false;
             this.TextDescriptor.TextBehavior.Selection = StringSelection.Empty;
             this.InvokeChange();
