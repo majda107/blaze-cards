@@ -100,6 +100,10 @@ text {
 }
 
 /* TEXT */
+.blaze-text-editing:hover {
+    cursor: text;
+}
+
 .blaze-text-select {
     fill: rgba(160, 160, 250, 0.5);
 }

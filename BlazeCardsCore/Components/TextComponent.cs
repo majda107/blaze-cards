@@ -37,9 +37,11 @@ namespace BlazeCardsCore.Components
                 if (!this.TextDescriptor.Editable) return;
                 //this.Canvas.State.Deselect();
 
-                this.TextDescriptor.TextBehavior.Highlight(0, this.TextDescriptor.TextBehavior.Value.Length);
+                if (this.TextDescriptor.TextBehavior.Editing)
+                    this.TextDescriptor.TextBehavior.Highlight(0, this.TextDescriptor.TextBehavior.Value.Length);
+                else
+                    this.TextDescriptor.TextBehavior.Editing = true;
 
-                this.TextDescriptor.TextBehavior.Editing = true;
                 this.InvokeChange();
             }));
         }
@@ -47,7 +49,7 @@ namespace BlazeCardsCore.Components
         public override void Deselect()
         {
             this.TextDescriptor.TextBehavior.Editing = false;
-            this.TextDescriptor.TextBehavior.Highlighted = null;
+            this.TextDescriptor.TextBehavior.Selection = StringSelection.Empty;
             this.InvokeChange();
 
             base.Deselect();
@@ -58,7 +60,7 @@ namespace BlazeCardsCore.Components
         {
             this.RenderTextAddition(builder, ref seq);
 
-            if (this.TextDescriptor.TextBehavior.Highlighted != null)
+            if (this.TextDescriptor.TextBehavior.Selection != StringSelection.Empty)
             {
                 // SUBSTITUTE TO CARD.INVOKE_RENDER !!!!!!!!!!!!!
                 builder.OpenComponent(seq++, this.TextSelectionDescriptor.GetComponentType());
@@ -68,21 +70,28 @@ namespace BlazeCardsCore.Components
             }
 
             builder.OpenElement(seq++, "text");
-            builder.AddAttribute(seq++, "class", "blaze-text");
+
+            var classString = "blaze-text";
+            if (this.TextDescriptor.TextBehavior.Editing) classString += " blaze-text-editing";
+            builder.AddAttribute(seq++, "class", classString);
             builder.AddAttribute(seq++, "id", this.GetTextID());
 
             builder.AddAttribute(seq++, "tabindex", "0");
             builder.AddAttribute(seq++, "x", $"{this.TextDescriptor.TextBehavior.Padding.X}px");
             builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 20}px");
 
-            this.HookDoubleClick(builder, ref seq);
-            //this.HookBlur(builder, ref seq);
 
+            this.HookDoubleClick(builder, ref seq);
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
-                //Console.WriteLine("key down...");
-                this.TextDescriptor.TextBehavior.Highlighted = null;
-                this.TextDescriptor.TextBehavior.KeyDown(e);
+                if (this.Canvas.State.Keyboard.IsDown("Control"))
+                    this.TextDescriptor.TextBehavior.Highlight(0, this.TextDescriptor.TextBehavior.Value.Length);
+                else
+                {
+                    this.TextDescriptor.TextBehavior.KeyDown(e);
+                    this.TextDescriptor.TextBehavior.Selection = StringSelection.Empty;
+                }
+
                 this.InvokeChange();
             }));
 
@@ -93,13 +102,7 @@ namespace BlazeCardsCore.Components
             builder.AddContent(seq++, this.TextDescriptor.TextBehavior.Value);
 
 
-
-            //builder.AddElementReferenceCapture(seq++, (eref) =>
-            //{
-            //    this.TextRef = eref;
-            //});
             builder.CloseElement();
-
 
             if (this.TextDescriptor.TextBehavior.Editing)
             {
@@ -133,9 +136,10 @@ namespace BlazeCardsCore.Components
                 this.TextSelectionDescriptor.SizeBehavior.Size = new Vector2f(0, 0);
             }
 
-            if (this.TextDescriptor.TextBehavior.Highlighted != null)
+            if (this.TextDescriptor.TextBehavior.Selection != StringSelection.Empty)
             {
-                var selectionBox = await this.TextDescriptor.TextBehavior.CalculateTextRect(this.TextDescriptor.TextBehavior.Highlighted);
+                var str = this.TextDescriptor.TextBehavior.Selection.Cut(this.TextDescriptor.TextBehavior.Value);
+                var selectionBox = await this.TextDescriptor.TextBehavior.CalculateTextRect(str);
                 this.TextSelectionDescriptor.SizeBehavior.Size = selectionBox.Size;
             }
 

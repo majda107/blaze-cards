@@ -1,4 +1,5 @@
 ﻿using BlazeCardsCore.Components;
+using BlazeCardsCore.Extension;
 using BlazeCardsCore.Models;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -16,7 +17,7 @@ namespace BlazeCardsCore.Behaviors
         public Vector2f Padding { get; set; }
 
         public string Value { get; set; }
-        public string Highlighted { get; set; }
+        public StringSelection Selection { get; set; }
         public float Caret { get => this.BufferedSize.Size.X; }
 
         public bool Editing { get; set; }
@@ -28,10 +29,7 @@ namespace BlazeCardsCore.Behaviors
             this.Padding = new Vector2f(6.0f, 3.0f);
         }
 
-        public void Highlight(int start, int end)
-        {
-            this.Highlighted = this.Value.Substring(start, end - start);
-        }
+        public void Highlight(int start, int end) => this.Selection = new StringSelection(start, end);
 
         public void AssignComponent(TextComponent card)
         {
@@ -50,7 +48,11 @@ namespace BlazeCardsCore.Behaviors
 
             if (e.Key.ToLower() == "backspace")
             {
-                this.Value = this.Value.Length <= 0 ? "" : this.Value.Substring(0, this.Value.Length - 1);
+                if (this.Selection != StringSelection.Empty)
+                    this.Value = this.Selection.RemoveFrom(this.Value);
+                else
+                    this.Value = this.Value.RemoveLast();
+
                 return;
             }
 
