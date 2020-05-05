@@ -84,7 +84,9 @@ namespace BlazeCardsCore.Components
             this.HookDoubleClick(builder, ref seq);
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
-                if (this.Canvas.State.Keyboard.IsDown("Control"))
+                if (e.Key.ToLower() == "shift") return;
+
+                if (this.TextDescriptor.TextBehavior.Editing && this.Canvas.State.Keyboard.IsDown("Control"))
                     this.TextDescriptor.TextBehavior.Highlight(0, this.TextDescriptor.TextBehavior.Value.Length);
                 else
                 {

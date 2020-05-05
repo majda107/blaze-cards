@@ -57,11 +57,12 @@ namespace BlazeCardsCore.Behaviors
             }
 
             if (e.Key.ToLower() == "space")
-            {
-                this.Value += " ";
-            }
+                e.Key = " "; // cheat lol
 
-            if (e.Key.ToString().Length > 1) return;
+            if (e.Key.Length > 1) return;
+
+            if (this.Selection != StringSelection.Empty)
+                this.Value = this.Selection.RemoveFrom(this.Value);
 
             this.Value += e.Key.ToString();
         }
