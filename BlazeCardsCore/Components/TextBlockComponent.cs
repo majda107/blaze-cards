@@ -10,13 +10,14 @@ namespace BlazeCardsCore.Components
     class TextBlockComponent : TextComponent
     {
         public ElementReference TextBackgroundReference { get; private set; }
-        
+
         protected override void RenderTextAddition(RenderTreeBuilder builder, ref int seq)
         {
             builder.OpenElement(seq++, "rect");
             builder.AddAttribute(seq++, "x", "0");
             builder.AddAttribute(seq++, "y", "0");
-            builder.AddAttribute(seq++, "class", "text-background blaze-rect");
+            //builder.AddAttribute(seq++, "class", "text-background blaze-rect");
+            this.BuildClassAttribute(builder, ref seq);
 
             this.HookMouseDown(builder, ref seq);
             this.HookDoubleClick(builder, ref seq);

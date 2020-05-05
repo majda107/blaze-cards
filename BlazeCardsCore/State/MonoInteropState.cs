@@ -21,6 +21,8 @@ namespace BlazeCardsCore.State
             var packet = String.Empty;
             for (int i = 0; i < changes.Length; i++)
             {
+                if (changes[i].UniqueID == String.Empty) continue;
+
                 packet += changes[i].ToString();
                 if (i < changes.Length - 1)
                     packet += "|";

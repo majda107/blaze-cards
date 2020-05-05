@@ -7,6 +7,7 @@
         let changeData = change.split(';');
         let el = document.querySelector(`#${changeData[0]}`);
 
+        if (el == undefined) continue;
         //console.log(changeData[1]);
         translateGraphics(el, changeData[1], changeData[2])
     }

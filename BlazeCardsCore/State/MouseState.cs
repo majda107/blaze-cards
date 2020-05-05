@@ -12,6 +12,7 @@ namespace BlazeCardsCore.State
     {
         public CardState State { get; private set; }
         public bool Down { get; private set; }
+        public bool Moved { get; private set; }
 
         public Vector2f Scroll { get; private set; }
         public float Zoom { get; set; }
@@ -90,6 +91,7 @@ namespace BlazeCardsCore.State
         public void OnDown(Vector2f position)
         {
             this.Down = true;
+            this.Moved = false;
 
             this.lastPosition = position;
         }
@@ -110,6 +112,7 @@ namespace BlazeCardsCore.State
 
             if (!this.Down) return;
 
+            this.Moved = true;
 
             if (this.State.Selected.Count > 0)
             {
@@ -149,7 +152,6 @@ namespace BlazeCardsCore.State
                 this.State.Highlighter = RectFactory.CreateHighlighter(this.State.Selected);
 
             }
-
 
             this.Down = false;
         }

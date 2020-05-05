@@ -22,13 +22,6 @@ namespace BlazeCardsCore.Components
         public IJSRuntime JSRuntime { get; set; }
 
 
-
-        //public ElementReference CanvasReference { get; private set; }
-        //public ElementReference CanvasGraphicsReference { get; private set; }
-        //public ElementReference CanvasZoomReference { get; private set; }
-
-
-
         public BoundingClientRect Box { get; private set; }
 
         public bool ShouldInvalidate { get; set; }
@@ -44,17 +37,13 @@ namespace BlazeCardsCore.Components
         public string GetZoomID() => $"blaze-zoom-{this.GetHashCode()}";
         public void Translate()
         {
-            //this.shouldTranslate = true;
             this.State.InteropQueue.QueueChange(new PositionChange(this.GetTranslateID(), this.State.Mouse.Scroll));
             this.State.InteropQueue.Flush(this.JSRuntime);
         }
 
         public void Zoom()
         {
-            //this.JSRuntime.InvokeVoidAsync("scaleGraphics", this.CanvasZoomReference, this.State.Mouse.Zoom, this.Box.CenterX, this.Box.CenterY);
             MonoInteropState.InvokeScale(this.GetZoomID(), this.State.Mouse.Zoom, (float)this.Box.CenterX, (float)this.Box.CenterY);
-
-            //this.InvokeChange();
         }
 
         [JSInvokable]
@@ -91,6 +80,15 @@ namespace BlazeCardsCore.Components
 
         private void OnUpLeaveCallback(float clientX, float clientY)
         {
+            var fireClick = !this.State.Mouse.Moved && this.State.Mouse.Down;
+            foreach (var selected in this.State.Selected)
+            {
+                selected.FireUp();
+                if (fireClick)
+                    selected.FireClick();
+            }
+
+
             this.State.Mouse.CheckDrop();
             this.State.Mouse.OnUp(this.Box.Center - new Vector2f(clientX, clientY)); // will snap
             this.State.Mouse.CheckSelector();
@@ -116,14 +114,9 @@ namespace BlazeCardsCore.Components
             if (createSelector)
             {
                 var pos = new Vector2f(local.X, local.Y);
-                //var pos = new Vector2f(clientX, clientY);
-                //pos.ToLocalFromClient(this.Box);
-
-                //this.State.Selector = RectFactory.CreateSelector(pos);
 
                 // reset selector
                 this.State.Selector.PositionBehavior.Position = (this.Box.Center - (pos / this.State.Mouse.Zoom)) - this.State.Mouse.Scroll;
-                //this.State.Selector.PositionBehavior.Position = pos - this.State.Mouse.Scroll;
                 this.State.Selector.PositionBehavior.Correction = Vector2f.Zero;
                 this.State.Selector.SizeBehavior.Size = Vector2f.Zero;
                 this.State.Selector.Visible = true;
@@ -186,7 +179,7 @@ namespace BlazeCardsCore.Components
 
             builder.AddAttribute(seq++, "ontouchmove", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
-                var pos = new Vector2f((int)e.Touches[0].ClientX, (int)e.Touches[0].ClientY);
+                var pos = new Vector2f((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
 
                 if (e.Touches.Length == 1)
                 {
@@ -204,7 +197,7 @@ namespace BlazeCardsCore.Components
 
                     this.State.Touch.LastPinchHypot = currentHypot;
 
-                    if (currentHypot > 130.0f)
+                    if (currentHypot > 150.0f)
                     {
                         this.State.Mouse.Zoom += val < 0 ? -0.05f : 0.05f;
                         this.Zoom();
@@ -215,12 +208,6 @@ namespace BlazeCardsCore.Components
                 }
 
             }));
-
-            //var b = new RenderTreeBuilder();
-            
-
-            //builder.AddEventPreventDefaultAttribute(seq++, "ontouchmove", true);
-            //builder.AddEventStopPropagationAttribute(seq++, "ontouchmove", true);
 
 
 
@@ -258,15 +245,12 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "id", this.GetTranslateID());
 
 
-
-            int seqHotFix = seq;
-            seq += 100000; // another ugly hotfix
             foreach (var card in this.State.Storage.Cards)
             {
                 //card.Render().Invoke(builder);
-                builder.OpenComponent(seqHotFix++, card.GetComponentType());
-                builder.AddAttribute(seqHotFix++, "Canvas", this);
-                builder.AddAttribute(seqHotFix++, "Descriptor", card);
+                builder.OpenComponent(seq++, card.GetComponentType());
+                builder.AddAttribute(seq++, "Canvas", this);
+                builder.AddAttribute(seq++, "Descriptor", card);
                 builder.CloseComponent();
             }
 
@@ -278,7 +262,6 @@ namespace BlazeCardsCore.Components
                 builder.AddAttribute(seq++, "Descriptor", this.State.Selector);
                 builder.CloseComponent();
             }
-            else seq += 3; // fix capture ref error
 
 
             //Console.WriteLine("Re-rendering highlighter");
@@ -289,7 +272,6 @@ namespace BlazeCardsCore.Components
                 builder.AddAttribute(seq++, "Descriptor", this.State.Highlighter);
                 builder.CloseComponent();
             }
-            else seq += 3; // fix capture ref error
 
 
 

@@ -20,7 +20,7 @@ namespace BlazeCardsCore.Components
         public IJSRuntime JSRuntime { get => this.Canvas.JSRuntime; }
 
 
-        public ElementReference Graphics { get; private set; }
+        //public ElementReference Graphics { get; private set; }
 
 
         // Behaviors
@@ -98,12 +98,25 @@ namespace BlazeCardsCore.Components
             this.RenderInner(builder, ref seq);
 
 
-            builder.AddElementReferenceCapture(seq++, (eref) =>
-            {
-                this.Graphics = eref;
-            });
+            //builder.AddElementReferenceCapture(seq++, (eref) =>
+            //{
+            //    this.Graphics = eref;
+            //});
 
             builder.CloseElement();
+        }
+
+        protected void BuildClassAttribute(RenderTreeBuilder builder, ref int seq)
+        {
+            var classString = String.Empty;
+            for (int i = 0; i < this.Descriptor.Classes.Count; i++)
+            {
+                classString += this.Descriptor.Classes[i];
+                if (i == this.Descriptor.Classes.Count - 1) continue;
+                classString += " ";
+            }
+
+            builder.AddAttribute(seq++, "class", classString);
         }
 
         private void MouseDownCallback(float clientX, float clientY)
@@ -113,10 +126,12 @@ namespace BlazeCardsCore.Components
             foreach (var card in this.Canvas.State.Selected)
                 if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
                 {
+                    this.Descriptor.FireDown();
                     this.Canvas.State.Mouse.OnDown(this.Canvas.Box.Center - new Vector2f(clientX, clientY));
                     return;
                 }
 
+            this.Descriptor.FireDown();
             this.Canvas.State.Mouse.OnDown(this.Canvas.Box.Center - new Vector2f(clientX, clientY));
             this.Canvas.State.Selected.Clear();
             this.Canvas.State.Selected.Add(this.Descriptor);

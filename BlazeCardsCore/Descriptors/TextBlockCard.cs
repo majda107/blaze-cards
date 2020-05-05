@@ -9,6 +9,11 @@ namespace BlazeCardsCore.Descriptors
 {
     class TextBlockCard : TextCard
     {
+        public TextBlockCard()
+        {
+            this.Classes.Add("text-background");
+            this.Classes.Add("blaze-rect");
+        }
         public override Type GetComponentType()
         {
             return typeof(TextBlockComponent);

@@ -84,3 +84,11 @@ text {
     fill: rgba(255, 105, 0, 0.3);
     stroke: rgba(255, 105, 0, 0.7);
 }
+
+.blaze-button {
+    fill: rgba(60, 60, 230, 0.9);
+}
+
+.blaze-button-down {
+    fill: rgba(60, 230, 60, 0.9);
+}

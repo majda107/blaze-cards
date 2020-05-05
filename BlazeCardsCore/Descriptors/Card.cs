@@ -11,6 +11,12 @@ namespace BlazeCardsCore.Descriptors
 {
     public abstract class Card
     {
+        public delegate void CardEventHandler(Card sender, EventArgs e);
+
+        public event CardEventHandler OnDown;
+        public event CardEventHandler OnUp;
+        public event CardEventHandler OnClick;
+
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }
 
@@ -41,8 +47,6 @@ namespace BlazeCardsCore.Descriptors
 
         public Card(Card parent = null)
         {
-            // move to asign component
-            //this.PositionBehavior = new PositionBehavior(this.Component);
             this.PositionBehavior = new PositionBehavior();
             this.Children = new List<Card>();
             this.Parent = parent;
@@ -53,11 +57,17 @@ namespace BlazeCardsCore.Descriptors
             this.Visible = true;
         }
 
+        public void FireDown() => this.OnDown?.Invoke(this, EventArgs.Empty);
+        public void FireUp() => this.OnUp?.Invoke(this, EventArgs.Empty);
+        public void FireClick() => this.OnClick?.Invoke(this, EventArgs.Empty);
+
         public virtual void AssignComponent(CardComponent component)
         {
             this.Component = component;
             this.PositionBehavior.AssignComponent(component);
         }
+
+        public void InvokeComponentChange() => this.Component?.InvokeChange();
 
         public virtual Type GetComponentType() => typeof(CardComponent);
 
@@ -83,7 +93,7 @@ namespace BlazeCardsCore.Descriptors
             child.Parent = this;
             this.Children.Add(child);
 
-            this.Component?.InvokeChange();
+            this.InvokeComponentChange();
             this.Snap();
         }
 
@@ -92,7 +102,7 @@ namespace BlazeCardsCore.Descriptors
             if (!this.Children.Contains(child)) return;
 
             this.Children.Remove(child);
-            this.Component?.InvokeChange();
+            this.InvokeComponentChange();
 
             child.Parent = null;
         }
