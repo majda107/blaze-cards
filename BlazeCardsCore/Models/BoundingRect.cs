@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Models
 {
-    public class BoundingRect
+    public struct BoundingRect
     {
         private Vector2f _position;
         public Vector2f Position { get => this._position; set => this._position = value; }

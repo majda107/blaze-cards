@@ -41,6 +41,9 @@ namespace BlazeCardsCore.Models
             return new Vector2f(vec.X * scalar, vec.Y * scalar);
         }
 
+        public static bool operator ==(Vector2f v1, Vector2f v2) => v1.X == v2.X && v1.Y == v2.Y;
+        public static bool operator !=(Vector2f v1, Vector2f v2) => v1.X != v2.X || v1.Y != v2.Y;
+
         public override bool Equals(object obj)
         {
             if (!(obj is Vector2f)) return false;

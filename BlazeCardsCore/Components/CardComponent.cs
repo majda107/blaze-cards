@@ -126,12 +126,12 @@ namespace BlazeCardsCore.Components
             foreach (var card in this.Canvas.State.Selected)
                 if (card.HasDescendant(c => c == this.Descriptor) || card == this.Descriptor)
                 {
-                    this.Descriptor.FireDown();
+                    this.Descriptor.FireDown(new Vector2f(clientX, clientY));
                     this.Canvas.State.Mouse.OnDown(this.Canvas.Box.Center - new Vector2f(clientX, clientY));
                     return;
                 }
 
-            this.Descriptor.FireDown();
+            this.Descriptor.FireDown(new Vector2f(clientX, clientY));
             this.Canvas.State.Mouse.OnDown(this.Canvas.Box.Center - new Vector2f(clientX, clientY));
             this.Canvas.State.Selected.Clear();
             this.Canvas.State.Selected.Add(this.Descriptor);

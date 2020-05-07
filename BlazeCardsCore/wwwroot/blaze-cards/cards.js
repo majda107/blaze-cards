@@ -59,6 +59,8 @@ function calculateTextRect(text) {
     return rect;
 }
 
+
+
 function getBoudingRect(elementID) {
     element = document.querySelector(`#${elementID}`);
     if (element == undefined) return;

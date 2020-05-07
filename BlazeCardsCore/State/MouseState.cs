@@ -12,13 +12,15 @@ namespace BlazeCardsCore.State
     {
         public CardState State { get; private set; }
         public bool Down { get; private set; }
-        public bool Moved { get; private set; }
 
         public Vector2f Scroll { get; private set; }
         public float Zoom { get; set; }
 
 
         private Vector2f lastPosition;
+
+        public bool Moved { get => this.LastDownMoved != Vector2f.Zero; }
+        public Vector2f LastDownMoved { get; private set; }
 
         public MouseState(CardState state)
         {
@@ -91,7 +93,7 @@ namespace BlazeCardsCore.State
         public void OnDown(Vector2f position)
         {
             this.Down = true;
-            this.Moved = false;
+            this.LastDownMoved = Vector2f.Zero;
 
             this.lastPosition = position;
         }
@@ -112,16 +114,19 @@ namespace BlazeCardsCore.State
 
             if (!this.Down) return;
 
-            this.Moved = true;
+            this.LastDownMoved += dev;
 
             if (this.State.Selected.Count > 0)
             {
                 bool moveHighlighter = true; // HIGHLIGHTER DRAGGING WORKAROUND, FIX LATER!!!!
                 foreach (var card in this.State.Selected)
+                {
+                    card.FireMove();
                     if (card.Draggable)
                         card.PositionBehavior.Position += dev;
                     else
                         moveHighlighter = false;
+                }    
 
 
                 if (this.State.Highlighter != null && moveHighlighter)

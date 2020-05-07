@@ -18,6 +18,7 @@ namespace BlazeCardsCore.State
         public KeyboardState Keyboard { get; private set; }
         public InteropQueueState InteropQueue { get; private set; }
         public StorageState Storage { get; private set; }
+        public CharacterState Character { get; private set; }
 
 
 
@@ -37,6 +38,7 @@ namespace BlazeCardsCore.State
             this.Keyboard = new KeyboardState(this);
             this.InteropQueue = new InteropQueueState(this);
             this.Storage = new StorageState(this);
+            this.Character = new CharacterState(this);
 
             this.Selector = RectFactory.CreateSelector(Vector2f.Zero);
             this.Selector.Visible = false;

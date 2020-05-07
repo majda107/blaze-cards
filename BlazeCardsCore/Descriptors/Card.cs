@@ -11,10 +11,11 @@ namespace BlazeCardsCore.Descriptors
 {
     public abstract class Card
     {
-        public delegate void CardEventHandler(Card sender, EventArgs e);
+        public delegate void CardEventHandler(Card sender, Vector2f pos);
 
         public event CardEventHandler OnDown;
         public event CardEventHandler OnUp;
+        public event CardEventHandler OnMove;
         public event CardEventHandler OnClick;
 
         public CardComponent Component { get; set; }
@@ -45,8 +46,6 @@ namespace BlazeCardsCore.Descriptors
         }
 
 
-
-
         public List<string> Classes { get; set; }
 
         public Card(Card parent = null)
@@ -63,9 +62,12 @@ namespace BlazeCardsCore.Descriptors
             this.Visible = true;
         }
 
-        public void FireDown() => this.OnDown?.Invoke(this, EventArgs.Empty);
-        public void FireUp() => this.OnUp?.Invoke(this, EventArgs.Empty);
-        public void FireClick() => this.OnClick?.Invoke(this, EventArgs.Empty);
+        public void FireDown(Vector2f position) => this.OnDown?.Invoke(this, position);
+        public void FireUp() => this.OnUp?.Invoke(this, Vector2f.Zero);
+        public void FireClick() => this.OnClick?.Invoke(this, Vector2f.Zero);
+        public void FireMove() => this.OnMove?.Invoke(this, Vector2f.Zero);
+
+
 
         public virtual void AssignComponent(CardComponent component)
         {

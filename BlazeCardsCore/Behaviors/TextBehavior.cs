@@ -27,9 +27,29 @@ namespace BlazeCardsCore.Behaviors
             this.Value = "default text";
             this.BufferedSize = new SizeBehavior();
             this.Padding = new Vector2f(6.0f, 3.0f);
+            this.Selection = StringSelection.Empty;
         }
 
-        public void Highlight(int start, int end) => this.Selection = new StringSelection(start, end);
+        public void Highlight(int start, int length) => this.Selection = new StringSelection(start, length);
+
+        public async Task<float> GetSelectorDown(float clickX)
+        {
+            float offsetX = 0;
+            foreach (var c in this.Value)
+            {
+                var width = (float)(await this.Card.Canvas.State.Character.Get(c)).Width;
+
+                if (offsetX + clickX / 2 > clickX)
+                    return offsetX;
+
+                offsetX += width;
+            }
+
+            return offsetX;
+        }
+
+
+
 
         public void AssignComponent(TextComponent card)
         {
@@ -67,15 +87,7 @@ namespace BlazeCardsCore.Behaviors
             this.Value += e.Key.ToString();
         }
 
-        //public async Task GetCaretAsync()
-        //{
-        //    float res = await this.Card.Canvas.JSRuntime.InvokeAsync<float>("getTextWidth", this.Card.TextRef);
-        //    if (res != this.Caret)
-        //    {
-        //        this.Caret = res;
-        //        this.Card.InvokeChange();
-        //    }
-        //}
+
 
         public async Task<BoundingClientRect> CalculateTextRect(string text)
         {
