@@ -115,6 +115,8 @@ namespace BlazeCardsCore.Components
             this.HookDoubleClick(builder, ref seq);
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
+                Console.WriteLine(e.Key);
+
                 if (e.Key.ToLower() == "shift") return;
                 if (e.Key.ToLower() == "escape")
                 {
@@ -180,7 +182,6 @@ namespace BlazeCardsCore.Components
                 var str = this.TextDescriptor.TextBehavior.Value.Substring(0, this.TextDescriptor.TextBehavior.Selection.ExtentOffset);
                 
                 var caretPos = (await this.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", str)).Size;
-                Console.WriteLine($"SERGEEEEEEEEEEEJ: {str} {caretPos.ToString()}");
 
                 caretPos.Y = this.TextDescriptor.TextBehavior.Padding.Y + 1;
                 caretPos.X += this.TextDescriptor.TextBehavior.Padding.X;

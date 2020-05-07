@@ -48,16 +48,31 @@ namespace BlazeCardsCore.Behaviors
         {
             if (!this.Editing) return;
 
-            if (e.Key.ToLower() == "backspace")
+            if (e.Key.ToLower() == "arrowleft")
             {
-                //if (this.Selection != StringSelection.Empty)
-                //    this.Value = this.Selection.RemoveFrom(this.Value);
-                //else
-                //this.Value = this.Value.RemoveLast();
+                this.Selection.MoveLeft();
+                return;
+            }
+
+            if (e.Key.ToLower() == "arrowright")
+            {
+                this.Selection.MoveRight(this.Value.Length);
+                return;
+            }
+
+            if (e.Key.ToLower() == "backspace" || e.Key.ToLower() == "delete")
+            {
                 if (this.Selection.BaseOffset > 0 && this.Selection.BaseOffset == this.Selection.ExtentOffset)
                 {
-                    this.Value = this.Value.Remove(this.Selection.ExtentOffset - 1, 1);
-                    this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset - 1, ExtentOffset = this.Selection.BaseOffset - 1 };
+                    if (e.Key.ToLower() == "delete")
+                    {
+                        this.Value = this.Value.Remove(this.Selection.ExtentOffset, 1);
+                    }
+                    else
+                    {
+                        this.Value = this.Value.Remove(this.Selection.ExtentOffset - 1, 1);
+                        this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset - 1, ExtentOffset = this.Selection.BaseOffset - 1 };
+                    }
                 }
                 else
                 {
@@ -65,8 +80,6 @@ namespace BlazeCardsCore.Behaviors
                     this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset, ExtentOffset = this.Selection.BaseOffset };
                 }
 
-
-                //this.Selection.ExtentOffset -= 1;
                 return;
             }
 

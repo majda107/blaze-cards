@@ -31,5 +31,21 @@ namespace BlazeCardsCore.Models
             this.BaseOffset = baseOffset;
             this.ExtentOffset = extentOffset;
         }
+
+        public void MoveLeft()
+        {
+            if (this.BaseOffset > 0)
+                this.BaseOffset -= 1;
+
+            this.ExtentOffset = this.BaseOffset;
+        }
+
+        public void MoveRight(int maxLen)
+        {
+            if (this.BaseOffset < maxLen - 1)
+                this.BaseOffset += 1;
+
+            this.ExtentOffset = this.BaseOffset;
+        }
     }
 }
