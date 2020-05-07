@@ -50,13 +50,22 @@ function calculateTextRect(text) {
 
     document.body.appendChild(svg);
     let rect = getBoudingRect("text-calculation-id");
-
-    //console.log("CALCULATING TEXT RECT");
-    //console.log(rect);
-
     document.body.removeChild(svg);
 
     return rect;
+}
+
+//function getSeletion() {
+//    let selection = window.getSelection();
+//    //console.log(selection);
+//    return { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type };
+//}
+
+
+let textInstance;
+
+function hookEditingTextElement(instance) {
+    textInstance = instance;
 }
 
 
@@ -83,10 +92,6 @@ function hookCanvasElement(elementID, instance) {
     canvasInstance = instance;
 
     instance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
-
-    window.addEventListener('resize', () => {
-        instance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
-    })
 }
 
 
@@ -98,3 +103,20 @@ function blazeAlert(text) {
     alert(id);
     console.log(id);
 }
+
+
+
+
+function Init() {
+    window.addEventListener('resize', () => {
+        canvasInstance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
+    })
+
+    document.addEventListener('selectionchange', () => {
+        //console.log("~~~~~~~~~ SELECTION CHANGED!")
+        let selection = window.getSelection();
+        textInstance.invokeMethodAsync('SelectionChanged', { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type });
+    })
+}
+
+Init();

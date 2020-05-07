@@ -12,6 +12,7 @@ namespace BlazeCardsCore.Descriptors
     {
         public TextBehavior TextBehavior { get; private set; }
 
+
         public bool Editable { get; set; }
         public TextCard() : base()
         {

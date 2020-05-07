@@ -17,8 +17,10 @@ namespace BlazeCardsCore.Behaviors
         public Vector2f Padding { get; set; }
 
         public string Value { get; set; }
-        public StringSelection Selection { get; set; }
-        public float Caret { get => this.BufferedSize.Size.X; }
+
+        public SelectionModel Selection { get; set; }
+        //public int CaretIndex { get; set; }
+        //public float Caret { get => this.BufferedSize.Size.X; }
 
         public bool Editing { get; set; }
 
@@ -27,27 +29,7 @@ namespace BlazeCardsCore.Behaviors
             this.Value = "default text";
             this.BufferedSize = new SizeBehavior();
             this.Padding = new Vector2f(6.0f, 3.0f);
-            this.Selection = StringSelection.Empty;
         }
-
-        public void Highlight(int start, int length) => this.Selection = new StringSelection(start, length);
-
-        public async Task<float> GetSelectorDown(float clickX)
-        {
-            float offsetX = 0;
-            foreach (var c in this.Value)
-            {
-                var width = (float)(await this.Card.Canvas.State.Character.Get(c)).Width;
-
-                if (offsetX + clickX / 2 > clickX)
-                    return offsetX;
-
-                offsetX += width;
-            }
-
-            return offsetX;
-        }
-
 
 
 
@@ -68,11 +50,23 @@ namespace BlazeCardsCore.Behaviors
 
             if (e.Key.ToLower() == "backspace")
             {
-                if (this.Selection != StringSelection.Empty)
-                    this.Value = this.Selection.RemoveFrom(this.Value);
+                //if (this.Selection != StringSelection.Empty)
+                //    this.Value = this.Selection.RemoveFrom(this.Value);
+                //else
+                //this.Value = this.Value.RemoveLast();
+                if (this.Selection.BaseOffset > 0 && this.Selection.BaseOffset == this.Selection.ExtentOffset)
+                {
+                    this.Value = this.Value.Remove(this.Selection.ExtentOffset - 1, 1);
+                    this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset - 1, ExtentOffset = this.Selection.BaseOffset - 1 };
+                }
                 else
-                    this.Value = this.Value.RemoveLast();
+                {
+                    this.Value = this.Value.Remove(this.Selection.BaseOffset, this.Selection.ExtentOffset - this.Selection.BaseOffset);
+                    this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset, ExtentOffset = this.Selection.BaseOffset };
+                }
 
+
+                //this.Selection.ExtentOffset -= 1;
                 return;
             }
 
@@ -81,10 +75,12 @@ namespace BlazeCardsCore.Behaviors
 
             if (e.Key.Length > 1) return;
 
-            if (this.Selection != StringSelection.Empty)
-                this.Value = this.Selection.RemoveFrom(this.Value);
+            //if (this.Selection != StringSelection.Empty)
+            //    this.Value = this.Selection.RemoveFrom(this.Value);
 
-            this.Value += e.Key.ToString();
+            this.Value = this.Value.Insert(this.Selection.ExtentOffset, e.Key.ToString());
+            this.Selection.ExtentOffset += 1;
+            this.Selection.BaseOffset = this.Selection.ExtentOffset;
         }
 
 

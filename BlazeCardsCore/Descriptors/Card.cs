@@ -2,6 +2,7 @@
 using BlazeCardsCore.Components;
 using BlazeCardsCore.Models;
 using BlazeCardsCore.State;
+using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,9 +66,21 @@ namespace BlazeCardsCore.Descriptors
         public void FireDown(Vector2f position) => this.OnDown?.Invoke(this, position);
         public void FireUp() => this.OnUp?.Invoke(this, Vector2f.Zero);
         public void FireClick() => this.OnClick?.Invoke(this, Vector2f.Zero);
-        public void FireMove() => this.OnMove?.Invoke(this, Vector2f.Zero);
+        public void FireMove(Vector2f dev) => this.OnMove?.Invoke(this, dev);
 
 
+        public void InvokeRender(RenderTreeBuilder builder, ref int seq, CanvasComponent canvas)
+        {
+            builder.OpenComponent(seq++, this.GetComponentType());
+            builder.AddAttribute(seq++, "Canvas", canvas);
+            builder.AddAttribute(seq++, "Descriptor", this);
+            builder.CloseComponent();
+
+            //builder.OpenComponent(seq++, card.GetComponentType());
+            //builder.AddAttribute(seq++, "Canvas", this);
+            //builder.AddAttribute(seq++, "Descriptor", card);
+            //builder.CloseComponent();
+        }
 
         public virtual void AssignComponent(CardComponent component)
         {

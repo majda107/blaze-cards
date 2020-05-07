@@ -121,7 +121,7 @@ namespace BlazeCardsCore.State
                 bool moveHighlighter = true; // HIGHLIGHTER DRAGGING WORKAROUND, FIX LATER!!!!
                 foreach (var card in this.State.Selected)
                 {
-                    card.FireMove();
+                    card.FireMove(dev);
                     if (card.Draggable)
                         card.PositionBehavior.Position += dev;
                     else
