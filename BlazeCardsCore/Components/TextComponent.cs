@@ -57,10 +57,7 @@ namespace BlazeCardsCore.Components
             this.TextDescriptor.OnUp += async (s, dev) =>
             {
                 this.TextDescriptor.SelectionBehavior.Selecting = false;
-
                 await this.TextDescriptor.SelectionBehavior.OnUp(this.Canvas);
-                //this.InvokeChange();
-                //Console.WriteLine($"Setting indices: {this.TextDescriptor.SelectionBehavior.BaseOffset} {this.TextDescriptor.SelectionBehavior.ExtentOffset}");
             };
         }
 
@@ -113,8 +110,6 @@ namespace BlazeCardsCore.Components
             this.HookDoubleClick(builder, ref seq);
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
             {
-                Console.WriteLine(e.Key);
-
                 if (e.Key.ToLower() == "shift") return;
                 if (e.Key.ToLower() == "escape")
                 {

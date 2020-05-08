@@ -65,9 +65,7 @@ namespace BlazeCardsCore.Behaviors
 
         public async Task OnDown(Vector2f pos, CanvasComponent canvas)
         {
-            Console.WriteLine("SNAPPING LETTER!");
             float offsetX = await this.Card.SelectionBehavior.SnapLetter(pos.X, canvas.JSRuntime, true);
-            Console.WriteLine(this.BaseOffset);
 
             var paddingX = this.Card.TextBehavior.Padding.X;
             this.CaretDescriptor.PositionBehavior.Position = new Vector2f(offsetX + paddingX, this.CaretDescriptor.PositionBehavior.Position.Y);
@@ -95,12 +93,16 @@ namespace BlazeCardsCore.Behaviors
 
         public void MoveLeft()
         {
+            if (this.CorrectedBase <= 0) return;
+
             this.BaseOffset -= 1;
             this.ExtentOffset = this.BaseOffset;
         }
         
         public void MoveRight()
         {
+            if (this.CorrectedExtent >= this.Card.TextBehavior.Value.Length) return;
+
             this.ExtentOffset += 1;
             this.BaseOffset = this.ExtentOffset;
         }
