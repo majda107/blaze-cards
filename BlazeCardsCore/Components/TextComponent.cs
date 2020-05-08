@@ -30,6 +30,30 @@ namespace BlazeCardsCore.Components
             //this.shouldResetCared = true;
         }
 
+        [JSInvokable]
+        public async Task KeyDown(string key)
+        {
+            if (key.ToLower() == "shift") return;
+            if (key.ToLower() == "escape")
+            {
+                this.Deselect();
+                return;
+            }
+
+            if (this.TextDescriptor.TextBehavior.Editing && this.Canvas.State.Keyboard.IsDown("Control"))
+            {
+                await this.TextDescriptor.SelectionBehavior.SelectAll(this.Canvas);
+            }
+            else
+            {
+                //this.shouldResetCared = true;
+                await this.TextDescriptor.TextBehavior.KeyDown(key, this.Canvas);
+            }
+
+            this.InvokeChange();
+
+            //Console.WriteLine($"KEEEEEEEEY: {key}");
+        }
 
         public async Task Init()
         {
@@ -50,7 +74,7 @@ namespace BlazeCardsCore.Components
                     this.TextDescriptor.SelectionBehavior.Selecting = true;
                     //this.InvokeChange();
                 }
-                    
+
                 this.TextDescriptor.SelectionBehavior.SelectorDescriptor.SizeBehavior.Size += new Vector2f(dev.X, 0);
             };
 
@@ -67,13 +91,11 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "ondblclick", EventCallback.Factory.Create<MouseEventArgs>(this, (e) =>
             {
                 if (!this.TextDescriptor.Editable) return;
-                //this.Canvas.State.Deselect();
-
                 this.TextDescriptor.Draggable = false;
-                //this.shouldResetCared = true;
                 this.TextDescriptor.TextBehavior.Editing = true;
 
-                //this.TextDescriptor.TextBehavior.Focus(true);
+                this.JSRuntime.InvokeVoidAsync("hookEditing", DotNetObjectReference.Create(this));
+
                 this.InvokeChange();
             }));
         }
@@ -110,24 +132,7 @@ namespace BlazeCardsCore.Components
             this.HookDoubleClick(builder, ref seq);
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
             {
-                if (e.Key.ToLower() == "shift") return;
-                if (e.Key.ToLower() == "escape")
-                {
-                    this.Deselect();
-                    return;
-                }
-
-                if (this.TextDescriptor.TextBehavior.Editing && this.Canvas.State.Keyboard.IsDown("Control"))
-                {
-                    await this.TextDescriptor.SelectionBehavior.SelectAll(this.Canvas);
-                }
-                else
-                {
-                    //this.shouldResetCared = true;
-                    await this.TextDescriptor.TextBehavior.KeyDown(e, this.Canvas);
-                }
-
-                this.InvokeChange();
+                await this.KeyDown(e.Key);
             }));
 
 
@@ -154,7 +159,7 @@ namespace BlazeCardsCore.Components
 
             if (this.TextDescriptor.TextBehavior.Editing)
             {
-                this.TextDescriptor.TextBehavior.Focus();
+                //this.TextDescriptor.TextBehavior.Focus();
 
                 var size = this.Descriptor.GetSize();
                 if (this.Canvas.State.Highlighter != null) // BEWARE THIS!!!!!!!!!

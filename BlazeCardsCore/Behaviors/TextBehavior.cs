@@ -42,34 +42,34 @@ namespace BlazeCardsCore.Behaviors
             this.BufferedSize.AssignComponent(component);
         }
 
-        public void Focus(bool prompt = false)
-        {
-            this.Component.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Component.GetTextID(), prompt);
-        }
+        //public void Focus(bool prompt = false)
+        //{
+        //    this.Component.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Component.GetTextID(), prompt);
+        //}
 
-        public async Task KeyDown(KeyboardEventArgs e, CanvasComponent canvas)
+        public async Task KeyDown(string key, CanvasComponent canvas)
         {
             if (!this.Editing) return;
 
-            if (e.Key.ToLower() == "arrowleft")
+            if (key.ToLower() == "arrowleft")
             {
                 this.Card.SelectionBehavior.MoveLeft();
                 await this.Card.SelectionBehavior.ExtentCaret(canvas);
                 return;
             }
 
-            if (e.Key.ToLower() == "arrowright")
+            if (key.ToLower() == "arrowright")
             {
                 this.Card.SelectionBehavior.MoveRight();
                 await this.Card.SelectionBehavior.ExtentCaret(canvas);
                 return;
             }
 
-            if (e.Key.ToLower() == "backspace" || e.Key.ToLower() == "delete")
+            if (key.ToLower() == "backspace" || key.ToLower() == "delete")
             {
                 if (this.Card.SelectionBehavior.CorrectedBase == this.Card.SelectionBehavior.CorrectedExtent)
                 {
-                    if (e.Key.ToLower() == "delete")
+                    if (key.ToLower() == "delete")
                     {
                         this.Value = this.Value.Remove(this.Card.SelectionBehavior.CorrectedExtent, 1);
                     }
@@ -91,15 +91,15 @@ namespace BlazeCardsCore.Behaviors
                 return;
             }
 
-            if (e.Key.ToLower() == "space")
-                e.Key = " "; // cheat lol
+            if (key.ToLower() == "space")
+                key = " "; // cheat lol
 
-            if (e.Key.Length > 1) return;
+            if (key.Length > 1) return;
 
             //if (this.Selection != StringSelection.Empty)
             //    this.Value = this.Selection.RemoveFrom(this.Value);
 
-            this.Value = this.Value.Insert(this.Card.SelectionBehavior.ExtentOffset, e.Key.ToString());
+            this.Value = this.Value.Insert(this.Card.SelectionBehavior.ExtentOffset, key.ToString());
 
             this.Card.SelectionBehavior.ExtentOffset += 1;
             this.Card.SelectionBehavior.BaseOffset = this.Card.SelectionBehavior.ExtentOffset;

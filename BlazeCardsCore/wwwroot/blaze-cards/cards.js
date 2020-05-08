@@ -58,25 +58,25 @@ function calculateTextRect(text) {
 
 
 
+// TEXT
 let textInstance;
-let textElement;
 
-function hookEditingTextElement(instance) {
+function hookEditing(instance, elementID) {
     textInstance = instance;
-    //textElement = document.querySelector(`#${elementID}`);
 
-    //textElement.addEventListener('dblclick', function () {
+    let inputEl = document.createElement("input");
+    inputEl.classList.add("blaze-input-hidden");
+    document.body.appendChild(inputEl);
 
-    //    let inputEl = document.createElement("input");
-    //    inputEl.classList.add("blaze-input-hidden");
-    //    document.body.appendChild(inputEl);
-    //    inputEl.focus();
-
-    //    setTimeout(() => {
-    //        textElement.focus();
-    //    }, 100)
-
+    //inputEl.addEventListener('keypress', (e) => {
+    //    instance.invokeMethodAsync("KeyDown", e.key);
     //})
+
+    inputEl.addEventListener('keydown', (e) => {
+        instance.invokeMethodAsync("KeyDown", e.key);
+    })
+
+    inputEl.focus();
 }
 
 
@@ -122,21 +122,6 @@ function Init() {
     window.addEventListener('resize', () => {
         canvasInstance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
     })
-
-
-    //document.addEventListener('selectionchange', () => {
-    //    let selection = window.getSelection();
-    //    textInstance.invokeMethodAsync('SelectionChanged', { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type });
-    //})
-
-    //document.addEventListener('dblclick', () => {
-    //    let inputEl = document.createElement("input");
-    //    inputEl.classList.add("blaze-input-hidden");
-    //    document.body.appendChild(inputEl);
-    //    inputEl.focus();
-
-
-    //})
 }
 
 Init();
