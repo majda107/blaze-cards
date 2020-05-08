@@ -11,12 +11,14 @@ namespace BlazeCardsCore.Descriptors
     public class TextCard : Card
     {
         public TextBehavior TextBehavior { get; private set; }
-
+        public SelectionBehavior SelectionBehavior { get; private set; }
 
         public bool Editable { get; set; }
         public TextCard() : base()
         {
             this.TextBehavior = new TextBehavior();
+            this.SelectionBehavior = new SelectionBehavior(this);
+
             this.Editable = true;
 
             this.OnUp += (s, e) =>

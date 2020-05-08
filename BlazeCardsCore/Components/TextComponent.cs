@@ -27,31 +27,43 @@ namespace BlazeCardsCore.Components
         public RectCard CaretDescriptor { get; set; }
 
 
+
+
+        public RectCard SelectorDescriptor { get; set; }
+        public int SelectorIndex { get; set; }
+
+
+
+
+
         public TextComponent()
         {
             this.shouldResetCared = true;
         }
 
-        [JSInvokable]
-        public async Task SelectionChanged(SelectionModel selection)
-        {
-            if (selection.BaseOffset > selection.ExtentOffset)
-            {
-                var swap = selection.BaseOffset;
-                selection.BaseOffset = selection.ExtentOffset;
-                selection.ExtentOffset = swap;
-            }
+        //[JSInvokable]
+        //public async Task SelectionChanged(SelectionModel selection)
+        //{
+        //    if (selection.BaseOffset > selection.ExtentOffset)
+        //    {
+        //        var swap = selection.BaseOffset;
+        //        selection.BaseOffset = selection.ExtentOffset;
+        //        selection.ExtentOffset = swap;
+        //    }
 
-            this.TextDescriptor.TextBehavior.Selection = selection;
+        //    if (selection.BaseOffset > this.TextDescriptor.TextBehavior.Value.Length - 1 || selection.ExtentOffset > this.TextDescriptor.TextBehavior.Value.Length - 1)
+        //        return;
 
-            var str = this.TextDescriptor.TextBehavior.Value.Substring(0, selection.ExtentOffset);
-            var box = await this.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", str);
+        //    Console.WriteLine(selection);
 
-            this.CaretDescriptor.PositionBehavior.Position = new Vector2f((float)box.Width + this.TextDescriptor.TextBehavior.Padding.X, this.CaretDescriptor.PositionBehavior.Position.Y);
-            this.Canvas.State.InteropQueue.Flush(this.Canvas.JSRuntime);
+        //    this.TextDescriptor.TextBehavior.Selection = selection;
 
-            Console.WriteLine($"Movin caret to {selection.ToString()}");
-        }
+        //    var str = this.TextDescriptor.TextBehavior.Value.Substring(0, selection.ExtentOffset);
+        //    var box = await this.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", str);
+
+        //    this.CaretDescriptor.PositionBehavior.Position = new Vector2f((float)box.Width + this.TextDescriptor.TextBehavior.Padding.X, this.CaretDescriptor.PositionBehavior.Position.Y);
+        //    this.Canvas.State.InteropQueue.Flush(this.Canvas.JSRuntime);
+        //}
 
         public void Init()
         {
@@ -63,9 +75,46 @@ namespace BlazeCardsCore.Components
             var len = this.TextDescriptor.TextBehavior.Value.Length;
             this.TextDescriptor.TextBehavior.Selection = new SelectionModel() { BaseOffset = len, ExtentOffset = len };
 
+
+            this.SelectorIndex = 1;
+            this.SelectorDescriptor = new RectCard();
+            this.SelectorDescriptor.Highlightable = this.SelectorDescriptor.Draggable = false;
+            this.SelectorDescriptor.Classes.Add("blaze-text-selector");
+            this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(20, 24);
+            this.SelectorDescriptor.SizeBehavior.HookNegativeSize(this.SelectorDescriptor.PositionBehavior);
+            this.SelectorDescriptor.PositionBehavior.Position = this.TextDescriptor.TextBehavior.Padding + new Vector2f(0, 1); // lol dat 0 : 1 boi
+
+
             this.TextDescriptor.OnDown += async (s, e) =>
             {
-                await this.JSRuntime.InvokeVoidAsync("hookEditingTextElement", DotNetObjectReference.Create(this));
+                var pos = e - this.TextDescriptor.GetGlobalPosition() - this.Canvas.State.Mouse.Scroll - this.TextDescriptor.TextBehavior.Padding;
+                float offsetX = await this.TextDescriptor.SelectionBehavior.SnapLetter(pos.X, this.JSRuntime);
+
+                var paddingX = this.TextDescriptor.TextBehavior.Padding.X;
+                this.CaretDescriptor.PositionBehavior.Position = new Vector2f(offsetX + paddingX, this.CaretDescriptor.PositionBehavior.Position.Y);
+
+                this.SelectorDescriptor.PositionBehavior.Correction = Vector2f.Zero;
+                this.SelectorDescriptor.PositionBehavior.Position = new Vector2f(offsetX + paddingX, this.SelectorDescriptor.PositionBehavior.Position.Y);
+                this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(pos.X - offsetX, 24);
+
+                this.Canvas.State.InteropQueue.Flush(this.Canvas.JSRuntime);
+            };
+
+            this.TextDescriptor.OnMove += (s, dev) =>
+            {
+                this.SelectorDescriptor.SizeBehavior.Size += new Vector2f(dev.X, 0);
+            };
+
+            this.TextDescriptor.OnUp += async (s, dev) =>
+            {
+                float last = this.TextDescriptor.SelectionBehavior.LastCalculatedSnap;
+                float offsetX = await this.TextDescriptor.SelectionBehavior.SnapLetter(last + this.SelectorDescriptor.SizeBehavior.Size.X, this.JSRuntime);
+
+                var paddingX = this.TextDescriptor.TextBehavior.Padding.X;
+                this.CaretDescriptor.PositionBehavior.Position = new Vector2f(offsetX + paddingX, this.CaretDescriptor.PositionBehavior.Position.Y);
+                this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(offsetX - last, 24);
+
+                this.Canvas.State.InteropQueue.Flush(this.Canvas.JSRuntime);
             };
         }
 
@@ -81,6 +130,7 @@ namespace BlazeCardsCore.Components
                 //this.shouldResetCared = true;
                 this.TextDescriptor.TextBehavior.Editing = true;
 
+                //this.TextDescriptor.TextBehavior.Focus(true);
                 this.InvokeChange();
             }));
         }
@@ -99,6 +149,8 @@ namespace BlazeCardsCore.Components
         {
             this.RenderTextAddition(builder, ref seq);
 
+            if (this.TextDescriptor.TextBehavior.Editing)
+                this.SelectorDescriptor.InvokeRender(builder, ref seq, this.Canvas);
 
             builder.OpenElement(seq++, "text");
 
@@ -116,6 +168,8 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) =>
             {
                 Console.WriteLine(e.Key);
+
+                this.SelectorIndex += 1;
 
                 if (e.Key.ToLower() == "shift") return;
                 if (e.Key.ToLower() == "escape")
@@ -145,17 +199,7 @@ namespace BlazeCardsCore.Components
             builder.CloseElement();
 
             if (this.TextDescriptor.TextBehavior.Editing)
-            {
-                //builder.OpenElement(seq++, "rect");
-                //builder.AddAttribute(seq++, "x", (this.TextDescriptor.TextBehavior.Caret).ToString("0.0").Replace(',', '.'));
-                //builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 4}px");
-                //builder.AddAttribute(seq++, "height", "20px");
-                //builder.AddAttribute(seq++, "width", "2px");
-                //builder.AddAttribute(seq++, "class", "card-caret");
-                //builder.CloseElement();
-
                 this.CaretDescriptor.InvokeRender(builder, ref seq, this.Canvas);
-            }
         }
 
         protected virtual void RenderTextAddition(RenderTreeBuilder builder, ref int seq) { }
@@ -176,11 +220,22 @@ namespace BlazeCardsCore.Components
                     this.Canvas.State.Highlighter.SizeBehavior.Size = size;
 
 
+
+
+                //var selectorStr = this.TextDescriptor.TextBehavior.Value.Substring(0, this.SelectorIndex);
+                //var box = (await this.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", selectorStr)).Size;
+                //this.SelectorDescriptor.SizeBehavior.Size = box;
+
+
+
+
+
+
                 if (!this.shouldResetCared) return;
 
                 //var caretPos = this.Descriptor.GetSize();
                 var str = this.TextDescriptor.TextBehavior.Value.Substring(0, this.TextDescriptor.TextBehavior.Selection.ExtentOffset);
-                
+
                 var caretPos = (await this.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", str)).Size;
 
                 caretPos.Y = this.TextDescriptor.TextBehavior.Padding.Y + 1;

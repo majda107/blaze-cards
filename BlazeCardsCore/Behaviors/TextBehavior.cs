@@ -39,9 +39,9 @@ namespace BlazeCardsCore.Behaviors
             this.BufferedSize.AssignComponent(card);
         }
 
-        public void Focus()
+        public void Focus(bool prompt = false)
         {
-            this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.GetTextID());
+            this.Card.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Card.GetTextID(), prompt);
         }
 
         public void KeyDown(KeyboardEventArgs e)
@@ -62,13 +62,13 @@ namespace BlazeCardsCore.Behaviors
 
             if (e.Key.ToLower() == "backspace" || e.Key.ToLower() == "delete")
             {
-                if (this.Selection.BaseOffset > 0 && this.Selection.BaseOffset == this.Selection.ExtentOffset)
+                if (this.Selection.BaseOffset == this.Selection.ExtentOffset)
                 {
                     if (e.Key.ToLower() == "delete")
                     {
                         this.Value = this.Value.Remove(this.Selection.ExtentOffset, 1);
                     }
-                    else
+                    else if(this.Selection.BaseOffset > 0)
                     {
                         this.Value = this.Value.Remove(this.Selection.ExtentOffset - 1, 1);
                         this.Selection = new SelectionModel() { BaseOffset = this.Selection.BaseOffset - 1, ExtentOffset = this.Selection.BaseOffset - 1 };

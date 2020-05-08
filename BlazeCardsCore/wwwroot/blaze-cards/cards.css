@@ -2,7 +2,6 @@
     width: 100%;
     height: 100%;
     touch-action: none;
-    /*transform-origin: bottom right;*/
 }
 
     .canvas:focus {
@@ -10,8 +9,6 @@
     }
 
 .canvas-zoom {
-    /*transform-origin: center 375px;
-    -webkit-transform-origin: center 375px;*/
     touch-action: none;
 }
 
@@ -98,9 +95,8 @@ text {
 
 /* TEXT */
 .blaze-text-editing:hover {
-    /*    cursor: text*/
-    /*    cursor: default;*/
-    cursor: text;
+    cursor: default;
+    /*    cursor: text;*/
 }
 
 .blaze-text-caret {
@@ -110,20 +106,30 @@ text {
     pointer-events: none;
 }
 
+.blaze-text-selector {
+    fill: rgba(160, 160, 250, 0.5);
+}
+
 .blaze-text-editing {
-    user-select: text;
+    /*    user-select: text;*/
 }
 
     .blaze-text-editing::selection {
-        background-color: #efb1ff;
+        /*        background-color: #efb1ff;*/
     }
 
-.blaze-text-select {
-    fill: rgba(160, 160, 250, 0.5);
-}
+
+
 
 /* HIDDEN WORKAROUND */
 .blaze-calculate-hidden {
     position: absolute;
     visibility: hidden;
+}
+
+.blaze-input-hidden {
+    opacity: 0.0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

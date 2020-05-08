@@ -35,6 +35,7 @@ function scaleGraphics(packet) {
 function setFocus(elementID) {
     element = document.querySelector(`#${elementID}`);
     if (element == undefined) return;
+
     element.focus();
 }
 
@@ -55,17 +56,27 @@ function calculateTextRect(text) {
     return rect;
 }
 
-//function getSeletion() {
-//    let selection = window.getSelection();
-//    //console.log(selection);
-//    return { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type };
-//}
 
 
 let textInstance;
+let textElement;
 
 function hookEditingTextElement(instance) {
     textInstance = instance;
+    //textElement = document.querySelector(`#${elementID}`);
+
+    //textElement.addEventListener('dblclick', function () {
+
+    //    let inputEl = document.createElement("input");
+    //    inputEl.classList.add("blaze-input-hidden");
+    //    document.body.appendChild(inputEl);
+    //    inputEl.focus();
+
+    //    setTimeout(() => {
+    //        textElement.focus();
+    //    }, 100)
+
+    //})
 }
 
 
@@ -112,11 +123,20 @@ function Init() {
         canvasInstance.invokeMethodAsync('CanvasSizeChanged', canvasElement.getBoundingClientRect());
     })
 
-    document.addEventListener('selectionchange', () => {
-        //console.log("~~~~~~~~~ SELECTION CHANGED!")
-        let selection = window.getSelection();
-        textInstance.invokeMethodAsync('SelectionChanged', { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type });
-    })
+
+    //document.addEventListener('selectionchange', () => {
+    //    let selection = window.getSelection();
+    //    textInstance.invokeMethodAsync('SelectionChanged', { BaseOffset: selection.baseOffset, ExtentOffset: selection.extentOffset, Type: selection.type });
+    //})
+
+    //document.addEventListener('dblclick', () => {
+    //    let inputEl = document.createElement("input");
+    //    inputEl.classList.add("blaze-input-hidden");
+    //    document.body.appendChild(inputEl);
+    //    inputEl.focus();
+
+
+    //})
 }
 
 Init();
