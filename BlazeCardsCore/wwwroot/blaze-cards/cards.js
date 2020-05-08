@@ -60,20 +60,34 @@ function calculateTextRect(text) {
 
 // TEXT
 let textInstance;
+let inputEl
 
 function hookEditing(instance, elementID) {
     textInstance = instance;
 
-    let inputEl = document.createElement("input");
+    if (inputEl != undefined) inputEl.remove();
+
+    inputEl = document.createElement("input");
     inputEl.classList.add("blaze-input-hidden");
     document.body.appendChild(inputEl);
 
-    //inputEl.addEventListener('keypress', (e) => {
-    //    instance.invokeMethodAsync("KeyDown", e.key);
-    //})
 
     inputEl.addEventListener('keydown', (e) => {
-        instance.invokeMethodAsync("KeyDown", e.key);
+        if (navigator.userAgent.match(/Android/i)) return;
+        instance.invokeMethodAsync("KeyDown", e.keyCode, e.shiftKey);
+    })
+
+    inputEl.addEventListener('keyup', (e) => {
+        if (!navigator.userAgent.match(/Android/i)) return;
+
+        let inputValue = inputEl.value;
+
+        let charKeyCode = e.keyCode || e.which;
+        if (charKeyCode == 0 || charKeyCode == 229) {
+            charKeyCode = inputValue.charCodeAt(inputValue.length - 1);
+        }
+
+        instance.invokeMethodAsync("KeyDown", charKeyCode, false);
     })
 
     inputEl.focus();

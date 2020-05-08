@@ -31,10 +31,10 @@ namespace BlazeCardsCore.Components
         }
 
         [JSInvokable]
-        public async Task KeyDown(string key)
+        public async Task KeyDown(int key, bool shiftKey)
         {
-            if (key.ToLower() == "shift") return;
-            if (key.ToLower() == "escape")
+            if (key == 16) return; // shift
+            if (key == 27) // escape
             {
                 this.Deselect();
                 return;
@@ -47,7 +47,7 @@ namespace BlazeCardsCore.Components
             else
             {
                 //this.shouldResetCared = true;
-                await this.TextDescriptor.TextBehavior.KeyDown(key, this.Canvas);
+                await this.TextDescriptor.TextBehavior.KeyDown(key, this.Canvas, shiftKey);
             }
 
             this.InvokeChange();
@@ -94,8 +94,6 @@ namespace BlazeCardsCore.Components
                 this.TextDescriptor.Draggable = false;
                 this.TextDescriptor.TextBehavior.Editing = true;
 
-                this.JSRuntime.InvokeVoidAsync("hookEditing", DotNetObjectReference.Create(this));
-
                 this.InvokeChange();
             }));
         }
@@ -130,10 +128,10 @@ namespace BlazeCardsCore.Components
 
 
             this.HookDoubleClick(builder, ref seq);
-            builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
-            {
-                await this.KeyDown(e.Key);
-            }));
+            //builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
+            //{
+            //    await this.KeyDown(e.Key);
+            //}));
 
 
             this.HookMouseDown(builder, ref seq);
@@ -160,6 +158,7 @@ namespace BlazeCardsCore.Components
             if (this.TextDescriptor.TextBehavior.Editing)
             {
                 //this.TextDescriptor.TextBehavior.Focus();
+                await this.JSRuntime.InvokeVoidAsync("hookEditing", DotNetObjectReference.Create(this));
 
                 var size = this.Descriptor.GetSize();
                 if (this.Canvas.State.Highlighter != null) // BEWARE THIS!!!!!!!!!

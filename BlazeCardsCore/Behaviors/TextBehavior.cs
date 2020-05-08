@@ -47,29 +47,29 @@ namespace BlazeCardsCore.Behaviors
         //    this.Component.Canvas.JSRuntime.InvokeVoidAsync("setFocus", this.Component.GetTextID(), prompt);
         //}
 
-        public async Task KeyDown(string key, CanvasComponent canvas)
+        public async Task KeyDown(int key, CanvasComponent canvas, bool shiftKey)
         {
             if (!this.Editing) return;
 
-            if (key.ToLower() == "arrowleft")
+            if (key == 37) // arrow left
             {
                 this.Card.SelectionBehavior.MoveLeft();
                 await this.Card.SelectionBehavior.ExtentCaret(canvas);
                 return;
             }
 
-            if (key.ToLower() == "arrowright")
+            if (key == 39) // arrow right
             {
                 this.Card.SelectionBehavior.MoveRight();
                 await this.Card.SelectionBehavior.ExtentCaret(canvas);
                 return;
             }
 
-            if (key.ToLower() == "backspace" || key.ToLower() == "delete")
+            if (key == 8 || key == 46) // backspace - delete 
             {
                 if (this.Card.SelectionBehavior.CorrectedBase == this.Card.SelectionBehavior.CorrectedExtent)
                 {
-                    if (key.ToLower() == "delete")
+                    if (key == 46)
                     {
                         this.Value = this.Value.Remove(this.Card.SelectionBehavior.CorrectedExtent, 1);
                     }
@@ -91,15 +91,16 @@ namespace BlazeCardsCore.Behaviors
                 return;
             }
 
-            if (key.ToLower() == "space")
-                key = " "; // cheat lol
-
-            if (key.Length > 1) return;
-
             //if (this.Selection != StringSelection.Empty)
             //    this.Value = this.Selection.RemoveFrom(this.Value);
 
-            this.Value = this.Value.Insert(this.Card.SelectionBehavior.ExtentOffset, key.ToString());
+            if ((key < 48 || key > 122) && key != 32)
+                return;
+
+            if (!shiftKey && key != 32 && key <= 90)
+                key += 32;
+
+            this.Value = this.Value.Insert(this.Card.SelectionBehavior.ExtentOffset, ((char)key).ToString());
 
             this.Card.SelectionBehavior.ExtentOffset += 1;
             this.Card.SelectionBehavior.BaseOffset = this.Card.SelectionBehavior.ExtentOffset;
