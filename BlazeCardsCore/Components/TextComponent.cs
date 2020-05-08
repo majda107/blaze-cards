@@ -88,7 +88,7 @@ namespace BlazeCardsCore.Components
             this.TextDescriptor.OnDown += async (s, e) =>
             {
                 var pos = e - this.TextDescriptor.GetGlobalPosition() - this.Canvas.State.Mouse.Scroll - this.TextDescriptor.TextBehavior.Padding;
-                float offsetX = await this.TextDescriptor.SelectionBehavior.SnapLetter(pos.X, this.JSRuntime);
+                float offsetX = await this.TextDescriptor.SelectionBehavior.SnapLetter(pos.X, this.JSRuntime, true);
 
                 var paddingX = this.TextDescriptor.TextBehavior.Padding.X;
                 this.CaretDescriptor.PositionBehavior.Position = new Vector2f(offsetX + paddingX, this.CaretDescriptor.PositionBehavior.Position.Y);
@@ -102,11 +102,20 @@ namespace BlazeCardsCore.Components
 
             this.TextDescriptor.OnMove += (s, dev) =>
             {
+                if(!this.TextDescriptor.SelectionBehavior.Selecting)
+                {
+                    this.TextDescriptor.SelectionBehavior.Selecting = true;
+                    this.InvokeChange();
+                }
+                    
                 this.SelectorDescriptor.SizeBehavior.Size += new Vector2f(dev.X, 0);
             };
 
             this.TextDescriptor.OnUp += async (s, dev) =>
             {
+                this.TextDescriptor.SelectionBehavior.Selecting = false;
+                this.InvokeChange();
+
                 float last = this.TextDescriptor.SelectionBehavior.LastCalculatedSnap;
                 float offsetX = await this.TextDescriptor.SelectionBehavior.SnapLetter(last + this.SelectorDescriptor.SizeBehavior.Size.X, this.JSRuntime);
 
@@ -115,6 +124,9 @@ namespace BlazeCardsCore.Components
                 this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(offsetX - last, 24);
 
                 this.Canvas.State.InteropQueue.Flush(this.Canvas.JSRuntime);
+
+
+                Console.WriteLine($"Setting indices: {this.TextDescriptor.SelectionBehavior.BaseOffset} {this.TextDescriptor.SelectionBehavior.ExtentOffset}");
             };
         }
 
@@ -198,7 +210,7 @@ namespace BlazeCardsCore.Components
 
             builder.CloseElement();
 
-            if (this.TextDescriptor.TextBehavior.Editing)
+            if (this.TextDescriptor.TextBehavior.Editing && !this.TextDescriptor.SelectionBehavior.Selecting)
                 this.CaretDescriptor.InvokeRender(builder, ref seq, this.Canvas);
         }
 
