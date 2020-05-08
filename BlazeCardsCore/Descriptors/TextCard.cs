@@ -16,7 +16,7 @@ namespace BlazeCardsCore.Descriptors
         public bool Editable { get; set; }
         public TextCard() : base()
         {
-            this.TextBehavior = new TextBehavior();
+            this.TextBehavior = new TextBehavior(this);
             this.SelectionBehavior = new SelectionBehavior(this);
 
             this.Editable = true;
