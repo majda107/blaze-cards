@@ -118,7 +118,9 @@ namespace BlazeCardsCore.Components
                 }
 
                 if (this.TextDescriptor.TextBehavior.Editing && this.Canvas.State.Keyboard.IsDown("Control"))
-                    Console.WriteLine("SHOULD SELECT ALL!");
+                {
+                    await this.TextDescriptor.SelectionBehavior.SelectAll(this.Canvas);
+                }
                 else
                 {
                     //this.shouldResetCared = true;

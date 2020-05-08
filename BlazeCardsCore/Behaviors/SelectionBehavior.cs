@@ -108,6 +108,29 @@ namespace BlazeCardsCore.Behaviors
         }
 
 
+        public async Task SelectAll(CanvasComponent canvas)
+        {
+            this.BaseOffset = 0;
+            this.ExtentOffset = this.Card.TextBehavior.Value.Length;
+
+            await this.SelectBaseExtent(canvas);
+        }
+
+        public async Task SelectBaseExtent(CanvasComponent canvas)
+        {
+            var str = this.Card.TextBehavior.Value;
+            var selectorStr = str.Substring(this.CorrectedBase, this.CorrectedExtent);
+
+            var width = (float)(await canvas.JSRuntime.InvokeAsync<BoundingClientRect>("calculateTextRect", selectorStr)).Width;
+            this.SelectorDescriptor.PositionBehavior.Correction = Vector2f.Zero;
+            this.SelectorDescriptor.PositionBehavior.Position = this.Card.TextBehavior.Padding + new Vector2f(0, 1);
+            this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(width, this.SelectorDescriptor.SizeBehavior.Size.Y);
+
+            canvas.State.InteropQueue.Flush(canvas.JSRuntime);
+
+            //await this.ExtentCaret(canvas);
+        }
+
         private void SetOffset(int index, bool setBase)
         {
             if (setBase)
@@ -115,6 +138,7 @@ namespace BlazeCardsCore.Behaviors
             else
                 this.ExtentOffset = index;
         }
+
         public async Task<float> SnapLetter(float inputX, IJSRuntime JSRuntime, bool setBase = false)
         {
             var tb = this.Card.TextBehavior;
