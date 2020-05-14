@@ -61,6 +61,7 @@ namespace BlazeCardsCore.State
             };
 
             list.AddChild(drop);
+
             list.AddChild(new ButtonCard("Button1", (s, e) =>
             {
                 var card = new TextCard();

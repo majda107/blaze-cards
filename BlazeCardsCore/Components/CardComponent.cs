@@ -138,7 +138,12 @@ namespace BlazeCardsCore.Components
 
             this.Descriptor.FireDown(new Vector2f(clientX, clientY));
             this.Canvas.State.Mouse.OnDown(this.Canvas.Box.Center - new Vector2f(clientX, clientY));
+
+            foreach (var card in this.Canvas.State.Selected)
+                card.Deselect();
+
             this.Canvas.State.Selected.Clear();
+
             this.Canvas.State.Selected.Add(this.Descriptor);
             this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
 
