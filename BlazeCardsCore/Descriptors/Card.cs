@@ -5,6 +5,7 @@ using BlazeCardsCore.State;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,11 +76,6 @@ namespace BlazeCardsCore.Descriptors
             builder.AddAttribute(seq++, "Canvas", canvas);
             builder.AddAttribute(seq++, "Descriptor", this);
             builder.CloseComponent();
-
-            //builder.OpenComponent(seq++, card.GetComponentType());
-            //builder.AddAttribute(seq++, "Canvas", this);
-            //builder.AddAttribute(seq++, "Descriptor", card);
-            //builder.CloseComponent();
         }
 
         public virtual void AssignComponent(CardComponent component)
@@ -88,7 +84,14 @@ namespace BlazeCardsCore.Descriptors
             this.PositionBehavior.AssignComponent(component);
         }
 
-        public void InvokeComponentChange() => this.Component?.InvokeChange();
+        //public void InvokeComponentChange() => this.Component?.InvokeChange();
+        public void InvokeComponentChange()
+        {
+            this.Component?.InvokeChange();
+
+            //foreach (var child in this.Children)
+            //    child.InvokeComponentChange();
+        }
 
         public virtual Type GetComponentType() => typeof(CardComponent);
 

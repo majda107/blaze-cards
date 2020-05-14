@@ -47,13 +47,14 @@ namespace BlazeCardsCore.Behaviors
         public async Task Init(CanvasComponent canvas)
         {
             this.CaretDescriptor = new RectCard();
+            this.SelectorDescriptor = new RectCard();
+
             this.CaretDescriptor.Highlightable = this.CaretDescriptor.Draggable = false;
             this.CaretDescriptor.Classes.Add("blaze-text-caret");
             this.CaretDescriptor.SizeBehavior.Size = new Vector2f(2, 24);
 
             await this.EndCaret(canvas);
 
-            this.SelectorDescriptor = new RectCard();
             this.SelectorDescriptor.Highlightable = this.SelectorDescriptor.Draggable = false;
             this.SelectorDescriptor.Classes.Add("blaze-text-selector");
             this.SelectorDescriptor.SizeBehavior.Size = new Vector2f(0, 24);

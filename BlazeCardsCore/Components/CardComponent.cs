@@ -72,10 +72,15 @@ namespace BlazeCardsCore.Components
 
         protected override void OnInitialized()
         {
-            Console.WriteLine("Element initialized!");
             this.Descriptor.AssignComponent(this);
             base.OnInitialized();
         }
+
+        //protected override void OnParametersSet()
+        //{
+        //    this.Descriptor.AssignComponent(this);
+        //    base.OnParametersSet();
+        //}
 
         //private void Init()
         //{

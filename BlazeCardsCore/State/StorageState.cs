@@ -63,8 +63,10 @@ namespace BlazeCardsCore.State
             list.AddChild(drop);
             list.AddChild(new ButtonCard("Button1", (s, e) =>
             {
-                list.AddChild(new TextCard());
-                //Console.WriteLine("NIGGAA");
+                var card = new TextCard();
+                card.TextBehavior.Value = $"Added via button";
+                card.PositionBehavior.Position = new Vector2f(0, 10000); // order FIX NEEDED!
+                list.AddChild(card);
             }));
 
             list.PositionBehavior.Position = new Vector2f(300, 740);

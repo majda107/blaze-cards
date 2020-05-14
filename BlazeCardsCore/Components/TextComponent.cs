@@ -18,17 +18,22 @@ namespace BlazeCardsCore.Components
 {
     public class TextComponent : CardComponent
     {
-        //public TextBehavior TextBehavior { get; private set; }
-
-        //public ElementReference TextRef { get; private set; }
         public TextCard TextDescriptor { get => this.Descriptor as TextCard; }
 
 
-
+        private bool initialized;
         public TextComponent()
         {
-            //this.shouldResetCared = true;
+            this.initialized = false;
         }
+
+        //protected override void OnParametersSet()
+        //{
+        //    //Console.WriteLine($"~~~ {this.TextDescriptor.TextBehavior.Value} #{this.GetHashCode()}");
+        //    base.OnParametersSet();
+        //    //this.initialized = false;
+        //    //this.TextDescriptor.AssignComponent(this);
+        //}
 
         [JSInvokable]
         public async Task KeyDown(int key, bool shiftKey)
@@ -61,27 +66,33 @@ namespace BlazeCardsCore.Components
 
             this.TextDescriptor.OnDown += async (s, e) =>
             {
-                var pos = e - this.TextDescriptor.GetGlobalPosition() - this.Canvas.State.Mouse.Scroll - this.TextDescriptor.TextBehavior.Padding;
-                await this.TextDescriptor.SelectionBehavior.OnDown(pos, this.Canvas);
+                var textCard = s as TextCard;
+
+                var pos = e - s.GetGlobalPosition() - this.Canvas.State.Mouse.Scroll - textCard.TextBehavior.Padding;
+                await textCard.SelectionBehavior.OnDown(pos, this.Canvas);
             };
 
             this.TextDescriptor.OnMove += (s, dev) =>
             {
-                if (!this.TextDescriptor.TextBehavior.Editing) return;
+                var textCard = s as TextCard;
 
-                if (!this.TextDescriptor.SelectionBehavior.Selecting)
+                if (!textCard.TextBehavior.Editing) return;
+
+                if (!textCard.SelectionBehavior.Selecting)
                 {
-                    this.TextDescriptor.SelectionBehavior.Selecting = true;
+                    textCard.SelectionBehavior.Selecting = true;
                     //this.InvokeChange();
                 }
 
-                this.TextDescriptor.SelectionBehavior.SelectorDescriptor.SizeBehavior.Size += new Vector2f(dev.X, 0);
+                textCard.SelectionBehavior.SelectorDescriptor.SizeBehavior.Size += new Vector2f(dev.X, 0);
             };
 
             this.TextDescriptor.OnUp += async (s, dev) =>
             {
-                this.TextDescriptor.SelectionBehavior.Selecting = false;
-                await this.TextDescriptor.SelectionBehavior.OnUp(this.Canvas);
+                var textCard = s as TextCard;
+
+                textCard.SelectionBehavior.Selecting = false;
+                await textCard.SelectionBehavior.OnUp(this.Canvas);
             };
         }
 
@@ -129,15 +140,11 @@ namespace BlazeCardsCore.Components
             if (this.TextDescriptor.Editable)
                 this.HookDoubleClick(builder, ref seq);
 
-            //builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
-            //{
-            //    await this.KeyDown(e.Key);
-            //}));
-
 
             this.HookMouseDown(builder, ref seq);
 
 
+            //builder.AddContent(seq++, this.TextDescriptor.TextBehavior.Value + $" {this.GetHashCode()}");
             builder.AddContent(seq++, this.TextDescriptor.TextBehavior.Value);
 
 
@@ -153,21 +160,21 @@ namespace BlazeCardsCore.Components
         {
             await this.TextDescriptor.BufferSizeAsync();
 
-            if (firstRender)
+            if (!this.initialized)
+            {
+                this.initialized = true;
+                Console.WriteLine($"~~~~~~ TEXT FIRST RENDER! {this.TextDescriptor.TextBehavior.Value}");
                 await this.Init();
+            }
+                
 
             if (this.TextDescriptor.TextBehavior.Editing)
             {
-                //this.TextDescriptor.TextBehavior.Focus();
                 await this.JSRuntime.InvokeVoidAsync("hookEditing", DotNetObjectReference.Create(this));
 
                 var size = this.Descriptor.GetSize();
                 if (this.Canvas.State.Highlighter != null) // BEWARE THIS!!!!!!!!!
                     this.Canvas.State.Highlighter.SizeBehavior.Size = size;
-
-
-                Console.WriteLine($"Extending to: {this.TextDescriptor.SelectionBehavior.BaseOffset} {this.TextDescriptor.SelectionBehavior.ExtentOffset}");
-                //await this.TextDescriptor.SelectionBehavior.ExtentCaret(this.Canvas);
             }
 
             await base.OnAfterRenderAsync(firstRender);
