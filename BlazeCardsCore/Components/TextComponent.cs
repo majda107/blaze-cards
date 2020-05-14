@@ -126,8 +126,9 @@ namespace BlazeCardsCore.Components
             builder.AddAttribute(seq++, "x", $"{this.TextDescriptor.TextBehavior.Padding.X}px");
             builder.AddAttribute(seq++, "y", $"{this.TextDescriptor.TextBehavior.Padding.Y + 20}px");
 
+            if (this.TextDescriptor.Editable)
+                this.HookDoubleClick(builder, ref seq);
 
-            this.HookDoubleClick(builder, ref seq);
             //builder.AddAttribute(seq++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (e) =>
             //{
             //    await this.KeyDown(e.Key);

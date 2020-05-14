@@ -60,34 +60,52 @@ function calculateTextRect(text) {
 
 // TEXT
 let textInstance;
-let inputEl
 
-function hookEditing(instance, elementID) {
+let inputEl = undefined;
+let lastLen = 0;
+
+function hookEditing(instance) {
     textInstance = instance;
 
-    if (inputEl != undefined) inputEl.remove();
+    if (inputEl != undefined) return;
 
     inputEl = document.createElement("input");
     inputEl.classList.add("blaze-input-hidden");
     document.body.appendChild(inputEl);
+    pauseUp = false;
+    lastLen = 0;
 
 
     inputEl.addEventListener('keydown', (e) => {
         if (navigator.userAgent.match(/Android/i)) return;
+
         instance.invokeMethodAsync("KeyDown", e.keyCode, e.shiftKey);
     })
+
 
     inputEl.addEventListener('keyup', (e) => {
         if (!navigator.userAgent.match(/Android/i)) return;
 
         let inputValue = inputEl.value;
 
-        let charKeyCode = e.keyCode || e.which;
-        if (charKeyCode == 0 || charKeyCode == 229) {
-            charKeyCode = inputValue.charCodeAt(inputValue.length - 1);
+        if (inputValue.length == lastLen - 1) {
+            instance.invokeMethodAsync("KeyDown", 8, false);
+        }
+        else {
+            let charKeyCode = e.keyCode || e.which;
+            if (charKeyCode == 0 || charKeyCode == 229) {
+                charKeyCode = inputValue.charCodeAt(inputValue.length - 1);
+            }
+
+            instance.invokeMethodAsync("KeyDown", charKeyCode, false);
         }
 
-        instance.invokeMethodAsync("KeyDown", charKeyCode, false);
+        lastLen = inputValue.length;
+    })
+
+    inputEl.addEventListener('blur', _ => {
+        inputEl.remove();
+        inputEl = undefined;
     })
 
     inputEl.focus();
