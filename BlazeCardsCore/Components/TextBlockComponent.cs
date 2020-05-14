@@ -20,7 +20,9 @@ namespace BlazeCardsCore.Components
             this.BuildClassAttribute(builder, ref seq);
 
             this.HookMouseDown(builder, ref seq);
-            this.HookDoubleClick(builder, ref seq);
+
+            if (this.TextDescriptor.Editable)
+                this.HookDoubleClick(builder, ref seq);
 
             builder.AddElementReferenceCapture(seq++, eref =>
             {
