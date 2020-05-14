@@ -17,10 +17,10 @@ namespace BlazeCardsCore.State
             this.State = state;
             this.Cards = new List<Card>();
 
-            this.Init();
+            //this.Init();
         }
 
-        private void Init()
+        public void Init()
         {
             for (int i = 0; i < 20; i++)
             {

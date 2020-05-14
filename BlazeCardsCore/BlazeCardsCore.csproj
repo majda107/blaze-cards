@@ -12,4 +12,13 @@
     <PackageReference Include="Mono.WebAssembly.Interop" Version="5.0.0-preview.3.20215.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\blaze-cards\cards.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\blaze-cards\cards.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

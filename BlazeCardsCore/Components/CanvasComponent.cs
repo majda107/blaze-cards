@@ -17,7 +17,9 @@ namespace BlazeCardsCore.Components
 {
     public class CanvasComponent : ComponentBase
     {
+        [Parameter]
         public CardState State { get; set; }
+
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
@@ -28,8 +30,14 @@ namespace BlazeCardsCore.Components
 
         public CanvasComponent()
         {
-            this.State = new CardState(this);
+            //this.State = new CardState(this);
             this.ShouldInvalidate = true;
+        }
+
+        protected override void OnParametersSet()
+        {
+            this.State.Canvas = this;
+            base.OnParametersSet();
         }
 
         public string GetCanvasID() => $"blaze-canvas-{this.GetHashCode()}";

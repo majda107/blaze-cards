@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BlazeCardsCore.Components
 {
-    class TextBlockComponent : TextComponent
+    public class TextBlockComponent : TextComponent
     {
         public ElementReference TextBackgroundReference { get; private set; }
 

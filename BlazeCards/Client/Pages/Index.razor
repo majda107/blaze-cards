@@ -1,6 +1,17 @@
 ﻿@page "/"
 @using BlazeCardsCore.Components
+@using BlazeCardsCore.State
 
 <div style="width: 100%; height: 100%">
-    <CanvasComponent></CanvasComponent>
+    <CanvasComponent State="@cardState"></CanvasComponent>
 </div>
+
+@code { 
+    private CardState cardState;
+
+    protected override void OnInitialized()
+    {
+        this.cardState = new CardState();   
+        this.cardState.Storage.Init();
+    }
+}

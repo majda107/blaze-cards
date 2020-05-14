@@ -12,7 +12,7 @@ namespace BlazeCardsCore.State
     public class CardState
     {
 
-        public CanvasComponent Canvas { get; private set; }
+        public CanvasComponent Canvas { get; set; }
         public MouseState Mouse { get; private set; }
         public TouchState Touch { get; private set; }
         public KeyboardState Keyboard { get; private set; }
@@ -30,7 +30,16 @@ namespace BlazeCardsCore.State
         public CardState(CanvasComponent canvas)
         {
             this.Canvas = canvas;
+            this.Init();
+        }
 
+        public CardState()
+        {
+            this.Init();
+        }
+
+        private void Init()
+        {
             this.Selected = new List<Card>();
             this.Mouse = new MouseState(this);
             this.Touch = new TouchState(this);

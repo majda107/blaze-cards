@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BlazeCardsCore.Descriptors
 {
-    class HorizontalListCard : Card
+    public class HorizontalListCard : Card
     {
         public bool Fixed { get; set; }
         public int Spacing { get; set; }

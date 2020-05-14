@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Descriptors
 {
-    class TextBlockCard : TextCard
+    public class TextBlockCard : TextCard
     {
         public TextBlockCard()
         {

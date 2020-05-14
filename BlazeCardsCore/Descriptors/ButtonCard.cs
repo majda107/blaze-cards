@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlazeCardsCore.Descriptors
 {
-    class ButtonCard : TextBlockCard
+    public class ButtonCard : TextBlockCard
     {
         public CardEventHandler ButtonAction { get; private set; }
 
