@@ -16,6 +16,7 @@ namespace BlazeCardsCore.Components
             foreach (var child in this.Descriptor.Children)
             {
                 builder.OpenComponent(hotFix++, child.GetComponentType());
+                builder.SetKey(child.GetHashCode());
                 builder.AddAttribute(hotFix++, "Canvas", this.Canvas);
                 builder.AddAttribute(hotFix++, "Descriptor", child);
                 builder.CloseComponent();

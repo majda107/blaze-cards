@@ -66,7 +66,7 @@ namespace BlazeCardsCore.State
             {
                 var card = new TextCard();
                 card.TextBehavior.Value = $"Added via button";
-                card.PositionBehavior.Position = new Vector2f(0, 10000); // order FIX NEEDED!
+                //card.PositionBehavior.Position = new Vector2f(0, 10000); // order FIX NEEDED!
                 list.AddChild(card);
             }));
 

@@ -9,6 +9,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace BlazeCardsCore.Components
@@ -95,7 +96,6 @@ namespace BlazeCardsCore.Components
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             int seq = 0;
-
 
             builder.OpenElement(seq++, "g");
             builder.AddAttribute(seq++, "id", this.GetUniquieID());
