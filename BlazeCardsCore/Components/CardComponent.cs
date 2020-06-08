@@ -148,6 +148,8 @@ namespace BlazeCardsCore.Components
             this.Canvas.State.Highlighter = RectFactory.CreateHighlighter(this.Canvas.State.Selected);
 
             this.Canvas.InvokeChange();
+
+            this.Descriptor.FireSelected(new Vector2f(clientX, clientY));
         }
 
         protected void HookMouseDown(RenderTreeBuilder builder, ref int seq)

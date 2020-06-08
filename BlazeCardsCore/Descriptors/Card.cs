@@ -20,6 +20,8 @@ namespace BlazeCardsCore.Descriptors
         public event CardEventHandler OnMove;
         public event CardEventHandler OnClick;
 
+        public event CardEventHandler OnSelected;
+
         public CardComponent Component { get; set; }
         public PositionBehavior PositionBehavior { get; private set; }
 
@@ -65,6 +67,7 @@ namespace BlazeCardsCore.Descriptors
         }
 
         public void FireDown(Vector2f position) => this.OnDown?.Invoke(this, position);
+        public void FireSelected(Vector2f position) => this.OnSelected?.Invoke(this, position);
         public void FireUp() => this.OnUp?.Invoke(this, Vector2f.Zero);
         public void FireClick() => this.OnClick?.Invoke(this, Vector2f.Zero);
         public void FireMove(Vector2f dev) => this.OnMove?.Invoke(this, dev);
