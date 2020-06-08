@@ -159,7 +159,8 @@ namespace BlazeCardsCore.Components
                 this.MouseDownCallback((float)e.ClientX, (float)e.ClientY);
             }));
 
-            builder.AddEventStopPropagationAttribute(seq++, "onmousedown", true);
+            //builder.AddEventStopPropagationAttribute(seq++, "onmousedown", true);
+            builder.AddEventStopPropagationAttribute(seq++, "onmousedown", this.Descriptor.Clickable);
 
             builder.AddAttribute(seq++, "ontouchstart", EventCallback.Factory.Create<TouchEventArgs>(this, (e) =>
             {
@@ -167,7 +168,8 @@ namespace BlazeCardsCore.Components
                 this.MouseDownCallback((float)e.Touches[0].ClientX, (float)e.Touches[0].ClientY);
             }));
 
-            builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
+            //builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", true);
+            builder.AddEventStopPropagationAttribute(seq++, "ontouchstart", this.Descriptor.Clickable);
         }
 
         protected virtual void RenderInner(RenderTreeBuilder builder, ref int seq)
