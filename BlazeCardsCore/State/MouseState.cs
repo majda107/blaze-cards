@@ -13,8 +13,33 @@ namespace BlazeCardsCore.State
         public CardState State { get; private set; }
         public bool Down { get; private set; }
 
-        public Vector2f Scroll { get; private set; }
-        public float Zoom { get; set; }
+
+
+        private Vector2f scroll;
+        public Vector2f Scroll
+        {
+            get => this.scroll;
+            private set
+            {
+                this.scroll = this.Scrollable ? value : Vector2f.Zero;
+            }
+        }
+
+
+        private float zoom;
+        public float Zoom
+        {
+            get => this.zoom;
+            set
+            {
+                this.zoom = this.Zoomable ? value : 1.0f;
+            }
+        }
+
+        public bool Zoomable { get; set; }
+        public bool Scrollable { get; set; }
+
+
 
 
         private Vector2f lastPosition;
@@ -30,6 +55,8 @@ namespace BlazeCardsCore.State
             this.lastPosition = Vector2f.Zero;
             this.Scroll = Vector2f.Zero;
             this.Zoom = 1.0f;
+
+            this.Zoomable = this.Scrollable = true;
         }
 
         public void ScrollToZoom(bool negate)
@@ -126,7 +153,7 @@ namespace BlazeCardsCore.State
                         card.PositionBehavior.Position += dev;
                     else
                         moveHighlighter = false;
-                }    
+                }
 
 
                 if (this.State.Highlighter != null && moveHighlighter)
