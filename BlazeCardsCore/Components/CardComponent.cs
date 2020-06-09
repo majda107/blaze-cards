@@ -71,6 +71,14 @@ namespace BlazeCardsCore.Components
 
         }
 
+        public virtual void Select()
+        {
+            var state = this.Canvas.State;
+            state.Select(this.Descriptor, this.JSRuntime);
+
+            //this.InvokeChange();
+        }
+
         protected override void OnInitialized()
         {
             this.Descriptor.AssignComponent(this);

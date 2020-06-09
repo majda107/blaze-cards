@@ -2,9 +2,11 @@
 using BlazeCardsCore.Descriptors;
 using BlazeCardsCore.Factories;
 using BlazeCardsCore.Models;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace BlazeCardsCore.State
@@ -61,6 +63,22 @@ namespace BlazeCardsCore.State
             this.Selected.Clear();
 
             this.Canvas.InvokeChange();
+        }
+
+        public void Select(Card toSelect, IJSRuntime runtime) => this.Select(new Card[] { toSelect }, runtime);
+
+        public void Select(Card[] cards, IJSRuntime runtime)
+        {
+            foreach (var card in this.Selected)
+                card.Deselect();
+
+            this.Selected.Clear();
+
+            foreach (var card in cards)
+                this.Selected.Add(card);
+
+            this.Highlighter = RectFactory.CreateHighlighter(this.Selected);
+            this.InteropQueue.Flush(runtime);
         }
     }
 }
