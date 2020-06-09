@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using BlazeCardsCore.Event;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,10 @@ namespace BlazeCardsCore.State
 {
     public class KeyboardState
     {
+        public delegate void KeyEventHandler(KeyboardState sender, KeyEventArgs key);
+        public event KeyEventHandler OnKeyDown;
+        public event KeyEventHandler OnKeyUp;
+
         public CardState State { get; private set; }
         public List<string> KeysDown { get; private set; }
 
@@ -23,6 +28,7 @@ namespace BlazeCardsCore.State
             if (this.KeysDown.Contains(key)) return;
             this.KeysDown.Add(key);
 
+            this.OnKeyDown?.Invoke(this, new KeyEventArgs(key));
             //Console.WriteLine($"Key down... {key}");
         }
 
@@ -33,6 +39,7 @@ namespace BlazeCardsCore.State
             if (!this.KeysDown.Contains(key)) return;
             this.KeysDown.Remove(key);
 
+            this.OnKeyUp?.Invoke(this, new KeyEventArgs(key));
             //Console.WriteLine($"Key up... {key}");
         }
 
